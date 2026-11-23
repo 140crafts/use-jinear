@@ -85,6 +85,11 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         editorRef.current = editor;
     }, []);
 
+    const restoreBody = useCallback((html: string) => {
+        editorRef.current?.setContent(html);
+        flushNow();
+    }, [flushNow]);
+
     const notFound = !isPendingCreate && !ackedNoteId && !isLoading && !note;
 
     return (
@@ -100,6 +105,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             status,
             flushNow,
             registerEditor,
+            restoreBody,
             taskTags,
             setTaskTags
         }}>

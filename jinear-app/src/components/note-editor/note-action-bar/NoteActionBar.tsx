@@ -5,6 +5,7 @@ import {useNoteEditorContext} from "@/components/note-editor/note-editor-context
 import useTranslation, {type StringKeys} from "@/locals/useTranslation.ts";
 import {useOnlineStatus} from "@/hooks/useOnlineStatus.ts";
 import NotePath from "@/components/note-editor/note-action-bar/note-path/NotePath.tsx";
+import NoteHistoryButton from "@/components/note-editor/note-action-bar/note-history-button/NoteHistoryButton.tsx";
 import {LuCircleCheck, LuCloudAlert, LuCloudOff, LuCloudUpload, LuLoaderCircle, LuTrash2,} from "react-icons/lu";
 import type {IconType} from "react-icons/lib";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
@@ -100,6 +101,8 @@ const NoteActionBar: React.FC = () => {
                         {t(ui.key)}
                     </span>
                 )}
+
+                <NoteHistoryButton/>
 
                 <Button
                     variant={ButtonVariants.outline}

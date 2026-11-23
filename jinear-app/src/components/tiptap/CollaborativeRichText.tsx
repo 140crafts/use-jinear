@@ -13,6 +13,7 @@ import styles from "./Tiptap.module.css";
 export interface ICollaborativeRichTextRef {
     getHTML: () => string | undefined;
     focus: () => void;
+    setContent: (html: string) => void;
 }
 
 interface CollaborativeRichTextProps {
@@ -89,7 +90,8 @@ const CollaborativeRichText = (
 
     useImperativeHandle(ref, () => ({
         getHTML: () => editor?.getHTML(),
-        focus: () => editor?.commands.focus()
+        focus: () => editor?.commands.focus(),
+        setContent: (html: string) => editor?.commands.setContent(html, {emitUpdate: true})
     }));
 
     return (

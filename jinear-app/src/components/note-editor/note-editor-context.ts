@@ -22,6 +22,7 @@ export interface INoteEditorContext {
     status?: LiveTextStatus;
     flushNow?: () => void;
     registerEditor?: (editor: ICollaborativeRichTextRef | null) => void;
+    restoreBody?: (html: string) => void;
     taskTags?: string[];
     setTaskTags?: (taskTags: string[]) => void;
 }

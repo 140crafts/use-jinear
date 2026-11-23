@@ -967,6 +967,17 @@ export interface RichTextUpdatesDto {
     updates: string[];
 }
 
+export interface RichTextVersionDto extends BaseDto {
+    richTextVersionId: string;
+    richTextId: string;
+    accountId: string;
+    account?: PlainAccountProfileDto | null;
+}
+
+export interface RichTextVersionDetailDto extends RichTextVersionDto {
+    html: string;
+}
+
 export interface RobotDto extends BaseDto {
     robotId: string;
     workspaceId: string;
@@ -2587,6 +2598,14 @@ export interface RichTextTempImageResponse extends BaseResponse {
 
 export interface RichTextUpdatesResponse extends BaseResponse {
     data: RichTextUpdatesDto;
+}
+
+export interface RichTextVersionPaginatedResponse extends BaseResponse {
+    data: PageDto<RichTextVersionDto>;
+}
+
+export interface RichTextVersionResponse extends BaseResponse {
+    data: RichTextVersionDetailDto;
 }
 
 export interface RobotSecretResponse extends BaseResponse {

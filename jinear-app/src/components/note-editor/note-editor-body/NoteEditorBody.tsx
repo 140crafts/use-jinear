@@ -4,6 +4,7 @@ import CollaborativeRichText from "@/components/tiptap/CollaborativeRichText.tsx
 import {useNoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import {TaskLinkChips} from "@/components/tiptap/taskLinkChips/TaskLinkChips.ts";
+import taskLinkChipStyles from "@/components/tiptap/taskLinkChips/TaskLinkChips.module.css";
 import {useTypedSelector} from "@/store";
 import {selectNoteTextWidth} from "@/slice/displayPreferenceSlice.ts";
 import cn from "classnames";
@@ -17,7 +18,7 @@ const NoteEditorBody: React.FC = () => {
     const extensions = useMemo(() => [
         TaskLinkChips.configure({
             workspaceUsername: workspace?.username,
-            chipClassName: styles.taskLinkChip,
+            chipClassName: taskLinkChipStyles.taskLinkChip,
             onTaskTagsChange: setTaskTags
         })
     ], [workspace?.username, setTaskTags]);

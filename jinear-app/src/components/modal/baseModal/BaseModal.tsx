@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./style.module.css";
 import {DISMISS_ATTRIBUTE, SCOPE_ATTRIBUTE} from "@/keyboard/keymap";
 
-export type ModalWidth = "small" | "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
+export type ModalWidth = "small" | "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "page-extended" | "fullscreen";
 export type ModalHeight = "default" | "height-medium-or-full" | "height-full";
 
 export interface BaseModalProps {

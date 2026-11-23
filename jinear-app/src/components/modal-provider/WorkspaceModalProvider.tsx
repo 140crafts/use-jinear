@@ -51,6 +51,7 @@ import PasswordChangeModal from "@/components/modal/passwordChangeModal/Password
 import NotebookInitializeModal from "@/components/modal/notebookInitializeModal/NotebookInitializeModal.tsx";
 import NotebookPickerModal from "@/components/modal/notebookPickerModal/NotebookPickerModal.tsx";
 import NoteTagPickerModal from "@/components/modal/noteTagPickerModal/NoteTagPickerModal.tsx";
+import NoteHistoryModal from "@/components/modal/noteHistoryModal/NoteHistoryModal.tsx";
 import TaskContextMenu from "@/components/taskContextMenu/TaskContextMenu.tsx";
 
 interface WorkspaceModalProviderProps {
@@ -102,6 +103,7 @@ const workspaceModals: any = (
         <NotebookInitializeModal/>
         <NotebookPickerModal/>
         <NoteTagPickerModal/>
+        <NoteHistoryModal/>
 
         <PasswordChangeModal/>
         <UploadStatusModal/>

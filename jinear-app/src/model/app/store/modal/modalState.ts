@@ -336,6 +336,13 @@ export interface NoteTagPickerModalState extends ModalState {
     onPick?: (pickedList: NoteTagDto[]) => void
 }
 
+export interface NoteHistoryModalState extends ModalState {
+    workspace?: WorkspaceDto,
+    richTextId?: string,
+    noteTitle?: string,
+    onRestore?: (html: string) => void
+}
+
 export interface MaterialFolderPickerModalState extends ModalState {
     workspaceId?: string,
     onPick?: (pickedMaterialId?: string) => void,

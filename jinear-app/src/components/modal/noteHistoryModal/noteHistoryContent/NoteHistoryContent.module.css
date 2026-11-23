@@ -1,0 +1,34 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.preview {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.strip {
+    flex-shrink: 0;
+    border-top: thin solid var(--c-primary-shade-1);
+}
+
+.footer {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: .75rem 1rem;
+    border-top: thin solid var(--c-primary-shade-1);
+}
+
+.editedBy {
+    font-size: .8125rem;
+    color: var(--c-secondary-shade-0);
+}

@@ -7121,6 +7121,58 @@ const translations = {
         en: "Tasks mentioned in this note",
         tr: "Bu notta bahsedilen görevler"
     },
+    noteHistoryButtonTooltip: {
+        en: "Version history",
+        tr: "Sürüm geçmişi"
+    },
+    noteHistoryModalTitle: {
+        en: "Version history",
+        tr: "Sürüm geçmişi"
+    },
+    noteHistoryToday: {
+        en: "Today",
+        tr: "Bugün"
+    },
+    noteHistoryYesterday: {
+        en: "Yesterday",
+        tr: "Dün"
+    },
+    noteHistoryCurrentVersion: {
+        en: "Current",
+        tr: "Güncel"
+    },
+    noteHistoryIsCurrentVersion: {
+        en: "This is the current version",
+        tr: "Bu güncel sürüm"
+    },
+    noteHistoryLoadOlder: {
+        en: "Load older",
+        tr: "Eskileri yükle"
+    },
+    noteHistoryEmpty: {
+        en: "No older versions yet. Versions are saved while you edit.",
+        tr: "Henüz eski sürüm yok. Sürümler sen düzenledikçe kaydedilir."
+    },
+    noteHistoryEditedBy: {
+        en: "Edited by ${username}, ${date}",
+        tr: "${username} düzenledi, ${date}"
+    },
+    noteHistoryRestore: {
+        en: "Restore",
+        tr: "Geri yükle"
+    },
+    noteHistoryRestoreAreYouSureTitle: {
+        en: "Restore this version?",
+        tr: "Bu sürüm geri yüklensin mi?"
+    },
+    noteHistoryRestoreAreYouSureText: {
+        en: "The note body changes to this version for all members. The title does not change. You can undo this from the history.",
+        tr: "Not içeriği tüm üyeler için bu sürüme döner. Başlık değişmez. Bunu geçmişten geri alabilirsin."
+    },
+    noteHistoryRestoreAreYouSureConfirmLabel: {
+        en: "Restore",
+        tr: "Geri yükle"
+    },
 
 };
 
