@@ -32,6 +32,9 @@ public class RichTextVersion extends BaseEntity {
     @Column(name = "html", nullable = false)
     private String html;
 
+    @Column(name = "title")
+    private String title;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)

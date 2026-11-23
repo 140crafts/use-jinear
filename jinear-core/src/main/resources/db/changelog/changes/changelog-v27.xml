@@ -32,4 +32,10 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jin-593-add-title-to-rich_text_version">
+        <addColumn tableName="rich_text_version">
+            <column name="title" type="text"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

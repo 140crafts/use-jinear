@@ -12,6 +12,8 @@ import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.entity.richtext.RichTextUpdate;
 import co.jinear.core.model.enumtype.richtext.RichTextFormat;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
+import co.jinear.core.model.vo.richtext.RecordRichTextVersionVo;
 import co.jinear.core.repository.RichTextRepository;
 import co.jinear.core.repository.richtext.RichTextUpdateRepository;
 import co.jinear.core.service.note.NoteFtsRefreshService;
@@ -68,7 +70,8 @@ public class RichTextSyncService {
     }
 
     @Transactional
-    public RichTextAppendDto appendUpdate(String richTextId, String accountId, String updateBase64, String renderedHtml) {
+    public RichTextAppendDto appendUpdate(AppendRichTextUpdateVo vo) {
+        String richTextId = vo.getRichTextId();
         RichText richText = retrieve(richTextId);
         if (!RichTextFormat.CRDT.equals(richText.getFormat())) {
             log.info("Append update rejected on non-CRDT rich text. richTextId: {}, format: {}", richTextId, richText.getFormat());
@@ -76,13 +79,13 @@ public class RichTextSyncService {
         }
         long seq = richText.getUpdateSeq() + 1;
         richText.setUpdateSeq(seq);
-        applyProjectionIfPresent(richText, accountId, renderedHtml);
+        applyProjectionIfPresent(richText, vo);
         richTextRepository.save(richText);
 
         RichTextUpdate richTextUpdate = new RichTextUpdate();
         richTextUpdate.setRichTextId(richTextId);
         richTextUpdate.setSeq(seq);
-        richTextUpdate.setUpdateBytes(decode(updateBase64));
+        richTextUpdate.setUpdateBytes(decode(vo.getUpdate()));
         richTextUpdateRepository.save(richTextUpdate);
 
         log.info("Append update completed. richTextId: {}, seq: {}", richTextId, seq);
@@ -92,13 +95,13 @@ public class RichTextSyncService {
     }
 
     @Transactional
-    public RichTextAppendDto appendUpdateAtHead(String richTextId, String accountId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
-        RichText richText = retrieve(richTextId);
+    public RichTextAppendDto appendUpdateAtHead(AppendRichTextUpdateVo vo, long expectedHeadSeq) {
+        RichText richText = retrieve(vo.getRichTextId());
         if (richText.getHeadSeq() != expectedHeadSeq) {
-            log.info("Append update at head rejected. richTextId: {}, expected: {}, head: {}", richTextId, expectedHeadSeq, richText.getHeadSeq());
+            log.info("Append update at head rejected. richTextId: {}, expected: {}, head: {}", vo.getRichTextId(), expectedHeadSeq, richText.getHeadSeq());
             throw new RichTextHeadMovedException();
         }
-        return appendUpdate(richTextId, accountId, updateBase64, renderedHtml);
+        return appendUpdate(vo);
     }
 
     @Transactional
@@ -137,16 +140,27 @@ public class RichTextSyncService {
         log.info("Snapshot completed. richTextId: {}, yjsStateSeq: {}", richTextId, target);
     }
 
-    private void applyProjectionIfPresent(RichText richText, String accountId, String renderedHtml) {
-        if (Objects.isNull(renderedHtml)) {
+    private void applyProjectionIfPresent(RichText richText, AppendRichTextUpdateVo vo) {
+        if (Objects.isNull(vo.getHtml())) {
             return;
         }
-        String html = htmlSanitizeService.sanitizeHTML(renderedHtml);
+        String html = htmlSanitizeService.sanitizeHTML(vo.getHtml());
         richText.setValue(html);
         if (RichTextType.NOTE.equals(richText.getType())) {
             noteFtsRefreshService.markDirty();
         }
-        richTextVersionOperationService.record(richText.getRichTextId(), richText.getType(), accountId, html);
+        RecordRichTextVersionVo recordVo = mapRecordVersionVo(richText, vo, html);
+        richTextVersionOperationService.record(recordVo);
+    }
+
+    private RecordRichTextVersionVo mapRecordVersionVo(RichText richText, AppendRichTextUpdateVo vo, String html) {
+        RecordRichTextVersionVo recordVo = new RecordRichTextVersionVo();
+        recordVo.setRichTextId(richText.getRichTextId());
+        recordVo.setType(richText.getType());
+        recordVo.setAccountId(vo.getAccountId());
+        recordVo.setHtml(html);
+        recordVo.setTitle(vo.getTitle());
+        return recordVo;
     }
 
     private RichTextStateDto toStateDto(RichText richText) {

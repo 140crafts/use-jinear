@@ -3,6 +3,7 @@ package co.jinear.core.service.richtext.sync;
 import co.jinear.core.model.dto.richtext.RichTextAppendDto;
 import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.dto.richtext.RichTextStateDto;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,21 +34,21 @@ public class RichTextSyncOperationService {
         }
     }
 
-    public RichTextAppendDto appendUpdate(String richTextId, String accountId, String updateBase64, String renderedHtml) {
-        richTextSyncLockService.lock(richTextId);
+    public RichTextAppendDto appendUpdate(AppendRichTextUpdateVo vo) {
+        richTextSyncLockService.lock(vo.getRichTextId());
         try {
-            return richTextSyncService.appendUpdate(richTextId, accountId, updateBase64, renderedHtml);
+            return richTextSyncService.appendUpdate(vo);
         } finally {
-            richTextSyncLockService.unlock(richTextId);
+            richTextSyncLockService.unlock(vo.getRichTextId());
         }
     }
 
-    public RichTextAppendDto appendUpdateAtHead(String richTextId, String accountId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
-        richTextSyncLockService.lock(richTextId);
+    public RichTextAppendDto appendUpdateAtHead(AppendRichTextUpdateVo vo, long expectedHeadSeq) {
+        richTextSyncLockService.lock(vo.getRichTextId());
         try {
-            return richTextSyncService.appendUpdateAtHead(richTextId, accountId, updateBase64, renderedHtml, expectedHeadSeq);
+            return richTextSyncService.appendUpdateAtHead(vo, expectedHeadSeq);
         } finally {
-            richTextSyncLockService.unlock(richTextId);
+            richTextSyncLockService.unlock(vo.getRichTextId());
         }
     }
 

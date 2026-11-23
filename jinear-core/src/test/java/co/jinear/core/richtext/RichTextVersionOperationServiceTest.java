@@ -2,6 +2,7 @@ package co.jinear.core.richtext;
 
 import co.jinear.core.model.entity.richtext.RichTextVersion;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.vo.richtext.RecordRichTextVersionVo;
 import co.jinear.core.repository.richtext.RichTextVersionRepository;
 import co.jinear.core.service.richtext.version.RichTextVersionOperationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,8 @@ class RichTextVersionOperationServiceTest {
     private static final String ACCOUNT_ID = "account-1";
     private static final String OLD_HTML = "<p>old</p>";
     private static final String NEW_HTML = "<p>new</p>";
+    private static final String OLD_TITLE = "Old title";
+    private static final String NEW_TITLE = "New title";
 
     private final RichTextVersionRepository richTextVersionRepository = Mockito.mock(RichTextVersionRepository.class);
     private final RichTextVersionOperationService richTextVersionOperationService = new RichTextVersionOperationService(richTextVersionRepository);
@@ -33,27 +36,27 @@ class RichTextVersionOperationServiceTest {
 
     @Test
     void aRichTextTypeWithoutVersionsIsNotRecorded() {
-        richTextVersionOperationService.record(RICH_TEXT_ID, RichTextType.TASK_COMMENT, ACCOUNT_ID, NEW_HTML);
+        richTextVersionOperationService.record(recordVo(RichTextType.TASK_COMMENT, NEW_HTML, OLD_TITLE));
 
         Mockito.verify(richTextVersionRepository, Mockito.never()).save(any());
     }
 
     @Test
     void theSameHtmlAsTheLatestVersionIsNotRecorded() {
-        latestVersionIs(version(OLD_HTML));
+        latestVersionIs(version(OLD_HTML, OLD_TITLE));
 
-        richTextVersionOperationService.record(RICH_TEXT_ID, RichTextType.NOTE, ACCOUNT_ID, OLD_HTML);
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, OLD_HTML, OLD_TITLE));
 
         Mockito.verify(richTextVersionRepository, Mockito.never()).save(any());
     }
 
     @Test
     void anEditInTheVersionWindowOverwritesTheOpenVersion() {
-        RichTextVersion openVersion = version(OLD_HTML);
+        RichTextVersion openVersion = version(OLD_HTML, OLD_TITLE);
         latestVersionIs(openVersion);
         openVersionIs(Optional.of(openVersion));
 
-        richTextVersionOperationService.record(RICH_TEXT_ID, RichTextType.NOTE, ACCOUNT_ID, NEW_HTML);
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, NEW_HTML, OLD_TITLE));
 
         RichTextVersion saved = savedVersion();
         assertThat(saved).isSameAs(openVersion);
@@ -62,10 +65,10 @@ class RichTextVersionOperationServiceTest {
 
     @Test
     void anEditAfterTheVersionWindowCreatesANewVersion() {
-        latestVersionIs(version(OLD_HTML));
+        latestVersionIs(version(OLD_HTML, OLD_TITLE));
         openVersionIs(Optional.empty());
 
-        richTextVersionOperationService.record(RICH_TEXT_ID, RichTextType.NOTE, ACCOUNT_ID, NEW_HTML);
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, NEW_HTML, OLD_TITLE));
 
         RichTextVersion saved = savedVersion();
         assertThat(saved.getRichTextVersionId()).isNull();
@@ -79,9 +82,32 @@ class RichTextVersionOperationServiceTest {
         latestVersionIs(null);
         openVersionIs(Optional.empty());
 
-        richTextVersionOperationService.record(RICH_TEXT_ID, RichTextType.NOTE, ACCOUNT_ID, NEW_HTML);
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, NEW_HTML, OLD_TITLE));
 
         assertThat(savedVersion().getHtml()).isEqualTo(NEW_HTML);
+    }
+
+    @Test
+    void aTitleChangeWithTheSameHtmlIsRecorded() {
+        RichTextVersion openVersion = version(OLD_HTML, OLD_TITLE);
+        latestVersionIs(openVersion);
+        openVersionIs(Optional.of(openVersion));
+
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, OLD_HTML, NEW_TITLE));
+
+        RichTextVersion saved = savedVersion();
+        assertThat(saved.getHtml()).isEqualTo(OLD_HTML);
+        assertThat(saved.getTitle()).isEqualTo(NEW_TITLE);
+    }
+
+    @Test
+    void theTitleIsStoredWithANewVersion() {
+        latestVersionIs(null);
+        openVersionIs(Optional.empty());
+
+        richTextVersionOperationService.record(recordVo(RichTextType.NOTE, NEW_HTML, NEW_TITLE));
+
+        assertThat(savedVersion().getTitle()).isEqualTo(NEW_TITLE);
     }
 
     private void latestVersionIs(RichTextVersion version) {
@@ -100,12 +126,23 @@ class RichTextVersionOperationServiceTest {
         return captor.getValue();
     }
 
-    private RichTextVersion version(String html) {
+    private RecordRichTextVersionVo recordVo(RichTextType type, String html, String title) {
+        RecordRichTextVersionVo vo = new RecordRichTextVersionVo();
+        vo.setRichTextId(RICH_TEXT_ID);
+        vo.setType(type);
+        vo.setAccountId(ACCOUNT_ID);
+        vo.setHtml(html);
+        vo.setTitle(title);
+        return vo;
+    }
+
+    private RichTextVersion version(String html, String title) {
         RichTextVersion version = new RichTextVersion();
         version.setRichTextVersionId("version-1");
         version.setRichTextId(RICH_TEXT_ID);
         version.setAccountId(ACCOUNT_ID);
         version.setHtml(html);
+        version.setTitle(title);
         return version;
     }
 }

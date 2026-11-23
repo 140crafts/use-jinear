@@ -11,4 +11,5 @@ public class RichTextVersionDetailDto extends RichTextVersionDto {
 
     @ToString.Exclude
     private String html;
+    private String title;
 }

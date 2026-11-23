@@ -8,6 +8,7 @@ import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.vo.note.NoteEditVo;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import co.jinear.core.model.vo.note.NoteUpdateVo;
 import co.jinear.core.service.note.NoteOperationService;
 import co.jinear.core.service.richtext.crdt.NoteCrdtEngine;
@@ -44,9 +45,20 @@ public class NoteContentEditService {
         if (!result.isChanged()) {
             return noteEditResultConverter.convert(note, false);
         }
-        richTextSyncOperationService.appendUpdateAtHead(note.getRichTextId(), accountId, result.getUpdate(), result.getHtml(), document.getHeadSeq());
+        AppendRichTextUpdateVo appendVo = mapAppendVo(accountId, note, result);
+        richTextSyncOperationService.appendUpdateAtHead(appendVo, document.getHeadSeq());
         mirrorTitle(note, result.getTitle());
         return noteEditResultConverter.convert(note, true);
+    }
+
+    private AppendRichTextUpdateVo mapAppendVo(String accountId, NoteDto note, NoteCrdtResultDto result) {
+        AppendRichTextUpdateVo appendVo = new AppendRichTextUpdateVo();
+        appendVo.setRichTextId(note.getRichTextId());
+        appendVo.setAccountId(accountId);
+        appendVo.setUpdate(result.getUpdate());
+        appendVo.setHtml(result.getHtml());
+        appendVo.setTitle(result.getTitle());
+        return appendVo;
     }
 
     private String resolveTargetHtml(RichTextDocumentDto document, NoteEditVo vo) {

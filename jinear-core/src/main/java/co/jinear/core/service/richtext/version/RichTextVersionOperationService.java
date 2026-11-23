@@ -2,6 +2,7 @@ package co.jinear.core.service.richtext.version;
 
 import co.jinear.core.model.entity.richtext.RichTextVersion;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.vo.richtext.RecordRichTextVersionVo;
 import co.jinear.core.repository.richtext.RichTextVersionRepository;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -25,22 +27,26 @@ public class RichTextVersionOperationService {
     private final RichTextVersionRepository richTextVersionRepository;
 
     @Transactional
-    public void record(String richTextId, RichTextType type, String accountId, String html) {
-        if (!VERSIONED_TYPES.contains(type) || isSameAsLatest(richTextId, html)) {
+    public void record(RecordRichTextVersionVo vo) {
+        if (!VERSIONED_TYPES.contains(vo.getType()) || isSameAsLatest(vo)) {
             return;
         }
-        RichTextVersion version = retrieveOpenVersion(richTextId, accountId)
-                .orElseGet(() -> initialize(richTextId, accountId));
-        version.setHtml(html);
+        RichTextVersion version = retrieveOpenVersion(vo.getRichTextId(), vo.getAccountId())
+                .orElseGet(() -> initialize(vo.getRichTextId(), vo.getAccountId()));
+        version.setHtml(vo.getHtml());
+        version.setTitle(vo.getTitle());
         RichTextVersion saved = richTextVersionRepository.save(version);
-        log.info("Record rich text version completed. richTextId: {}, richTextVersionId: {}", richTextId, saved.getRichTextVersionId());
+        log.info("Record rich text version completed. richTextId: {}, richTextVersionId: {}", vo.getRichTextId(), saved.getRichTextVersionId());
     }
 
-    private boolean isSameAsLatest(String richTextId, String html) {
-        return richTextVersionRepository.findFirstByRichTextIdAndPassiveIdIsNullOrderByCreatedDateDesc(richTextId)
-                .map(RichTextVersion::getHtml)
-                .filter(html::equals)
+    private boolean isSameAsLatest(RecordRichTextVersionVo vo) {
+        return richTextVersionRepository.findFirstByRichTextIdAndPassiveIdIsNullOrderByCreatedDateDesc(vo.getRichTextId())
+                .filter(latest -> hasSameContent(latest, vo))
                 .isPresent();
+    }
+
+    private boolean hasSameContent(RichTextVersion latest, RecordRichTextVersionVo vo) {
+        return Objects.equals(latest.getHtml(), vo.getHtml()) && Objects.equals(latest.getTitle(), vo.getTitle());
     }
 
     private Optional<RichTextVersion> retrieveOpenVersion(String richTextId, String accountId) {
