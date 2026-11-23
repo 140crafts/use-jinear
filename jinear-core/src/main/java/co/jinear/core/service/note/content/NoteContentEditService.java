@@ -35,7 +35,7 @@ public class NoteContentEditService {
     private final NoteEditResultConverter noteEditResultConverter;
 
     @Retryable(value = {RichTextHeadMovedException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
-    public NoteEditResultDto edit(NoteDto note, NoteEditVo vo) {
+    public NoteEditResultDto edit(String accountId, NoteDto note, NoteEditVo vo) {
         log.info("Edit note content has started. vo: {}", vo);
         RichTextDocumentDto document = richTextSyncOperationService.retrieveDocument(note.getRichTextId());
         noteEditValidator.validateEditable(document);
@@ -44,7 +44,7 @@ public class NoteContentEditService {
         if (!result.isChanged()) {
             return noteEditResultConverter.convert(note, false);
         }
-        richTextSyncOperationService.appendUpdateAtHead(note.getRichTextId(), result.getUpdate(), result.getHtml(), document.getHeadSeq());
+        richTextSyncOperationService.appendUpdateAtHead(note.getRichTextId(), accountId, result.getUpdate(), result.getHtml(), document.getHeadSeq());
         mirrorTitle(note, result.getTitle());
         return noteEditResultConverter.convert(note, true);
     }

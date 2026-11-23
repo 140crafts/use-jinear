@@ -16,6 +16,7 @@ import co.jinear.core.repository.RichTextRepository;
 import co.jinear.core.repository.richtext.RichTextUpdateRepository;
 import co.jinear.core.service.note.NoteFtsRefreshService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
+import co.jinear.core.service.richtext.version.RichTextVersionOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class RichTextSyncService {
     private final HtmlSanitizeService htmlSanitizeService;
     private final RichTextDocumentConverter richTextDocumentConverter;
     private final NoteFtsRefreshService noteFtsRefreshService;
+    private final RichTextVersionOperationService richTextVersionOperationService;
 
     @Transactional(readOnly = true)
     public RichTextDocumentDto retrieveDocument(String richTextId) {
@@ -66,7 +68,7 @@ public class RichTextSyncService {
     }
 
     @Transactional
-    public RichTextAppendDto appendUpdate(String richTextId, String updateBase64, String renderedHtml) {
+    public RichTextAppendDto appendUpdate(String richTextId, String accountId, String updateBase64, String renderedHtml) {
         RichText richText = retrieve(richTextId);
         if (!RichTextFormat.CRDT.equals(richText.getFormat())) {
             log.info("Append update rejected on non-CRDT rich text. richTextId: {}, format: {}", richTextId, richText.getFormat());
@@ -74,7 +76,7 @@ public class RichTextSyncService {
         }
         long seq = richText.getUpdateSeq() + 1;
         richText.setUpdateSeq(seq);
-        applyProjectionIfPresent(richText, renderedHtml);
+        applyProjectionIfPresent(richText, accountId, renderedHtml);
         richTextRepository.save(richText);
 
         RichTextUpdate richTextUpdate = new RichTextUpdate();
@@ -90,13 +92,13 @@ public class RichTextSyncService {
     }
 
     @Transactional
-    public RichTextAppendDto appendUpdateAtHead(String richTextId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
+    public RichTextAppendDto appendUpdateAtHead(String richTextId, String accountId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
         RichText richText = retrieve(richTextId);
         if (richText.getHeadSeq() != expectedHeadSeq) {
             log.info("Append update at head rejected. richTextId: {}, expected: {}, head: {}", richTextId, expectedHeadSeq, richText.getHeadSeq());
             throw new RichTextHeadMovedException();
         }
-        return appendUpdate(richTextId, updateBase64, renderedHtml);
+        return appendUpdate(richTextId, accountId, updateBase64, renderedHtml);
     }
 
     @Transactional
@@ -135,14 +137,16 @@ public class RichTextSyncService {
         log.info("Snapshot completed. richTextId: {}, yjsStateSeq: {}", richTextId, target);
     }
 
-    private void applyProjectionIfPresent(RichText richText, String renderedHtml) {
+    private void applyProjectionIfPresent(RichText richText, String accountId, String renderedHtml) {
         if (Objects.isNull(renderedHtml)) {
             return;
         }
-        richText.setValue(htmlSanitizeService.sanitizeHTML(renderedHtml));
+        String html = htmlSanitizeService.sanitizeHTML(renderedHtml);
+        richText.setValue(html);
         if (RichTextType.NOTE.equals(richText.getType())) {
             noteFtsRefreshService.markDirty();
         }
+        richTextVersionOperationService.record(richText.getRichTextId(), richText.getType(), accountId, html);
     }
 
     private RichTextStateDto toStateDto(RichText richText) {

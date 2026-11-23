@@ -33,19 +33,19 @@ public class RichTextSyncOperationService {
         }
     }
 
-    public RichTextAppendDto appendUpdate(String richTextId, String updateBase64, String renderedHtml) {
+    public RichTextAppendDto appendUpdate(String richTextId, String accountId, String updateBase64, String renderedHtml) {
         richTextSyncLockService.lock(richTextId);
         try {
-            return richTextSyncService.appendUpdate(richTextId, updateBase64, renderedHtml);
+            return richTextSyncService.appendUpdate(richTextId, accountId, updateBase64, renderedHtml);
         } finally {
             richTextSyncLockService.unlock(richTextId);
         }
     }
 
-    public RichTextAppendDto appendUpdateAtHead(String richTextId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
+    public RichTextAppendDto appendUpdateAtHead(String richTextId, String accountId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
         richTextSyncLockService.lock(richTextId);
         try {
-            return richTextSyncService.appendUpdateAtHead(richTextId, updateBase64, renderedHtml, expectedHeadSeq);
+            return richTextSyncService.appendUpdateAtHead(richTextId, accountId, updateBase64, renderedHtml, expectedHeadSeq);
         } finally {
             richTextSyncLockService.unlock(richTextId);
         }

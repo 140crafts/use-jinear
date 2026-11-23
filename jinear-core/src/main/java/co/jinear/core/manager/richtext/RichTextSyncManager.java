@@ -51,8 +51,9 @@ public class RichTextSyncManager {
 
     public RichTextAppendResponse appendUpdate(String richTextId, AppendRichTextUpdateRequest request) {
         authorizeWrite(richTextId);
+        String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Append rich text update has started. richTextId: {}", richTextId);
-        RichTextAppendDto richTextAppendDto = richTextSyncOperationService.appendUpdate(richTextId, request.getUpdate(), request.getHtml());
+        RichTextAppendDto richTextAppendDto = richTextSyncOperationService.appendUpdate(richTextId, currentAccountId, request.getUpdate(), request.getHtml());
         RichTextAppendResponse response = new RichTextAppendResponse();
         response.setRichTextAppendDto(richTextAppendDto);
         return response;
