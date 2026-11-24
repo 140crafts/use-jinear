@@ -12,6 +12,7 @@ public class RecordRichTextVersionVo {
     private String richTextId;
     private RichTextType type;
     private String accountId;
+    private String sessionInfoId;
     @ToString.Exclude
     private String html;
     private String title;

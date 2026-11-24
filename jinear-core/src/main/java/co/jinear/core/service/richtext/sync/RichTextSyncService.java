@@ -158,6 +158,7 @@ public class RichTextSyncService {
         recordVo.setRichTextId(richText.getRichTextId());
         recordVo.setType(richText.getType());
         recordVo.setAccountId(vo.getAccountId());
+        recordVo.setSessionInfoId(vo.getSessionInfoId());
         recordVo.setHtml(html);
         recordVo.setTitle(vo.getTitle());
         return recordVo;

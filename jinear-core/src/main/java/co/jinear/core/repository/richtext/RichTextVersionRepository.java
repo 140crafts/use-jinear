@@ -12,7 +12,7 @@ public interface RichTextVersionRepository extends JpaRepository<RichTextVersion
 
     Optional<RichTextVersion> findFirstByRichTextIdAndPassiveIdIsNullOrderByCreatedDateDesc(String richTextId);
 
-    Optional<RichTextVersion> findFirstByRichTextIdAndAccountIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(String richTextId, String accountId, Date createdAfter);
+    Optional<RichTextVersion> findFirstByRichTextIdAndAccountIdAndSessionInfoIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(String richTextId, String accountId, String sessionInfoId, Date createdAfter);
 
     Optional<RichTextVersion> findByRichTextVersionIdAndRichTextIdAndPassiveIdIsNull(String richTextVersionId, String richTextId);
 

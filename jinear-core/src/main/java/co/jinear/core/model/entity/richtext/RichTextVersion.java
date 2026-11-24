@@ -29,6 +29,9 @@ public class RichTextVersion extends BaseEntity {
     @Column(name = "account_id", nullable = false)
     private String accountId;
 
+    @Column(name = "session_info_id")
+    private String sessionInfoId;
+
     @Column(name = "html", nullable = false)
     private String html;
 

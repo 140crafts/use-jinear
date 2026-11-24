@@ -21,6 +21,8 @@ class RichTextVersionOperationServiceTest {
 
     private static final String RICH_TEXT_ID = "rich-text-1";
     private static final String ACCOUNT_ID = "account-1";
+    private static final String SESSION_INFO_ID = "session-1";
+    private static final String OTHER_SESSION_INFO_ID = "session-2";
     private static final String OLD_HTML = "<p>old</p>";
     private static final String NEW_HTML = "<p>new</p>";
     private static final String OLD_TITLE = "Old title";
@@ -74,7 +76,26 @@ class RichTextVersionOperationServiceTest {
         assertThat(saved.getRichTextVersionId()).isNull();
         assertThat(saved.getRichTextId()).isEqualTo(RICH_TEXT_ID);
         assertThat(saved.getAccountId()).isEqualTo(ACCOUNT_ID);
+        assertThat(saved.getSessionInfoId()).isEqualTo(SESSION_INFO_ID);
         assertThat(saved.getHtml()).isEqualTo(NEW_HTML);
+    }
+
+    @Test
+    void anEditFromAnotherSessionInTheVersionWindowCreatesANewVersion() {
+        RichTextVersion openVersion = version(OLD_HTML, OLD_TITLE);
+        latestVersionIs(openVersion);
+        openVersionIs(Optional.of(openVersion));
+
+        RecordRichTextVersionVo vo = recordVo(RichTextType.NOTE, NEW_HTML, OLD_TITLE);
+        vo.setSessionInfoId(OTHER_SESSION_INFO_ID);
+        richTextVersionOperationService.record(vo);
+
+        RichTextVersion saved = savedVersion();
+        assertThat(saved).isNotSameAs(openVersion);
+        assertThat(saved.getRichTextVersionId()).isNull();
+        assertThat(saved.getSessionInfoId()).isEqualTo(OTHER_SESSION_INFO_ID);
+        assertThat(saved.getHtml()).isEqualTo(NEW_HTML);
+        assertThat(openVersion.getHtml()).isEqualTo(OLD_HTML);
     }
 
     @Test
@@ -116,7 +137,7 @@ class RichTextVersionOperationServiceTest {
     }
 
     private void openVersionIs(Optional<RichTextVersion> version) {
-        Mockito.when(richTextVersionRepository.findFirstByRichTextIdAndAccountIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(eq(RICH_TEXT_ID), eq(ACCOUNT_ID), any(Date.class)))
+        Mockito.when(richTextVersionRepository.findFirstByRichTextIdAndAccountIdAndSessionInfoIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(eq(RICH_TEXT_ID), eq(ACCOUNT_ID), eq(SESSION_INFO_ID), any(Date.class)))
                 .thenReturn(version);
     }
 
@@ -131,6 +152,7 @@ class RichTextVersionOperationServiceTest {
         vo.setRichTextId(RICH_TEXT_ID);
         vo.setType(type);
         vo.setAccountId(ACCOUNT_ID);
+        vo.setSessionInfoId(SESSION_INFO_ID);
         vo.setHtml(html);
         vo.setTitle(title);
         return vo;
@@ -141,6 +163,7 @@ class RichTextVersionOperationServiceTest {
         version.setRichTextVersionId("version-1");
         version.setRichTextId(RICH_TEXT_ID);
         version.setAccountId(ACCOUNT_ID);
+        version.setSessionInfoId(SESSION_INFO_ID);
         version.setHtml(html);
         version.setTitle(title);
         return version;

@@ -31,8 +31,8 @@ public class RichTextVersionOperationService {
         if (!VERSIONED_TYPES.contains(vo.getType()) || isSameAsLatest(vo)) {
             return;
         }
-        RichTextVersion version = retrieveOpenVersion(vo.getRichTextId(), vo.getAccountId())
-                .orElseGet(() -> initialize(vo.getRichTextId(), vo.getAccountId()));
+        RichTextVersion version = retrieveOpenVersion(vo)
+                .orElseGet(() -> initialize(vo));
         version.setHtml(vo.getHtml());
         version.setTitle(vo.getTitle());
         RichTextVersion saved = richTextVersionRepository.save(version);
@@ -49,15 +49,16 @@ public class RichTextVersionOperationService {
         return Objects.equals(latest.getHtml(), vo.getHtml()) && Objects.equals(latest.getTitle(), vo.getTitle());
     }
 
-    private Optional<RichTextVersion> retrieveOpenVersion(String richTextId, String accountId) {
+    private Optional<RichTextVersion> retrieveOpenVersion(RecordRichTextVersionVo vo) {
         Date windowStart = DateHelper.substractMinutes(DateHelper.now(), VERSION_WINDOW_MINUTES);
-        return richTextVersionRepository.findFirstByRichTextIdAndAccountIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(richTextId, accountId, windowStart);
+        return richTextVersionRepository.findFirstByRichTextIdAndAccountIdAndSessionInfoIdAndCreatedDateAfterAndPassiveIdIsNullOrderByCreatedDateDesc(vo.getRichTextId(), vo.getAccountId(), vo.getSessionInfoId(), windowStart);
     }
 
-    private RichTextVersion initialize(String richTextId, String accountId) {
+    private RichTextVersion initialize(RecordRichTextVersionVo vo) {
         RichTextVersion version = new RichTextVersion();
-        version.setRichTextId(richTextId);
-        version.setAccountId(accountId);
+        version.setRichTextId(vo.getRichTextId());
+        version.setAccountId(vo.getAccountId());
+        version.setSessionInfoId(vo.getSessionInfoId());
         return version;
     }
 }

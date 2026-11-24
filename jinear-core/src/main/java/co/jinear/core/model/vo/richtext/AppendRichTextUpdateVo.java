@@ -10,6 +10,7 @@ import lombok.ToString;
 public class AppendRichTextUpdateVo {
     private String richTextId;
     private String accountId;
+    private String sessionInfoId;
     @ToString.Exclude
     private String update;
     @ToString.Exclude

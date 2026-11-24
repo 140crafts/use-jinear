@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AppendRichTextUpdateVoConverter {
 
-    AppendRichTextUpdateVo convert(AppendRichTextUpdateRequest request, String richTextId, String accountId);
+    AppendRichTextUpdateVo convert(AppendRichTextUpdateRequest request, String richTextId, String accountId, String sessionInfoId);
 }

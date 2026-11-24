@@ -38,4 +38,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jin-593-add-session_info_id-to-rich_text_version">
+        <addColumn tableName="rich_text_version">
+            <column name="session_info_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
