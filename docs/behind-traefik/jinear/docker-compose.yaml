@@ -76,9 +76,6 @@ services:
       - ".logs/jinear-core:/app/logs"
       - ".config:/config"
     environment:
-      # Jasypt encryption
-      jasypt.encryptor.password: ${ENCRYPTOR_PASSWORD}
-      jasypt.encryptor.algorithm: PBEWithMD5AndDES
       # JWT
       JWT_SECRET: ${JWT_SECRET}
       JWT_DOMAIN: ${DOMAIN}

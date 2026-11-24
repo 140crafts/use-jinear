@@ -78,8 +78,6 @@ services:
       - ".logs/jinear-core:/app/logs"
       - ".config:/config"
     environment:
-      jasypt.encryptor.password: encryptor-pass
-      jasypt.encryptor.algorithm: PBEWithMD5AndDES
       #      GOOGLE_APPLICATION_CREDENTIALS: /config/gcloud-serviceaccount.json
       JWT_SECRET: change-me
       JWT_DOMAIN: company.com

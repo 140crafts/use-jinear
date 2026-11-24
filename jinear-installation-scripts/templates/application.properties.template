@@ -1,5 +1,3 @@
-jasypt.encryptor.bean=encryptorBean
-
 jinear.instance.id=${JINEAR_INSTANCE_ID:jc0}
 spring.application.name=jinear-core
 server.port=8008

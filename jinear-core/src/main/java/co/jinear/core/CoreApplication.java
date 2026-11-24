@@ -6,7 +6,6 @@ import co.jinear.core.config.logback.appender.AxiomAppender;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableRetry
 @EnableScheduling
-@EnableFeignClients
 public class CoreApplication {
 
     public static void main(String[] args) {
