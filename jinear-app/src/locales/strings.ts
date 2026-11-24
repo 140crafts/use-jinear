@@ -1470,10 +1470,6 @@ const translations = {
         en: "Repeat",
         tr: "Yenile"
     },
-    taskNewReminderModalRepeatEndLabel: {
-        en: "Repeat reminder until specific date",
-        tr: "Belirli bir tarihe dek yenile"
-    },
     taskNewReminderModalRepeatEndDateLabel: {
         en: "End date",
         tr: "Sonlandırma tarihi"
@@ -1523,16 +1519,92 @@ const translations = {
         tr: "Yılda Bir"
     },
     taskNewReminderCreateButton: {
-        en: "Initialize Reminder",
+        en: "Create Reminder",
         tr: "Anımsatıcı Oluştur"
     },
     taskNewReminderCloseButton: {
         en: "Dismiss",
         tr: "Vazgeç"
     },
+    taskNewReminderAddButton: {
+        en: "Add Reminder",
+        tr: "Anımsatıcı Ekle"
+    },
+    taskNewReminderProvideFutureDate: {
+        en: "Please pick a future date",
+        tr: "Lütfen ileri bir tarih seçin"
+    },
     taskNewReminderProvideSpecificDate: {
         en: "Please provide a date",
         tr: "Lütfen tarih girin"
+    },
+    taskNewReminderRepeatEndAfterRemindDate: {
+        en: "The end date must be after the reminder date",
+        tr: "Bitiş tarihi anımsatma tarihinden sonra olmalı"
+    },
+    taskNewReminderHintNoAssignedDate: {
+        en: "No assigned date",
+        tr: "Planlanan tarih yok"
+    },
+    taskNewReminderHintNoDueDate: {
+        en: "No due date",
+        tr: "Son tarih yok"
+    },
+    taskNewReminderHintDatePassed: {
+        en: "Date has passed",
+        tr: "Tarih geçti"
+    },
+    taskNewReminderHintAlreadyExists: {
+        en: "Already has a reminder",
+        tr: "Anımsatıcı zaten var"
+    },
+    taskNewReminderPresetInOneHour: {
+        en: "In 1 hour",
+        tr: "1 saat sonra"
+    },
+    taskNewReminderPresetThisEvening: {
+        en: "Today 18:00",
+        tr: "Bugün 18:00"
+    },
+    taskNewReminderPresetTomorrowMorning: {
+        en: "Tomorrow 09:00",
+        tr: "Yarın 09:00"
+    },
+    taskNewReminderPresetNextMonday: {
+        en: "Next Monday 09:00",
+        tr: "Gelecek Pazartesi 09:00"
+    },
+    taskNewReminderRepeatEndsLabel: {
+        en: "Ends",
+        tr: "Bitiş"
+    },
+    taskNewReminderRepeatEndsNever: {
+        en: "Never",
+        tr: "Hiçbir zaman"
+    },
+    taskNewReminderRepeatEndsOnDate: {
+        en: "On date",
+        tr: "Tarihte"
+    },
+    taskNewReminderSummaryNone: {
+        en: "No reminder selected",
+        tr: "Anımsatıcı seçilmedi"
+    },
+    taskNewReminderSummaryFirst: {
+        en: "First on ${date}",
+        tr: "İlki ${date}"
+    },
+    taskNewReminderSummaryRepeatUntil: {
+        en: "${repeat} until ${date}",
+        tr: "${repeat}, ${date} tarihine dek"
+    },
+    taskReminderCountOne: {
+        en: "1 reminder",
+        tr: "1 anımsatıcı"
+    },
+    taskReminderCountMany: {
+        en: "${count} reminders",
+        tr: "${count} anımsatıcı"
     },
     taskReminderType_ASSIGNED_DATE: {
         en: "Assigned Date",
@@ -2402,6 +2474,18 @@ const translations = {
     newTaskFormPickedCollaboratorsLabel: {
         en: "${count} collaborators",
         tr: "${count} ortak çalışan"
+    },
+    newTaskFormPickReminderButtonLabel: {
+        en: "Add Reminder",
+        tr: "Anımsatıcı Ekle"
+    },
+    newTaskFormReminderAssignedDateRemoved: {
+        en: "The reminder on the assigned date was removed because the task has no assigned date.",
+        tr: "Görevin planlanan tarihi olmadığı için planlanan tarih anımsatıcısı kaldırıldı."
+    },
+    newTaskFormReminderDueDateRemoved: {
+        en: "The reminder on the due date was removed because the task has no due date.",
+        tr: "Görevin son tarihi olmadığı için son tarih anımsatıcısı kaldırıldı."
     },
     newTaskFormPickAssignedDateButtonLabel: {
         en: "Pick assigned date",

@@ -10,6 +10,7 @@ import type {
     ProjectStateType,
     TaskBoardDto,
     TaskDto,
+    TaskInitializeReminderRequest,
     TeamDto,
     TeamMemberDto,
     TeamWorkflowStatusDto,
@@ -96,8 +97,18 @@ export interface ReminderListModalState extends ModalState {
     task?: TaskDto;
 }
 
+export interface NewReminderDraft {
+    assignedDate?: Date | null;
+    hasPreciseAssignedDate?: boolean;
+    dueDate?: Date | null;
+    hasPreciseDueDate?: boolean;
+    reminder?: TaskInitializeReminderRequest | null;
+}
+
 export interface NewReminderModalState extends ModalState {
     task?: TaskDto;
+    draft?: NewReminderDraft;
+    onDraftSave?: (reminder: TaskInitializeReminderRequest | null) => void;
 }
 
 export interface DatePickerModalState extends ModalState {

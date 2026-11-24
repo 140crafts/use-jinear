@@ -1262,6 +1262,8 @@ export const selectReminderListModalTask = (state: RootState) => state.modal.rem
 
 export const selectNewReminderModalVisible = (state: RootState) => state.modal.newReminderModal?.visible;
 export const selectNewReminderModalTask = (state: RootState) => state.modal.newReminderModal?.task;
+export const selectNewReminderModalDraft = (state: RootState) => state.modal.newReminderModal?.draft;
+export const selectNewReminderModalOnDraftSave = (state: RootState) => state.modal.newReminderModal?.onDraftSave;
 
 export const selectDatePickerModalVisible = (state: RootState) => state.modal.datePickerModal?.visible;
 export const selectDatePickerModalTitle = (state: RootState) => state.modal.datePickerModal?.title;

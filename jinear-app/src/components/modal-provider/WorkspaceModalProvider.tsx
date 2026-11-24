@@ -74,7 +74,6 @@ const workspaceModals: any = (
         <AddMemberToTeamModal/>
         <WorkspaceInviteMemberModal/>
         <ReminderListModal/>
-        <NewReminderModal/>
         <SearchTaskModal/>
         <GlobalSearchModal/>
         <NewTeamModal/>
@@ -85,6 +84,7 @@ const workspaceModals: any = (
         <TaskTaskBoardModal/>
         <WorkflowChangeStatusModal/>
         <NewTaskModal/>
+        <NewReminderModal/>
 
         <WorkspaceMemberPickerModal/>
         <NewCalendarIntegrationModal/>

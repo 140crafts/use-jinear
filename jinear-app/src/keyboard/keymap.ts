@@ -31,6 +31,7 @@ export const shortcuts = {
     taskBoard: "b",
     taskAssignedDate: "s",
     taskDueDate: "d",
+    taskReminders: "r",
     taskCreate: "enter",
 
     pickerNew: "n",

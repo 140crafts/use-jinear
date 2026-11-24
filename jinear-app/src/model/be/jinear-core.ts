@@ -1943,6 +1943,14 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface TaskInitializeReminderRequest {
+    beforeAssignedDate?: boolean | null;
+    beforeDueDate?: boolean | null;
+    specificRemindDate?: Date | null;
+    specificRemindRepeatEnd?: Date | null;
+    specificRemindDateRepeatType?: RepeatType | null;
+}
+
 export interface AppendRichTextUpdateRequest extends BaseRequest {
     update: string;
     html?: string | null;
@@ -2086,6 +2094,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     projectId?: string | null;
     milestoneId?: string | null;
     collaboratorIds?: string[] | null;
+    reminder?: TaskInitializeReminderRequest | null;
 }
 
 export interface TaskProjectAndMilestoneUpdateRequest {
