@@ -28,6 +28,8 @@ import co.jinear.core.manager.mcp.tool.note.AppendToNoteTool;
 import co.jinear.core.manager.mcp.tool.note.CreateNoteTool;
 import co.jinear.core.manager.mcp.tool.note.DeleteNoteTool;
 import co.jinear.core.manager.mcp.tool.note.GetNoteTool;
+import co.jinear.core.manager.mcp.tool.note.GetNoteVersionTool;
+import co.jinear.core.manager.mcp.tool.note.ListNoteVersionsTool;
 import co.jinear.core.manager.mcp.tool.note.ListNotebooksTool;
 import co.jinear.core.manager.mcp.tool.note.ListNotesTool;
 import co.jinear.core.manager.mcp.tool.note.MoveNoteTool;
@@ -57,6 +59,7 @@ import co.jinear.core.manager.note.NoteContentManager;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.note.NoteOperationManager;
 import co.jinear.core.manager.note.NoteSearchManager;
+import co.jinear.core.manager.richtext.RichTextVersionManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
 import co.jinear.core.manager.reminder.TaskReminderManager;
 import co.jinear.core.manager.task.TaskBoardEntryManager;
@@ -176,6 +179,8 @@ final class McpRealCatalog {
                 new SearchNotesTool(mock(NoteSearchManager.class), viewConverter),
                 new ListNotesTool(mock(NoteSearchManager.class), viewConverter),
                 new GetNoteTool(mock(NoteFilterManager.class), mock(NoteContentManager.class), viewConverter),
+                new ListNoteVersionsTool(mock(NoteFilterManager.class), mock(RichTextVersionManager.class), viewConverter),
+                new GetNoteVersionTool(mock(NoteFilterManager.class), mock(RichTextVersionManager.class), viewConverter),
                 new CreateNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new ReplaceInNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new AppendToNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),

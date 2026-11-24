@@ -1375,6 +1375,78 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "get_note_version",
+    "title" : "Get one note version",
+    "description" : "Reads one saved version of a note in full: its title and its body as HTML, in the same form as get_note. Use it to see what a note said earlier, to compare two versions, or to find text that was removed and put it back with replace_in_note.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "versionId" : {
+          "type" : "string",
+          "description" : "Version id, from list_note_versions."
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "versionId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "version" : {
+          "type" : "object",
+          "description" : "The version, with its title and body.",
+          "properties" : {
+            "versionId" : {
+              "type" : "string",
+              "description" : "Version id."
+            },
+            "editorAccountId" : {
+              "type" : "string",
+              "description" : "Account id of the editor."
+            },
+            "editorUsername" : {
+              "type" : "string",
+              "description" : "Editor handle."
+            },
+            "createdAt" : {
+              "type" : "string",
+              "description" : "ISO 8601 instant the version was first saved."
+            },
+            "updatedAt" : {
+              "type" : "string",
+              "description" : "ISO 8601 instant of the last edit in this version."
+            },
+            "title" : {
+              "type" : "string",
+              "description" : "Note title in this version, or null when the version has no title."
+            },
+            "body" : {
+              "type" : "string",
+              "description" : "Note body as HTML in this version."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "version" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Get one note version",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "get_task",
     "title" : "Get one task",
     "description" : "Reads a single task in full by its human readable reference such as ENG-42: its body, collaborators, relations such as subtasks and blockers, checklists with their items, and the boards it is on. Use it after search_tasks or list_tasks when the details of a specific task are needed. Comments, attachments, reminders and activity have their own list tools.",
@@ -2084,6 +2156,94 @@
     },
     "annotations" : {
       "title" : "List files and folders",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_note_versions",
+    "title" : "List a note's versions",
+    "description" : "Lists the saved versions of a note, newest first, 50 per page. The first item is the current version. Each version holds the edits of one editor in one session within about a minute. Returns ids, editors and dates; call get_note_version for the body of a version.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId", "noteId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Versions of this note, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "versionId" : {
+                "type" : "string",
+                "description" : "Version id."
+              },
+              "editorAccountId" : {
+                "type" : "string",
+                "description" : "Account id of the editor."
+              },
+              "editorUsername" : {
+                "type" : "string",
+                "description" : "Editor handle."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant the version was first saved."
+              },
+              "updatedAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant of the last edit in this version."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List a note's versions",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -4303,12 +4463,14 @@
     "get_context" : [ "workspace:read" ],
     "get_file_link" : [ "files:read" ],
     "get_note" : [ "notes:read" ],
+    "get_note_version" : [ "notes:read" ],
     "get_task" : [ "tasks:read" ],
     "get_unread_notification_count" : [ "tasks:read" ],
     "get_workspace" : [ "workspace:read" ],
     "list_activity" : [ "tasks:read" ],
     "list_calendar_events" : [ "calendar:read" ],
     "list_files" : [ "files:read" ],
+    "list_note_versions" : [ "notes:read" ],
     "list_notebooks" : [ "notes:read" ],
     "list_notes" : [ "notes:read" ],
     "list_notifications" : [ "tasks:read" ],
