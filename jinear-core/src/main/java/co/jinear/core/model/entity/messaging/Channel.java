@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -42,11 +42,11 @@ public class Channel extends BaseEntity {
     private ChannelVisibilityType channelVisibilityType;
 
     @OneToMany(mappedBy = "channel")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     private Set<ChannelSettings> settings;
 
     @OneToMany(mappedBy = "channel")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<ChannelMember> members;
 

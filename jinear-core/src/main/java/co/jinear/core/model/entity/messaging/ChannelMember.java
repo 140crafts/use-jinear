@@ -11,7 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 
@@ -50,13 +50,13 @@ public class ChannelMember extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "robot_id", insertable = false, updatable = false)
     private Robot robot;
 

@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -47,17 +47,17 @@ public class Workspace extends BaseEntity {
     private WorkspaceSetting settings;
 
     @OneToMany(mappedBy = "workspace")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Team> teams;
 
     @OneToMany(mappedBy = "workspace")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Feed> feeds;
 
     @OneToMany(mappedBy = "workspace")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<WorkspaceMember> workspaceMembers;
 }

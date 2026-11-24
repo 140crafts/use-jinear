@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -38,7 +38,7 @@ public class Conversation extends BaseEntity {
 
     @OneToMany
     @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id", insertable = false, updatable = false)
-    @Where(clause = "passive_id is null and left_at is null")
+    @SQLRestriction("passive_id is null and left_at is null")
     @OrderBy("createdDate ASC")
     private Set<ConversationParticipant> participants;
 }

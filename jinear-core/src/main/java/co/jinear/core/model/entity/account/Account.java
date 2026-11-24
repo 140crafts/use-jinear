@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public class Account extends BaseEntity {
     private Boolean ghost;
 
     @OneToMany(mappedBy = "account")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<AccountRole> roles;
 

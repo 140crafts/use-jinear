@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.5.16</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>co.jinear</groupId>
@@ -39,9 +39,9 @@
     </profiles>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <graalvm.version>23.1.5</graalvm.version>
-        <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <spring-cloud.version>2025.0.3</spring-cloud.version>
         <lombok.version>1.18.30</lombok.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
@@ -178,7 +178,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.19.0</version>
         </dependency>
 
         <dependency>
@@ -331,6 +330,12 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.18.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>1.86</version>
         </dependency>
 
         <dependency>

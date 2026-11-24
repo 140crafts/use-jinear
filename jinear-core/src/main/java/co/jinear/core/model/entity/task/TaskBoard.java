@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -47,7 +47,7 @@ public class TaskBoard extends BaseEntity {
     private String color;
 
     @OneToMany(mappedBy = "taskBoard")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("order asc")
     private Set<TaskBoardEntry> taskListEntries;
 }

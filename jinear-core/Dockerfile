@@ -17,6 +17,7 @@ FROM ${RUNTIME_IMAGE}
 # Release tag from CI (v0.1.NNNN); branch builds pass a short SHA, local builds keep "dev"
 ARG JINEAR_VERSION=dev
 ENV JINEAR_VERSION=${JINEAR_VERSION}
+ENV LIQUIBASE_ANALYTICS_ENABLED=false
 
 WORKDIR /app
 
