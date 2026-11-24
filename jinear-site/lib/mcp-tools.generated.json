@@ -174,7 +174,7 @@
   }, {
     "name" : "add_task_relation",
     "title" : "Relate two tasks",
-    "description" : "Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId; BLOCKS and IS_BLOCKED_BY mark a dependency. Returns the relation with its id.",
+    "description" : "Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId. Returns the relation with its id.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -188,8 +188,8 @@
         },
         "relationType" : {
           "type" : "string",
-          "description" : "Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, or taskId IS_BLOCKED_BY relatedTaskId.",
-          "enum" : [ "BLOCKS", "IS_BLOCKED_BY", "SUBTASK" ]
+          "description" : "Read it as: taskId SUBTASK of relatedTaskId.",
+          "enum" : [ "SUBTASK" ]
         }
       },
       "required" : [ "taskId", "relatedTaskId", "relationType" ],
@@ -208,7 +208,7 @@
             },
             "relationType" : {
               "type" : "string",
-              "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+              "description" : "SUBTASK. Read it as: taskId SUBTASK of relatedTaskId."
             },
             "taskId" : {
               "type" : "string",
@@ -1566,7 +1566,7 @@
                   },
                   "relationType" : {
                     "type" : "string",
-                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                    "description" : "SUBTASK. Read it as: taskId SUBTASK of relatedTaskId."
                   },
                   "taskId" : {
                     "type" : "string",
@@ -1600,7 +1600,7 @@
                   },
                   "relationType" : {
                     "type" : "string",
-                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                    "description" : "SUBTASK. Read it as: taskId SUBTASK of relatedTaskId."
                   },
                   "taskId" : {
                     "type" : "string",
