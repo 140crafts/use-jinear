@@ -1,15 +1,15 @@
 package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.config.properties.OauthProperties;
-import co.jinear.core.exception.BusinessException;
-import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
 import co.jinear.core.converter.oauth.OauthClientMetadataVoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.request.oauth.OauthClientRegistrationRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -175,7 +175,7 @@ public class CimdResolver {
     private OauthClientRegistrationRequest readDocument(String body) {
         try {
             return objectMapper.readValue(body, OauthClientRegistrationRequest.class);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             log.warn("[OAUTH] CIMD document could not be read: {}", exception.getMessage());
             throw new BusinessException("oauth.error.invalid-client");
         }

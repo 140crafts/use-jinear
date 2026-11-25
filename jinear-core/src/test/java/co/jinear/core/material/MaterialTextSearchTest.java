@@ -23,7 +23,6 @@ import co.jinear.core.service.material.MaterialAccessValidationService;
 import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.material.MaterialSearchService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -32,6 +31,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Set;
@@ -141,7 +142,7 @@ class MaterialTextSearchTest {
         response.setMaterialDtoPageDto(new PageDto<>(new PageImpl<>(List.of(material("m1")))));
         Mockito.when(manager.searchText(eq("ws"), any(MaterialTextSearchRequest.class), eq(1))).thenReturn(response);
         SearchFilesTool tool = new SearchFilesTool(manager, new McpViewConverter());
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = JsonMapper.builderWithJackson2Defaults().build();
         McpToolArguments args = McpToolArguments.of(
                 objectMapper.readTree("{\"workspaceId\":\"ws\",\"query\":\"report\",\"type\":\"FILE\",\"page\":1}"),
                 objectMapper,

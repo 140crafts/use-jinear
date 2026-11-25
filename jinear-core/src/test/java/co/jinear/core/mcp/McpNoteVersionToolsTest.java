@@ -21,13 +21,14 @@ import co.jinear.core.model.request.note.NoteFilterRequest;
 import co.jinear.core.model.response.note.NotePaginatedResponse;
 import co.jinear.core.model.response.richtext.RichTextVersionPaginatedResponse;
 import co.jinear.core.model.response.richtext.RichTextVersionResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 class McpNoteVersionToolsTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
     private static final String RICH_TEXT_ID = "rich-text-1";
 

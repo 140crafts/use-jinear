@@ -5,8 +5,7 @@ import co.jinear.core.model.enumtype.lock.LockSourceType;
 import co.jinear.core.service.lock.LockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class TeamWorkflowStatusLockService {
     private final LockService lockService;
 
-    @Retryable(value = {LockedException.class}, maxAttempts = 8, backoff = @Backoff(delay = 200, multiplier = 2, maxDelay = 3000))
+    @Retryable(includes = LockedException.class, maxRetries = 7, delay = 200, multiplier = 2, maxDelay = 3000)
     public void lockTeamWorkflow(String teamId) {
         log.info("Lock team workflow status has started for teamId: {}", teamId);
         lockService.lock(teamId, LockSourceType.TEAM_WORKFLOW_STATUS);

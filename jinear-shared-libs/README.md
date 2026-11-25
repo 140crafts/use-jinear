@@ -60,6 +60,6 @@ public class MyIpResolver implements ClientIpResolver {
 ### Requirements
 
 - Java 17+
-- Spring Boot 3.0+
+- Spring Boot 4.1+
 - Redis
 

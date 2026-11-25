@@ -8,8 +8,8 @@ import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.vo.note.NoteEditVo;
-import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import co.jinear.core.model.vo.note.NoteUpdateVo;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import co.jinear.core.service.note.NoteOperationService;
 import co.jinear.core.service.richtext.crdt.NoteCrdtEngine;
 import co.jinear.core.service.richtext.sync.RichTextSyncOperationService;
@@ -17,8 +17,7 @@ import co.jinear.core.validator.note.NoteEditValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -35,7 +34,7 @@ public class NoteContentEditService {
     private final NoteEditValidator noteEditValidator;
     private final NoteEditResultConverter noteEditResultConverter;
 
-    @Retryable(value = {RichTextHeadMovedException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
+    @Retryable(includes = RichTextHeadMovedException.class, maxRetries = 2, delay = 100)
     public NoteEditResultDto edit(String accountId, String sessionInfoId, NoteDto note, NoteEditVo vo) {
         log.info("Edit note content has started. vo: {}", vo);
         RichTextDocumentDto document = richTextSyncOperationService.retrieveDocument(note.getRichTextId());

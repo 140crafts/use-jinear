@@ -5,8 +5,10 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.exception.NotValidException;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpToolArguments;
+import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import co.jinear.core.model.mcp.McpToolContext;
-import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.jsonrpc.McpContentBlock;
@@ -23,16 +25,14 @@ import co.jinear.core.model.mcp.jsonrpc.McpToolCallResult;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsCapability;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsListResult;
 import co.jinear.core.model.mcp.view.McpToolPayload;
-import co.jinear.core.manager.mcp.tool.McpTool;
-import co.jinear.core.manager.mcp.tool.McpToolArguments;
-import co.jinear.core.manager.mcp.tool.McpToolRegistry;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import co.jinear.core.service.mcp.McpToolCallLogService;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -160,7 +160,7 @@ public class McpProtocolManager {
             return Objects.isNull(params) || !params.isObject()
                     ? type.getDeclaredConstructor().newInstance()
                     : objectMapper.treeToValue(params, type);
-        } catch (ReflectiveOperationException | JsonProcessingException exception) {
+        } catch (ReflectiveOperationException | JacksonException exception) {
             throw new McpToolException("invalid_params", "mcp.error.params.unreadable");
         }
     }
@@ -183,7 +183,7 @@ public class McpProtocolManager {
     private String serialize(Object value) {
         try {
             return objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             log.warn("[MCP] Could not serialize a tool payload.", exception);
             return String.valueOf(value);
         }

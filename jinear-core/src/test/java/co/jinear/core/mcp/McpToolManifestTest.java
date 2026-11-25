@@ -13,8 +13,10 @@ import co.jinear.core.model.response.mcp.McpToolManifestResponse;
 import co.jinear.core.validator.mcp.McpEnabledValidator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverters;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,8 +66,10 @@ class McpToolManifestTest {
 
     @Test
     void prettyPrintsTheManifestAndLeavesOtherResponsesCompact() throws IOException {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        new PublishedDocumentJsonConfiguration().extendMessageConverters(List.of(converter));
+        JacksonJsonHttpMessageConverter converter = new JacksonJsonHttpMessageConverter(JsonMapper.builderWithJackson2Defaults());
+        HttpMessageConverters.ServerBuilder builder = HttpMessageConverters.forServer().withJsonConverter(converter);
+        new PublishedDocumentJsonConfiguration().configureMessageConverters(builder);
+        builder.build();
 
         McpToolManifestResponse manifest = new McpToolManifestResponse();
         manifest.setTools(List.of());
@@ -75,7 +79,7 @@ class McpToolManifestTest {
         assertThat(write(converter, new McpServerInfoResponse())).doesNotContain("\n");
     }
 
-    private String write(MappingJackson2HttpMessageConverter converter, Object body) throws IOException {
+    private String write(JacksonJsonHttpMessageConverter converter, Object body) throws IOException {
         MockHttpOutputMessage message = new MockHttpOutputMessage();
         converter.write(body, MediaType.APPLICATION_JSON, message);
         return message.getBodyAsString();

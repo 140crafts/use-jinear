@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.data.redis.autoconfigure.DataRedisProperties;
 import org.springframework.context.annotation.Bean;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class RateLimiterAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public StatefulRedisConnection<String, byte[]> rateLimitRedisConnection(
-            org.springframework.boot.autoconfigure.data.redis.RedisProperties redisProperties) {
+            DataRedisProperties redisProperties) {
         String redisUri = String.format("redis://%s@%s:%d",
                 redisProperties.getPassword() != null ? redisProperties.getPassword() : "",
                 redisProperties.getHost(),

@@ -18,11 +18,11 @@ import co.jinear.core.service.messaging.message.MessageListingService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.ZonedDateTime;
 import java.util.List;

@@ -1,8 +1,8 @@
 package co.jinear.core.model.mcp.jsonrpc;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 

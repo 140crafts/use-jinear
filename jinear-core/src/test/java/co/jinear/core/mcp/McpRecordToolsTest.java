@@ -29,11 +29,12 @@ import co.jinear.core.model.mcp.view.McpFileLinkView;
 import co.jinear.core.model.mcp.view.McpTaskView;
 import co.jinear.core.model.response.material.MaterialRetrieveResponse;
 import co.jinear.core.model.response.task.TaskResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -45,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class McpRecordToolsTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     private final TaskRetrieveManager taskRetrieveManager = Mockito.mock(TaskRetrieveManager.class);

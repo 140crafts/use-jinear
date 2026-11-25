@@ -4,9 +4,9 @@ import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.mcp.schema.McpField;
 import co.jinear.core.model.mcp.schema.McpZonedDateTimeDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.ZonedDateTime;
 import java.util.List;

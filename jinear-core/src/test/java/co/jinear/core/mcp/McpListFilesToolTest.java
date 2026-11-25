@@ -14,13 +14,14 @@ import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
 import co.jinear.core.model.request.material.MaterialSearchRequest;
 import co.jinear.core.model.response.material.ParentMaterialDtoResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class McpListFilesToolTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
 
     private final MaterialListingManager materialListingManager = Mockito.mock(MaterialListingManager.class);
     private final ListFilesTool tool = new ListFilesTool(materialListingManager, new McpViewConverter());

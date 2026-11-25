@@ -15,7 +15,6 @@ import co.jinear.core.model.mcp.view.McpTaskAttachmentAcknowledgementView;
 import co.jinear.core.model.mcp.view.McpTaskAttachmentView;
 import co.jinear.core.model.response.task.TaskMediaResponse;
 import co.jinear.core.model.response.task.TaskMediaUploadResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -32,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class McpTaskAttachmentToolsTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
     private static final String DOWNLOAD_URL = "https://api.jinear.co/v1/task/media/task-1/download/media-1";
 

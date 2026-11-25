@@ -3,11 +3,11 @@ package co.jinear.core.service.richtext.crdt;
 import co.jinear.core.exception.note.NoteCrdtException;
 import co.jinear.core.model.dto.note.NoteContentDto;
 import co.jinear.core.model.dto.note.NoteCrdtResultDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class NoteCrdtEngine {
     private String serialize(List<String> values) {
         try {
             return objectMapper.writeValueAsString(values);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             throw new NoteCrdtException("note.error.document.serialize-failed");
         }
     }
@@ -46,7 +46,7 @@ public class NoteCrdtEngine {
             return objectMapper.readerFor(type)
                     .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                     .readValue(json);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             throw new NoteCrdtException("note.error.document.read-failed");
         }
     }

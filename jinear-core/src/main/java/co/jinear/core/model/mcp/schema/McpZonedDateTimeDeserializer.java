@@ -1,11 +1,10 @@
 package co.jinear.core.model.mcp.schema;
 
 import co.jinear.core.model.mcp.McpToolException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -13,10 +12,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
-public class McpZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
+public class McpZonedDateTimeDeserializer extends ValueDeserializer<ZonedDateTime> {
 
     @Override
-    public ZonedDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+    public ZonedDateTime deserialize(JsonParser parser, DeserializationContext context) {
         String raw = parser.getValueAsString();
         if (Objects.isNull(raw) || raw.isBlank()) {
             return null;
