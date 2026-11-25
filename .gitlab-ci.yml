@@ -33,7 +33,7 @@ workflow:
     - .gitlab-ci.yml
 
 .maven_setup: &maven_setup
-  image: $CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/maven:3.9-eclipse-temurin-21
+  image: $CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/maven:3.9-eclipse-temurin-25
   before_script:
     - |
       # Create Maven settings.xml for GitLab Package Registry authentication
@@ -143,8 +143,8 @@ core:build:
   script:
     - cd jinear-core
     - docker buildx build --platform linux/amd64,linux/arm64
-        --build-arg MAVEN_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/maven:3.9-eclipse-temurin-21
-        --build-arg RUNTIME_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/eclipse-temurin:21-jre-alpine
+        --build-arg MAVEN_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/maven:3.9-eclipse-temurin-25
+        --build-arg RUNTIME_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/eclipse-temurin:25-jre-alpine
         --build-arg JINEAR_VERSION=${TAG}
         --cache-from type=registry,ref=${JINEAR_CORE_IMAGE_LATEST}-buildcache
         --cache-to type=registry,ref=${JINEAR_CORE_IMAGE_LATEST}-buildcache,mode=max

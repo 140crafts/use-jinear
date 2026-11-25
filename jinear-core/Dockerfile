@@ -1,5 +1,5 @@
-ARG MAVEN_IMAGE=maven:3.9-eclipse-temurin-21
-ARG RUNTIME_IMAGE=eclipse-temurin:21-jre-alpine
+ARG MAVEN_IMAGE=maven:3.9-eclipse-temurin-25
+ARG RUNTIME_IMAGE=eclipse-temurin:25-jre-alpine
 FROM ${MAVEN_IMAGE} AS maven_build
 
 WORKDIR /build/

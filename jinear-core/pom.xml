@@ -39,9 +39,8 @@
     </profiles>
 
     <properties>
-        <java.version>21</java.version>
-        <graalvm.version>23.1.5</graalvm.version>
-        <lombok.version>1.18.30</lombok.version>
+        <java.version>25</java.version>
+        <graalvm.version>25.0.5.1</graalvm.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
