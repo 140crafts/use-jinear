@@ -17,7 +17,9 @@ import java.util.Map;
 @EnableScheduling
 public class CoreApplication {
 
-    private static final Map<String, Object> DEFAULT_PROPERTIES = Map.of("spring.jackson.use-jackson2-defaults", "true");
+    private static final Map<String, Object> DEFAULT_PROPERTIES = Map.of(
+            "spring.jackson.use-jackson2-defaults", "true",
+            "spring.jpa.properties.hibernate.timezone.default_storage", "NORMALIZE");
 
     public static void main(String[] args) {
         SpringApplication application = new SpringApplication(CoreApplication.class);

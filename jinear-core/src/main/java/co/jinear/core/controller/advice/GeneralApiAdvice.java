@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ import java.util.List;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GeneralApiAdvice {
+
+    private static final String NOT_FOUND_MESSAGE = "common.error.not-found";
 
     private final ApiAdviceHelper apiAdviceHelper;
     private final MessageSourceLocalizer messageSourceLocalizer;
@@ -65,6 +68,13 @@ public class GeneralApiAdvice {
         } catch (Exception e) {
             return apiAdviceHelper.getUnknownExceptionResponse(ex);
         }
+    }
+
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    protected ResponseEntity<BaseResponse> handleNoResourceFound() {
+        LocaleMessage localeMessage = messageSourceLocalizer.getLocaleMessage(NOT_FOUND_MESSAGE);
+        BaseResponse baseResponse = apiAdviceHelper.createErrorResponse(localeMessage);
+        return new ResponseEntity<>(baseResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = NoAccessException.class)
