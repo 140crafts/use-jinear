@@ -44,4 +44,19 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jin-593-turn-on-mcp_server-instance_flag">
+        <update tableName="instance_flag">
+            <column name="flag_value" value="true"/>
+            <column name="udate" valueComputed="CURRENT_TIMESTAMP"/>
+            <where>flag_type = 7</where>
+        </update>
+        <rollback>
+            <update tableName="instance_flag">
+                <column name="flag_value" value="false"/>
+                <column name="udate" valueComputed="CURRENT_TIMESTAMP"/>
+                <where>flag_type = 7</where>
+            </update>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

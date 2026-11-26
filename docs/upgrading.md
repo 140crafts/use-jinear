@@ -37,7 +37,9 @@ docker compose pull && docker compose up -d
 ```
 
 **The database updates itself.** Liquibase adds the `rich_text_version` table, which keeps
-the versions of notes. Existing data is not changed.
+the versions of notes. It also turns on **AI Assistant Connections** in the admin panel.
+Assistants still cannot connect while `MCP_ENABLED=false` in `.env`. To keep them off with
+`MCP_ENABLED=true`, turn the flag off again in `/admin`.
 
 ### Settings you can delete (optional)
 
@@ -344,8 +346,9 @@ access token on their next refresh without anyone reconnecting.
 docker compose up -d
 ```
 
-Then sign in as the instance admin, open `/admin`, and turn on **AI Assistant Connections**
-under instance flags. Both that flag and the two `.env` switches must be on.
+Then sign in as the instance admin, open `/admin`, and make sure **AI Assistant Connections**
+is on under instance flags. It is on by default from v0.1.1688. Both that flag and the two
+`.env` switches must be on.
 
 Members then find their server address in their own profile, under **AI Assistants**, with
 a copy button.

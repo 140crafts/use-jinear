@@ -117,8 +117,8 @@ their own machine.
 Two switches have to agree before anybody can connect:
 
 1. `MCP_ENABLED=true` in `.env`. This decides whether the server exists.
-2. **AI Assistants** turned on in the admin panel, under instance flags. This is the
-   switch an administrator keeps.
+2. **AI Assistants** turned on in the admin panel, under instance flags. It is on by
+   default. This is the switch an administrator keeps.
 
 Turning either off stops new connections. Assistants that are already connected keep
 working until a member disconnects them from their profile page.

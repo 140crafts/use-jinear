@@ -1,0 +1,129 @@
+---
+title: "Note History, Task Links in Notes, and Reminders on New Tasks."
+description: "Notes keep their older versions now, and you can bring one back. You can link tasks inside a note and see them listed under it. A new task can get its reminders before you save it. And the server moved to newer foundations."
+pubDate: "2026-11-26"
+tags: ["changelog", "notes", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Most of this release is about notes. Since assistants can write in them, and several
+people can have one open at the same time, I wanted a way back when an edit goes wrong.
+That is the first part of this post. The rest is task links, reminders, and a few small
+things that made notes nicer to live in.
+
+## Note history
+
+Every note keeps its older versions now. Open a note and click the **Version history**
+button at the top. The list shows who edited the note and when, grouped by today,
+yesterday and older days, with the newest at the top.
+
+Click a version to see it. If it is the one you want, press **Restore** and confirm.
+The note goes back to that version for everyone. A restore is a change like any other,
+so it is in the history too, and you can undo it from there.
+
+Jinear saves versions while you type, about one a minute for each person who edits the
+note. Edits from an assistant are in the history as well, under your name.
+
+<video src="https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-593-note-history-task-links-in-notes-and-reminders-on-new-tasks/note-versions.mp4" aria-label="Opening the version history of a note and restoring an older version" autoPlay loop muted playsInline />
+
+Assistants can read the history too. Ask "what did this note say yesterday?" or "put
+back the paragraph that was removed", and an assistant can look through the versions and
+do it. Some assistants load their list of tools only when they connect, so if yours does
+not know about the history yet, start a new chat.
+
+## Task links in notes
+
+You can link a task inside a note now. Use the **Link a task** button in the editor
+toolbar, or paste the link of a task into the note. Either way, the link turns into a
+small chip with the task in it. Click it and the task opens.
+
+In the note properties, **Tasks mentioned in this note** lists every task the note links to,
+with its status and who it is assigned to. A meeting note now shows at a glance which of
+the things you agreed on are done. If a note links a task from a team you are not in,
+you do not see that task.
+
+<video src="https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-593-note-history-task-links-in-notes-and-reminders-on-new-tasks/task-links-in-notes.mp4" aria-label="Linking a task in a note, and the task in the list of mentioned tasks" autoPlay loop muted playsInline />
+
+## Reminders on new tasks
+
+You can add reminders while you create a task, not only after. The new task form has an
+**Add Reminder** button. Pick a reminder at the start date, at the due date, or at a
+time of your own, with quick picks like **In 1 hour**, **Today 18:00**, **Tomorrow
+09:00** and **Next Monday 09:00**. A reminder can repeat, and you can choose when the
+repeating ends.
+
+The reminder window also got a redesign. A short summary at the bottom shows how many
+reminders you set and when the first one is, so you can check before you save.
+
+If you remove the start or due date of the task after you pick a reminder on that date,
+the reminder goes too, and the form tells you so.
+
+<video src="https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-593-note-history-task-links-in-notes-and-reminders-on-new-tasks/creating-task-with-reminder.mp4" aria-label="Adding reminders while creating a new task" autoPlay loop muted playsInline />
+
+## Smaller things in notes
+
+- **Page width or full width.** A button next to the note text switches between a
+  narrow page and the full width of the screen. Your choice applies to all notes on that
+  device.
+- **Drag a draft into a notebook.** Drag a draft note onto a notebook in the side list
+  to move it there. The notebook lights up while you hold the note over it.
+- **Jinear remembers where you were.** The notebooks and notes you opened in the side
+  list stay open, and the last note you were on opens again when you come back.
+- **Recently changed notes come first.** The notes in a notebook are in the order they
+  were last changed. Opening a note without typing in it no longer counts as a change.
+
+<video src="https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-593-note-history-task-links-in-notes-and-reminders-on-new-tasks/notes-page-width.mp4" aria-label="Switching a note between page width and full width" autoPlay loop muted playsInline />
+
+<video src="https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-593-note-history-task-links-in-notes-and-reminders-on-new-tasks/templates-drag-and-drop-to-notebooks.mp4" aria-label="Dragging a draft note onto a notebook" autoPlay loop muted playsInline />
+
+## Fixes
+
+- **Subtasks and related tasks keep their order.** The list under a task could come in a
+  different order each time you opened it. It is in the order you added them now.
+- **Task descriptions in the task window.** The description could show old or empty text
+  until you opened the task again. It shows the current text now.
+
+## Under the hood
+
+The server moved to newer versions of the tools it is built on. You should not notice it
+in daily use, and it keeps Jinear on versions that still get fixes.
+
+## Updating to this version
+
+Version v0.1.1688 no longer reads encrypted values in your settings file, the ones that
+look like `ENC(...)`. The installer never writes such values, so if you set up Jinear
+with the installer, there is nothing to do. If you encrypted a value yourself, replace it
+with the plain value before you update.
+
+The `grep` line below shows such values. If it prints nothing, you are fine. Then take a
+backup and update the way you always do:
+
+```bash
+cd ~/jinear
+grep -n "ENC(" .config/application.properties
+docker exec jinear-db-backup /backup.sh
+docker compose pull && docker compose up -d
+```
+
+The database adds what note history needs by itself. Three more things to know:
+
+- **Some settings are not needed anymore.** The encryption lines in your settings and in
+  `docker-compose.yaml` can go. Jinear starts with or without them, so there is no rush.
+- **AI Assistant Connections is on in the admin panel now.** Assistants still cannot connect until
+  you turn on the MCP server in `.env`. If you turned it on and want to keep assistants
+  out, turn the switch off again in the admin panel.
+- **If you have your own scripts that call the Jinear API**, a request to an address that
+  does not exist now gets "not found" instead of "unauthorized".
+
+The lines you can delete, and how to go back to the previous version if you need to, are
+in the
+[upgrade guide](https://gitlab.com/140crafts/use-jinear/-/blob/main/docs/upgrading.md).
+Going back does not need a database restore.
+
+---
+
+If a version you expected is not in the history, or a task link does not turn into a
+chip, write to me.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

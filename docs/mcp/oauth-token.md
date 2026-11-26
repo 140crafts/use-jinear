@@ -12,8 +12,8 @@ Two properties must be on:
 - `jinear.oauth.enabled=true` runs the authorization server.
 - `jinear.mcp.enabled=true` runs the MCP server, which is what the token opens.
 
-An administrator must also turn on **AI Assistant Connections** in the admin panel. Without
-it, no new connection can be authorized.
+**AI Assistant Connections** must also be on in the admin panel. It is on by default.
+Without it, no new connection can be authorized.
 
 A real client does steps 3 to 5 in a browser. The calls below do the same thing from a
 shell, which is useful for testing an instance.
