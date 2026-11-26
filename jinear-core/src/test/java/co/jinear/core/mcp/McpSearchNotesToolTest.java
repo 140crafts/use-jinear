@@ -13,7 +13,6 @@ import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpPageView;
 import co.jinear.core.model.request.note.NoteSearchRequest;
 import co.jinear.core.model.response.note.NotePaginatedResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
@@ -21,6 +20,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 class McpSearchNotesToolTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     private final NoteSearchManager noteSearchManager = Mockito.mock(NoteSearchManager.class);

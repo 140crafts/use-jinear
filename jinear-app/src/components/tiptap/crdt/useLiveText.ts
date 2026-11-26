@@ -26,11 +26,17 @@ interface IUseLiveTextProps {
     /** Server baseline snapshot for richTextId. Applied idempotently to both docs when syncing starts. */
     initialRichText?: RichTextDto;
     getHtml?: () => string | null;
+    getTitle?: (doc: Y.Doc) => string | null;
 }
 
 const logger = Logger('useLiveText');
 
-export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHtml}: IUseLiveTextProps) => {
+const hasUnsyncedChanges = (liveDoc: Y.Doc, serverDoc: Y.Doc) => {
+    const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
+    return !Y.snapshotContainsUpdate(Y.snapshot(serverDoc), delta);
+};
+
+export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHtml, getTitle}: IUseLiveTextProps) => {
     const dispatch = useAppDispatch();
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
@@ -43,9 +49,11 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
 
     // Mirrored each render so async work always reads the latest values without re-running effects.
     const getHtmlRef = useRef(getHtml);
+    const getTitleRef = useRef(getTitle);
     const initialRichTextRef = useRef(initialRichText);
     useEffect(() => {
         getHtmlRef.current = getHtml;
+        getTitleRef.current = getTitle;
         initialRichTextRef.current = initialRichText;
     });
 
@@ -100,9 +108,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
             // Diff against the server-confirmed shadow doc to catch unflushed local edits
             // (offline typing + reload), without this they'd never upload again.
             const serverDoc = serverDocRef.current;
-            const base = serverDoc ? Y.encodeStateVector(serverDoc) : Y.encodeStateVector(new Y.Doc());
-            const diff = Y.encodeStateAsUpdate(liveDoc, base);
-            if (diff.length > 2) {
+            if (hasUnsyncedChanges(liveDoc, serverDoc ?? new Y.Doc())) {
                 isDirtyRef.current = true;
                 setStatus("saved_locally");
             } else {
@@ -144,8 +150,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
         snapshotBaselineSeq.current = lastFetchedUpdateSeq.current;
 
         const armDelta = () => {
-            const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
-            if (delta.length > 2) isDirtyRef.current = true;
+            if (hasUnsyncedChanges(liveDoc, serverDoc)) isDirtyRef.current = true;
         };
         armDelta();
         // Hydration already done and nothing local-only (e.g. draft promoted after boot) → in sync.
@@ -178,9 +183,15 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
 
         const flush = async () => {
             if (!isDirtyRef.current || inFlightRef.current) return;
+            if (!hasUnsyncedChanges(liveDoc, serverDoc)) {
+                isDirtyRef.current = false;
+                setStatus("synced");
+                return;
+            }
             inFlightRef.current = true;
             const update = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
             const html = getHtmlRef.current?.() ?? null;   // capture BEFORE await, matches `update`
+            const title = getTitleRef.current?.(liveDoc) ?? null;
             isDirtyRef.current = false;
             // Manually dispatched mutations keep their result in the store until reset().
             const mutation = dispatch(
@@ -188,7 +199,8 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
                     {
                         richTextId,
                         update: toBase64(update),
-                        html
+                        html,
+                        title
                     }
                 )
             );

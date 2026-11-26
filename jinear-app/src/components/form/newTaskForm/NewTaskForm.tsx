@@ -17,10 +17,12 @@ import BoardPickerButton, {type IBoardPickerButtonRef} from "./boardPickerButton
 import CollaboratorPickerButton, {type ICollaboratorPickerButtonRef} from "./collaboratorPickerButton/CollaboratorPickerButton";
 import DatePickerButton from "./datePickerButton/DatePickerButton";
 import RelatedFeedItemButton from "./relatedFeedItemButton/RelatedFeedItemButton";
+import ReminderPickerButton from "./reminderPickerButton/ReminderPickerButton";
 import TeamMemberPickerButton, {type ITeamMemberPickerButtonRef} from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
 import TopicPickerButton, {type ITopicPickerButtonRef} from "./topicPickerButton/TopicPickerButton";
 import Shortcut from "@/components/keyboardShortcuts/shortcut/Shortcut";
+import {withoutRemindersOnMissingDates} from "@/util/taskReminderDraftUtils";
 
 interface NewTaskFormProps {
     workspace: WorkspaceDto;
@@ -71,6 +73,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     const workspaceId = workspace.workspaceId;
     const assignedDate = watch("assignedDate");
     const dueDate = watch("dueDate");
+    const hasPreciseAssignedDate = String(watch("hasPreciseAssignedDate")) == "true";
+    const hasPreciseDueDate = String(watch("hasPreciseDueDate")) == "true";
     const feedId = watch("feedId");
     const feedItemId = watch("feedItemId");
 
@@ -156,6 +160,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         if (data.assignedDate == "no-date") {
             data.assignedDate = undefined;
         }
+        data.reminder = withoutRemindersOnMissingDates(data.reminder, data.assignedDate, data.dueDate) ?? undefined;
         console.log({NewTaskForm: data});
         if (isInitializeTaskLoading) {
             return;
@@ -275,6 +280,15 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                             dateSpanStart={assignedDate ? new Date(assignedDate) : undefined}
                             dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
                             disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskReminders">
+                        <ReminderPickerButton
+                            setValue={setValue}
+                            assignedDate={assignedDate}
+                            hasPreciseAssignedDate={hasPreciseAssignedDate}
+                            dueDate={dueDate}
+                            hasPreciseDueDate={hasPreciseDueDate}
                         />
                     </Shortcut>
                 </div>

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-22 12:30:33.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-22 19:14:04.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -191,8 +191,8 @@ export interface GmailMessageDto extends BaseDto {
     body: string;
     gid: string;
     ginternalDate: string;
-    gthreadId: string;
     ghistoryId: string;
+    gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1776,10 +1776,10 @@ export interface OauthAuthorizeRequest {
     codeChallengeMethod: string;
     resource: string;
     response_type: string;
+    code_challenge_method: string;
     client_id: string;
     redirect_uri: string;
     code_challenge: string;
-    code_challenge_method: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -2052,6 +2052,7 @@ export interface TaskFilterRequest extends BaseRequest {
      */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
+    taskTags?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -2964,8 +2965,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
     description: string;
+    uri: URI;
     filename: string;
 }
 

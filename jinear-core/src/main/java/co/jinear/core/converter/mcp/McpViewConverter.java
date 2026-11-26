@@ -9,6 +9,8 @@ import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.dto.notification.NotificationEventDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.richtext.RichTextVersionDetailDto;
+import co.jinear.core.model.dto.richtext.RichTextVersionDto;
 import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.task.ChecklistDto;
@@ -37,6 +39,8 @@ import co.jinear.core.model.mcp.view.McpCommentView;
 import co.jinear.core.model.mcp.view.McpFileView;
 import co.jinear.core.model.mcp.view.McpMemberView;
 import co.jinear.core.model.mcp.view.McpNoteDetailView;
+import co.jinear.core.model.mcp.view.McpNoteVersionDetailView;
+import co.jinear.core.model.mcp.view.McpNoteVersionView;
 import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpNotificationView;
 import co.jinear.core.model.mcp.view.McpNotebookView;
@@ -215,6 +219,20 @@ public class McpViewConverter {
         return view;
     }
 
+    public McpNoteVersionView noteVersion(RichTextVersionDto dto) {
+        McpNoteVersionView view = new McpNoteVersionView();
+        fillNoteVersion(view, dto);
+        return view;
+    }
+
+    public McpNoteVersionDetailView noteVersionDetail(RichTextVersionDetailDto dto) {
+        McpNoteVersionDetailView view = new McpNoteVersionDetailView();
+        fillNoteVersion(view, dto);
+        view.setTitle(dto.getTitle());
+        view.setBody(dto.getHtml());
+        return view;
+    }
+
     public McpNotebookView notebook(NotebookDto dto) {
         McpNotebookView view = new McpNotebookView();
         view.setNotebookId(dto.getNotebookId());
@@ -383,6 +401,14 @@ public class McpViewConverter {
             return null;
         }
         return dto.getTeam().getTag() + "-" + dto.getTeamTagNo();
+    }
+
+    private void fillNoteVersion(McpNoteVersionView view, RichTextVersionDto dto) {
+        view.setVersionId(dto.getRichTextVersionId());
+        view.setEditorAccountId(dto.getAccountId());
+        view.setEditorUsername(Optional.ofNullable(dto.getAccount()).map(PlainAccountProfileDto::getUsername).orElse(null));
+        view.setCreatedAt(instant(dto.getCreatedDate()));
+        view.setUpdatedAt(instant(Optional.ofNullable(dto.getLastUpdatedDate()).orElse(dto.getCreatedDate())));
     }
 
     private String richText(RichTextDto dto) {

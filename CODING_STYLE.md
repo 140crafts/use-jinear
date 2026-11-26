@@ -3,8 +3,8 @@
 House rules for writing code in this monorepo. Each rule names a real file you can open, so
 the standard stays checkable instead of aspirational.
 
-This is the first version. It covers release compatibility for the whole repo, and the Java
-backend. Frontend sections come later.
+This is the first version. It covers release compatibility and comments for the whole repo,
+and the Java backend. Frontend sections come later.
 
 ## Release compatibility
 
@@ -57,6 +57,37 @@ database restore.
 - Approval is for one change. It does not carry to the next one.
 - An approved one-way change is the first thing in its `docs/upgrading.md` entry and in
   its release post, together with the backup step.
+
+## Comments
+
+Applies to all code in this repo: `jinear-core` Java, `jinear-app` TypeScript and every other
+project.
+
+Write code that reads without comments. Put the explanation of a change in the commit message
+or in the pull request, not in the code.
+
+- Do not write Javadoc, JSDoc or block comments that explain a class, a method or a field.
+- Do not write a comment that tells what the code does. Give the variable, the method or the
+  constant a name that tells it.
+- Do not leave commented-out code. Git keeps the old version.
+
+A short `//` comment is permitted only when it records a constraint that the code cannot show,
+and that a later cleanup would break if the reader did not know it. Keep it to one line when
+possible.
+
+- Legitimate: `jinear-app/src/keyboard/keymap.ts` keeps one line that explains why the task
+  shortcuts use no digits and no Q: on a Turkish Mac, Option + Q types `@`, and Option + a digit
+  types a symbol.
+- Not legitimate: a Javadoc block on each pattern constant. `config/HtmlSanitizerConfig.java`
+  has none: names such as `TABLE_WRAPPER_CLASS` and `CODE_LANGUAGE_CLASS` tell what each
+  pattern permits.
+
+An empty `//` line between the endpoints of an RTK Query API is a separator, not a comment.
+Keep it, because it makes the endpoint list easier to read. Reference:
+`jinear-app/src/store/api/richTextSyncApi.ts`.
+
+Generated files, such as `jinear-core/jinear-core.ts`, and third-party code keep the comments
+that their generator or their authors wrote.
 
 ## Backend - Java
 

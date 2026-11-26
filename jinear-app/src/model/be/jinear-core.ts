@@ -967,6 +967,18 @@ export interface RichTextUpdatesDto {
     updates: string[];
 }
 
+export interface RichTextVersionDto extends BaseDto {
+    richTextVersionId: string;
+    richTextId: string;
+    accountId: string;
+    account?: PlainAccountProfileDto | null;
+}
+
+export interface RichTextVersionDetailDto extends RichTextVersionDto {
+    html: string;
+    title: string;
+}
+
 export interface RobotDto extends BaseDto {
     robotId: string;
     workspaceId: string;
@@ -1931,9 +1943,18 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface TaskInitializeReminderRequest {
+    beforeAssignedDate?: boolean | null;
+    beforeDueDate?: boolean | null;
+    specificRemindDate?: Date | null;
+    specificRemindRepeatEnd?: Date | null;
+    specificRemindDateRepeatType?: RepeatType | null;
+}
+
 export interface AppendRichTextUpdateRequest extends BaseRequest {
     update: string;
     html?: string | null;
+    title?: string | null;
 }
 
 export interface SeedRichTextRequest extends BaseRequest {
@@ -2052,6 +2073,7 @@ export interface TaskFilterRequest extends BaseRequest {
      */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
+    taskTags?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -2072,6 +2094,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     projectId?: string | null;
     milestoneId?: string | null;
     collaboratorIds?: string[] | null;
+    reminder?: TaskInitializeReminderRequest | null;
 }
 
 export interface TaskProjectAndMilestoneUpdateRequest {
@@ -2586,6 +2609,14 @@ export interface RichTextTempImageResponse extends BaseResponse {
 
 export interface RichTextUpdatesResponse extends BaseResponse {
     data: RichTextUpdatesDto;
+}
+
+export interface RichTextVersionPaginatedResponse extends BaseResponse {
+    data: PageDto<RichTextVersionDto>;
+}
+
+export interface RichTextVersionResponse extends BaseResponse {
+    data: RichTextVersionDetailDto;
 }
 
 export interface RobotSecretResponse extends BaseResponse {

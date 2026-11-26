@@ -51,7 +51,7 @@ public class WorkspaceActivity extends BaseEntity {
     @Column(name = "old_state")
     private String oldState;
 
-    @Column(name = "newState")
+    @Column(name = "new_state")
     private String newState;
 
     @ManyToOne

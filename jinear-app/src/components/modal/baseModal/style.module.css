@@ -58,6 +58,10 @@
     width: max(35vw, 775px);
 }
 
+.page-extended-content {
+    width: var(--page-extended);
+}
+
 .fullscreen-content {
     width: 100%;
     height: 100%;

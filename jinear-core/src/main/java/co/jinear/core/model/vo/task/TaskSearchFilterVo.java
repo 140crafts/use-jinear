@@ -37,4 +37,5 @@ public class TaskSearchFilterVo {
     private List<String> projectIds;
     private List<String> milestoneIds;
     private List<String> taskboardIds;
+    private List<TaskTagVo> taskTags;
 }

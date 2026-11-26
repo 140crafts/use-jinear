@@ -35,11 +35,12 @@ export const richTextSyncApi = api.injectEndpoints({
             richTextId: string;
             update: string;
             html?: string | null;
+            title?: string | null;
         }>({
-            query: ({richTextId, update, html}) => ({
+            query: ({richTextId, update, html, title}) => ({
                 url: `v1/rich-text/${richTextId}/updates`,
                 method: "POST",
-                body: {update, html}
+                body: {update, html, title}
             }),
             transformResponse: (response: RichTextAppendResponse) => response.data
         }),

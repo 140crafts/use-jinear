@@ -16,6 +16,10 @@ public abstract class TaskFilterRequestConverter {
     @Autowired
     protected TeamMembershipTeamVisibilityTypeMapConverter teamMembershipTeamVisibilityTypeMapConverter;
 
+    @Autowired
+    protected TaskTagVoConverter taskTagVoConverter;
+
     @Mapping(target = "teamMemberMap", expression = "java(teamMembershipTeamVisibilityTypeMapConverter.convert(memberships))")
+    @Mapping(target = "taskTags", expression = "java(taskTagVoConverter.convert(taskFilterRequest.getTaskTags(), memberships))")
     public abstract TaskSearchFilterVo convert(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships);
 }

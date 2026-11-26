@@ -1,5 +1,5 @@
-ARG MAVEN_IMAGE=maven:3.9.9-amazoncorretto-17-alpine
-ARG RUNTIME_IMAGE=eclipse-temurin:21-jre-alpine
+ARG MAVEN_IMAGE=maven:3.9-eclipse-temurin-25
+ARG RUNTIME_IMAGE=eclipse-temurin:25-jre-alpine
 FROM ${MAVEN_IMAGE} AS maven_build
 
 WORKDIR /build/
@@ -17,6 +17,7 @@ FROM ${RUNTIME_IMAGE}
 # Release tag from CI (v0.1.NNNN); branch builds pass a short SHA, local builds keep "dev"
 ARG JINEAR_VERSION=dev
 ENV JINEAR_VERSION=${JINEAR_VERSION}
+ENV LIQUIBASE_ANALYTICS_ENABLED=false
 
 WORKDIR /app
 

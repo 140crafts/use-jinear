@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AppendToNoteTool implements McpTool {
 
-        private final NoteContentManager noteContentManager;
+    private final NoteContentManager noteContentManager;
     private final McpNoteEditConverter mcpNoteEditConverter;
     private final McpViewConverter mcpViewConverter;
 

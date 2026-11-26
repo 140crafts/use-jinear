@@ -16,6 +16,71 @@ turning a new feature on, not for keeping the server running.
 
 ---
 
+## v0.1.1688
+
+### Before you pull: encrypted values are no longer read
+
+jinear-core no longer decrypts `ENC(...)` values in `.config/application.properties`. The
+installer never writes such values, so an install made with the installer has nothing to
+change.
+
+If you encrypted a value yourself, replace each `ENC(...)` with its plain value before you
+pull. Otherwise jinear-core uses the encrypted text as the value, and it cannot connect to
+the service that needs it. The previous version also reads plain values, so a rollback
+works with the changed file.
+
+```bash
+cd ~/jinear
+grep -n "ENC(" .config/application.properties
+docker exec jinear-db-backup /backup.sh
+docker compose pull && docker compose up -d
+```
+
+**The database updates itself.** Liquibase adds the `rich_text_version` table, which keeps
+the versions of notes. It also turns on **AI Assistant Connections** in the admin panel.
+Assistants still cannot connect while `MCP_ENABLED=false` in `.env`. To keep them off with
+`MCP_ENABLED=true`, turn the flag off again in `/admin`.
+
+### Settings you can delete (optional)
+
+jinear-core starts with or without these lines:
+
+- `jasypt.encryptor.bean` in `.config/application.properties`;
+- `jasypt.encryptor.password` and `jasypt.encryptor.algorithm` under `jinear-core` in
+  `docker-compose.yaml`, and `ENCRYPTOR_PASSWORD` in `.env`.
+
+The three `server.servlet.encoding.*` lines in `.config/application.properties` have new
+names. The old names still work, and the log shows a warning for them. To remove the
+warning, rename them:
+
+```properties
+spring.servlet.encoding.charset=UTF-8
+spring.servlet.encoding.enabled=true
+spring.servlet.encoding.force=true
+```
+
+### API
+
+If you have your own scripts that call the API: a request to a path that does not exist
+now gets `404` with error code `001`, not `401`.
+
+### Rolling back
+
+Pin the previous images of `jinear-core` and `jinear-app`, then restart:
+
+```yaml
+image: registry.gitlab.com/140crafts/use-jinear/jinear-core:v0.1.1687
+```
+
+```yaml
+image: registry.gitlab.com/140crafts/use-jinear/jinear-app:v0.1.1687
+```
+
+There is no need to restore the database. The older version ignores the
+`rich_text_version` table. It also starts if you deleted the optional lines above.
+
+---
+
 ## v0.1.1687
 
 Nothing has to change before you pull.
@@ -281,8 +346,9 @@ access token on their next refresh without anyone reconnecting.
 docker compose up -d
 ```
 
-Then sign in as the instance admin, open `/admin`, and turn on **AI Assistant Connections**
-under instance flags. Both that flag and the two `.env` switches must be on.
+Then sign in as the instance admin, open `/admin`, and make sure **AI Assistant Connections**
+is on under instance flags. It is on by default from v0.1.1688. Both that flag and the two
+`.env` switches must be on.
 
 Members then find their server address in their own profile, under **AI Assistants**, with
 a copy button.

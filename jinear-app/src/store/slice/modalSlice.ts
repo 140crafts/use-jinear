@@ -39,6 +39,7 @@ import type {
     NotebookInitializeModalState,
     NotebookPickerModalState,
     NoteTagPickerModalState,
+    NoteHistoryModalState,
     NotFoundModalState,
     NotificationPermissionModalState,
     PasswordChangeModalState,
@@ -274,6 +275,9 @@ const initialState = {
     noteTagPickerModal: {
         visible: false
     },
+    noteHistoryModal: {
+        visible: false
+    },
     uploadStatusModal: {
         visible: false
     },
@@ -378,6 +382,7 @@ const initialState = {
     materialFolderPickerModal: null | MaterialFolderPickerModalState,
     notebookPickerModal: null | NotebookPickerModalState,
     noteTagPickerModal: null | NoteTagPickerModalState,
+    noteHistoryModal: null | NoteHistoryModalState,
     uploadStatusModal: null | UploadStatusModalState;
     materialAccessModal: null | MaterialAccessModalState;
     adminAccountPickerModal: null | AdminAccountPickerModalState;
@@ -848,6 +853,12 @@ const slice = createSlice({
         closeNoteTagPickerModal: (state, action: PayloadAction<void>) => {
             state.noteTagPickerModal = initialState.noteTagPickerModal;
         },
+        popNoteHistoryModal: (state, action: PayloadAction<NoteHistoryModalState>) => {
+            state.noteHistoryModal = {...action.payload, visible: true};
+        },
+        closeNoteHistoryModal: (state, action: PayloadAction<void>) => {
+            state.noteHistoryModal = initialState.noteHistoryModal;
+        },
 
         pushDataToUploadStatusModalQueue: (state, action: PayloadAction<IPresignedUploadData[]>) => {
             const queuedItems = action.payload.map(toQueuedUploadItem);
@@ -1115,6 +1126,8 @@ export const {
     closeNotebookPickerModal,
     popNoteTagPickerModal,
     closeNoteTagPickerModal,
+    popNoteHistoryModal,
+    closeNoteHistoryModal,
     closeUploadStatusModal,
     pushDataToUploadStatusModalQueue,
     setUploadStatusModalItemStatus,
@@ -1249,6 +1262,8 @@ export const selectReminderListModalTask = (state: RootState) => state.modal.rem
 
 export const selectNewReminderModalVisible = (state: RootState) => state.modal.newReminderModal?.visible;
 export const selectNewReminderModalTask = (state: RootState) => state.modal.newReminderModal?.task;
+export const selectNewReminderModalDraft = (state: RootState) => state.modal.newReminderModal?.draft;
+export const selectNewReminderModalOnDraftSave = (state: RootState) => state.modal.newReminderModal?.onDraftSave;
 
 export const selectDatePickerModalVisible = (state: RootState) => state.modal.datePickerModal?.visible;
 export const selectDatePickerModalTitle = (state: RootState) => state.modal.datePickerModal?.title;
@@ -1472,6 +1487,12 @@ export const selectNoteTagPickerModalVisible = (state: RootState) => state.modal
 export const selectNoteTagPickerModalNotebookId = (state: RootState) => state.modal.noteTagPickerModal?.notebookId;
 export const selectNoteTagPickerModalInitialSelection = (state: RootState) => state.modal.noteTagPickerModal?.initialSelection;
 export const selectNoteTagPickerModalOnPick = (state: RootState) => state.modal.noteTagPickerModal?.onPick;
+
+export const selectNoteHistoryModalVisible = (state: RootState) => state.modal.noteHistoryModal?.visible;
+export const selectNoteHistoryModalWorkspace = (state: RootState) => state.modal.noteHistoryModal?.workspace;
+export const selectNoteHistoryModalRichTextId = (state: RootState) => state.modal.noteHistoryModal?.richTextId;
+export const selectNoteHistoryModalNoteTitle = (state: RootState) => state.modal.noteHistoryModal?.noteTitle;
+export const selectNoteHistoryModalOnRestore = (state: RootState) => state.modal.noteHistoryModal?.onRestore;
 
 export const selectUploadStatusModalVisible = (state: RootState) => state.modal.uploadStatusModal?.visible;
 export const selectUploadStatusModalPresignedUploadData = (state: RootState) => state.modal.uploadStatusModal?.presignedUploadData;

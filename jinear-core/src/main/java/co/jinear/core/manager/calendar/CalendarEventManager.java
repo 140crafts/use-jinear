@@ -26,7 +26,7 @@ import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -128,7 +128,7 @@ public class CalendarEventManager {
         Optional.of(calendarEventFilterRequest)
                 .map(CalendarEventFilterRequest::getTeamIdList)
                 .map(Collection::stream)
-                .filter(teamIdStream -> teamIdStream.anyMatch(Strings::isBlank))
+                .filter(teamIdStream -> teamIdStream.anyMatch(StringUtils::isBlank))
                 .ifPresent(teamIdStream -> {
                     throw new NotValidException();
                 });

@@ -1470,10 +1470,6 @@ const translations = {
         en: "Repeat",
         tr: "Yenile"
     },
-    taskNewReminderModalRepeatEndLabel: {
-        en: "Repeat reminder until specific date",
-        tr: "Belirli bir tarihe dek yenile"
-    },
     taskNewReminderModalRepeatEndDateLabel: {
         en: "End date",
         tr: "Sonlandırma tarihi"
@@ -1523,16 +1519,92 @@ const translations = {
         tr: "Yılda Bir"
     },
     taskNewReminderCreateButton: {
-        en: "Initialize Reminder",
+        en: "Create Reminder",
         tr: "Anımsatıcı Oluştur"
     },
     taskNewReminderCloseButton: {
         en: "Dismiss",
         tr: "Vazgeç"
     },
+    taskNewReminderAddButton: {
+        en: "Add Reminder",
+        tr: "Anımsatıcı Ekle"
+    },
+    taskNewReminderProvideFutureDate: {
+        en: "Please pick a future date",
+        tr: "Lütfen ileri bir tarih seçin"
+    },
     taskNewReminderProvideSpecificDate: {
         en: "Please provide a date",
         tr: "Lütfen tarih girin"
+    },
+    taskNewReminderRepeatEndAfterRemindDate: {
+        en: "The end date must be after the reminder date",
+        tr: "Bitiş tarihi anımsatma tarihinden sonra olmalı"
+    },
+    taskNewReminderHintNoAssignedDate: {
+        en: "No assigned date",
+        tr: "Planlanan tarih yok"
+    },
+    taskNewReminderHintNoDueDate: {
+        en: "No due date",
+        tr: "Son tarih yok"
+    },
+    taskNewReminderHintDatePassed: {
+        en: "Date has passed",
+        tr: "Tarih geçti"
+    },
+    taskNewReminderHintAlreadyExists: {
+        en: "Already has a reminder",
+        tr: "Anımsatıcı zaten var"
+    },
+    taskNewReminderPresetInOneHour: {
+        en: "In 1 hour",
+        tr: "1 saat sonra"
+    },
+    taskNewReminderPresetThisEvening: {
+        en: "Today 18:00",
+        tr: "Bugün 18:00"
+    },
+    taskNewReminderPresetTomorrowMorning: {
+        en: "Tomorrow 09:00",
+        tr: "Yarın 09:00"
+    },
+    taskNewReminderPresetNextMonday: {
+        en: "Next Monday 09:00",
+        tr: "Gelecek Pazartesi 09:00"
+    },
+    taskNewReminderRepeatEndsLabel: {
+        en: "Ends",
+        tr: "Bitiş"
+    },
+    taskNewReminderRepeatEndsNever: {
+        en: "Never",
+        tr: "Hiçbir zaman"
+    },
+    taskNewReminderRepeatEndsOnDate: {
+        en: "On date",
+        tr: "Tarihte"
+    },
+    taskNewReminderSummaryNone: {
+        en: "No reminder selected",
+        tr: "Anımsatıcı seçilmedi"
+    },
+    taskNewReminderSummaryFirst: {
+        en: "First on ${date}",
+        tr: "İlki ${date}"
+    },
+    taskNewReminderSummaryRepeatUntil: {
+        en: "${repeat} until ${date}",
+        tr: "${repeat}, ${date} tarihine dek"
+    },
+    taskReminderCountOne: {
+        en: "1 reminder",
+        tr: "1 anımsatıcı"
+    },
+    taskReminderCountMany: {
+        en: "${count} reminders",
+        tr: "${count} anımsatıcı"
     },
     taskReminderType_ASSIGNED_DATE: {
         en: "Assigned Date",
@@ -2402,6 +2474,18 @@ const translations = {
     newTaskFormPickedCollaboratorsLabel: {
         en: "${count} collaborators",
         tr: "${count} ortak çalışan"
+    },
+    newTaskFormPickReminderButtonLabel: {
+        en: "Add Reminder",
+        tr: "Anımsatıcı Ekle"
+    },
+    newTaskFormReminderAssignedDateRemoved: {
+        en: "The reminder on the assigned date was removed because the task has no assigned date.",
+        tr: "Görevin planlanan tarihi olmadığı için planlanan tarih anımsatıcısı kaldırıldı."
+    },
+    newTaskFormReminderDueDateRemoved: {
+        en: "The reminder on the due date was removed because the task has no due date.",
+        tr: "Görevin son tarihi olmadığı için son tarih anımsatıcısı kaldırıldı."
     },
     newTaskFormPickAssignedDateButtonLabel: {
         en: "Pick assigned date",
@@ -6059,6 +6143,10 @@ const translations = {
         en: 'You can not move notes under drafts.',
         tr: 'Notları taslakların altına atamazsınız.'
     },
+    dropNoteOnNotebookToMoveIt: {
+        en: 'Drop the note on the notebook to move it there.',
+        tr: 'Notu oraya taşımak için not defterinin üzerine bırakın.'
+    },
     untitledNote: {
         en: 'Untitled',
         tr: 'Başlıksız'
@@ -7100,6 +7188,74 @@ const translations = {
     whatsNewButtonLabel: {
         en: "What's new",
         tr: "Yenilikler"
+    },
+    textEditorInsertTaskLink: {
+        en: "Link a task",
+        tr: "Görev bağla"
+    },
+    noteTextWidthFull: {
+        en: "Full width",
+        tr: "Tam genişlik"
+    },
+    noteTextWidthPage: {
+        en: "Page width",
+        tr: "Sayfa genişliği"
+    },
+    noteRelatedTasksTitle: {
+        en: "Tasks mentioned in this note",
+        tr: "Bu notta bahsedilen görevler"
+    },
+    noteHistoryButtonTooltip: {
+        en: "Version history",
+        tr: "Sürüm geçmişi"
+    },
+    noteHistoryModalTitle: {
+        en: "Version history",
+        tr: "Sürüm geçmişi"
+    },
+    noteHistoryToday: {
+        en: "Today",
+        tr: "Bugün"
+    },
+    noteHistoryYesterday: {
+        en: "Yesterday",
+        tr: "Dün"
+    },
+    noteHistoryCurrentVersion: {
+        en: "Current",
+        tr: "Güncel"
+    },
+    noteHistoryIsCurrentVersion: {
+        en: "This is the current version",
+        tr: "Bu güncel sürüm"
+    },
+    noteHistoryLoadOlder: {
+        en: "Load older",
+        tr: "Eskileri yükle"
+    },
+    noteHistoryEmpty: {
+        en: "No older versions yet. Versions are saved while you edit.",
+        tr: "Henüz eski sürüm yok. Sürümler sen düzenledikçe kaydedilir."
+    },
+    noteHistoryEditedBy: {
+        en: "Edited by ${username}, ${date}",
+        tr: "${username} düzenledi, ${date}"
+    },
+    noteHistoryRestore: {
+        en: "Restore",
+        tr: "Geri yükle"
+    },
+    noteHistoryRestoreAreYouSureTitle: {
+        en: "Restore this version?",
+        tr: "Bu sürüm geri yüklensin mi?"
+    },
+    noteHistoryRestoreAreYouSureText: {
+        en: "The note changes to this version for all members. You can undo this from the history.",
+        tr: "Not tüm üyeler için bu sürüme döner. Bunu geçmişten geri alabilirsin."
+    },
+    noteHistoryRestoreAreYouSureConfirmLabel: {
+        en: "Restore",
+        tr: "Geri yükle"
     },
 
 };

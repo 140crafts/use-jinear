@@ -15,7 +15,7 @@ import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -68,7 +68,7 @@ public class Material extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "parent_material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material parent;
 
@@ -78,13 +78,13 @@ public class Material extends BaseEntity {
     private Workspace workspace;
 
     @OneToMany(mappedBy = "material")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<MaterialAccess> materialAccesses;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "owner_id", referencedColumnName = "account_id", insertable = false, updatable = false)
     private Account owner;
 }

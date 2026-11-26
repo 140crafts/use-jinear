@@ -1,6 +1,7 @@
 package co.jinear.core.task;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.converter.reminder.ReminderConverter;
 import co.jinear.core.converter.task.TaskInitializeVoConverter;
 import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.manager.task.TaskInitializeManager;
@@ -15,6 +16,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskInitializeService;
 import co.jinear.core.service.task.TaskRetrieveService;
+import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
@@ -67,7 +69,9 @@ class TaskInitializeUrlTest {
                 Mockito.mock(TaskRetrieveService.class),
                 Mockito.mock(TopicRetrieveService.class),
                 Mockito.mock(ProjectAccessValidator.class),
-                Mockito.mock(MilestoneValidator.class));
+                Mockito.mock(MilestoneValidator.class),
+                Mockito.mock(TaskReminderOperationService.class),
+                Mockito.mock(ReminderConverter.class));
     }
 
     private TaskInitializeRequest request() {

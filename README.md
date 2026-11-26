@@ -133,8 +133,9 @@ To enable, disable or change the instance admin (the `/admin` panel) after insta
 edit the `MANAGEMENT_*` values in `.env` and restart. See
 [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#instance-management-admin-panel).
 
-To turn the MCP server on or off after installation, edit `MCP_ENABLED` in `.env`, restart,
-and turn on **AI Assistant Connections** in the admin panel. See [docs/mcp](docs/mcp/).
+To turn the MCP server on or off after installation, edit `MCP_ENABLED` in `.env` and
+restart. **AI Assistant Connections** in the admin panel is on by default. See
+[docs/mcp](docs/mcp/).
 
 **Privacy:** a self-hosted instance sends nothing unless you opt in. The installer asks
 about a daily update check (a random instance id and the version number) and an anonymous

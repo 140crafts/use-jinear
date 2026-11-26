@@ -14,7 +14,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -107,32 +107,32 @@ public class Task extends BaseEntity {
     private Account assignedToAccount;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskRelation> relations;
 
     @OneToMany(mappedBy = "relatedTask")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskRelation> relatedIn;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskReminder> taskReminders;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Checklist> checklists;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskFeedItem> feedItems;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskBoardEntry> taskBoardEntries;
 
@@ -147,7 +147,7 @@ public class Task extends BaseEntity {
     private Milestone milestone;
 
     @OneToMany(mappedBy = "task")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskCollaborator> taskCollaborators;
 }

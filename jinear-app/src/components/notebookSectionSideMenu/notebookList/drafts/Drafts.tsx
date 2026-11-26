@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './Drafts.module.css';
 import useTranslation from "@/locals/useTranslation.ts";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
-import {useToggle} from "@/hooks/useToggle.ts";
+import {useAppDispatch, useTypedSelector} from "@/store";
+import {selectDraftsOpen, setDraftsOpen} from "@/slice/noteNavigationSlice.ts";
 import Button, {ButtonVariants} from "@/components/button";
 import {LuEyeOff, LuFolder, LuFolderOpen} from "react-icons/lu";
 import cn from "classnames";
@@ -16,7 +17,9 @@ interface DraftsProps {
 
 const Drafts: React.FC<DraftsProps> = ({workspace}) => {
     const {t} = useTranslation();
-    const [open, toggle] = useToggle(true);
+    const dispatch = useAppDispatch();
+    const open = useTypedSelector(selectDraftsOpen(workspace.workspaceId)) ?? true;
+    const toggle = () => dispatch(setDraftsOpen({workspaceId: workspace.workspaceId, open: !open}));
 
     return (
         <div className={styles.container}>

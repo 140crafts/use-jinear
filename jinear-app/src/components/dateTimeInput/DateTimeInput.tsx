@@ -14,7 +14,7 @@ import styles from "./DateTimeInput.module.css";
 interface DateTimeInputProps {
     id?: string;
     type: "date" | "date-time";
-    value: Date;
+    value?: Date | null;
     setValue: (date?: Date | null) => void;
     valuePrecise: boolean;
     toggleValuePrecise?: () => void;
@@ -30,9 +30,12 @@ interface DateTimeInputProps {
     contentContainerClassName?: string;
     dateButtonClassName?: string;
     disabled?: boolean;
+    keepTimeOnDatePick?: boolean;
 }
 
 const logger = Logger("DateTimeInput");
+
+const withTimeOf = (day: Date, time: Date) => setMinutes(setHours(day, getHours(time)), getMinutes(time));
 const DateTimeInput: React.FC<DateTimeInputProps> = ({
                                                          id,
                                                          type,
@@ -51,13 +54,15 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                                                          minuteResolution = 1,
                                                          contentContainerClassName,
                                                          dateButtonClassName,
-                                                         disabled = false
+                                                         disabled = false,
+                                                         keepTimeOnDatePick = false
                                                      }) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
 
     const onDateSelect = (day: Date | null) => {
-        setValue(day);
+        const keepTime = keepTimeOnDatePick && day != null && value != null;
+        setValue(keepTime ? withTimeOf(day, value) : day);
         dispatch(closeDatePickerModal());
     };
 

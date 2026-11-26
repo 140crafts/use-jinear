@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -39,7 +39,7 @@ public class IntegrationInfo extends BaseEntity {
     private String relatedObjectId;
 
     @OneToMany(mappedBy = "integrationInfo")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     private Set<IntegrationScope> scopes;
 
     @ManyToOne

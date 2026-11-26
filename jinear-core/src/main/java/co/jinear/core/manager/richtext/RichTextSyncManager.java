@@ -1,5 +1,6 @@
 package co.jinear.core.manager.richtext;
 
+import co.jinear.core.converter.richtext.AppendRichTextUpdateVoConverter;
 import co.jinear.core.model.dto.richtext.RichTextAppendDto;
 import co.jinear.core.model.dto.richtext.RichTextStateDto;
 import co.jinear.core.model.dto.richtext.RichTextUpdatesDto;
@@ -7,6 +8,7 @@ import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.request.richtext.AppendRichTextUpdateRequest;
 import co.jinear.core.model.request.richtext.SeedRichTextRequest;
 import co.jinear.core.model.request.richtext.SnapshotRichTextRequest;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.richtext.RichTextAppendResponse;
 import co.jinear.core.model.response.richtext.RichTextStateResponse;
@@ -30,6 +32,7 @@ public class RichTextSyncManager {
     private final RichTextSyncAuthResolver richTextSyncAuthResolver;
     private final RichTextSyncOperationService richTextSyncOperationService;
     private final RichTextSyncService richTextSyncService;
+    private final AppendRichTextUpdateVoConverter appendRichTextUpdateVoConverter;
 
     public RichTextStateResponse retrieveState(String richTextId) {
         authorizeRead(richTextId);
@@ -51,8 +54,11 @@ public class RichTextSyncManager {
 
     public RichTextAppendResponse appendUpdate(String richTextId, AppendRichTextUpdateRequest request) {
         authorizeWrite(richTextId);
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         log.info("Append rich text update has started. richTextId: {}", richTextId);
-        RichTextAppendDto richTextAppendDto = richTextSyncOperationService.appendUpdate(richTextId, request.getUpdate(), request.getHtml());
+        AppendRichTextUpdateVo vo = appendRichTextUpdateVoConverter.convert(request, richTextId, currentAccountId, currentAccountSessionId);
+        RichTextAppendDto richTextAppendDto = richTextSyncOperationService.appendUpdate(vo);
         RichTextAppendResponse response = new RichTextAppendResponse();
         response.setRichTextAppendDto(richTextAppendDto);
         return response;

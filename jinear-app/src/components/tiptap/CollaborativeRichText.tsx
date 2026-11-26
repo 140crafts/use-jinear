@@ -1,8 +1,10 @@
+import type {Extension} from "@tiptap/core";
 import Collaboration from "@tiptap/extension-collaboration";
 import {EditorContent, useEditor} from "@tiptap/react";
 import cn from "classnames";
-import {forwardRef, useImperativeHandle} from "react";
+import {forwardRef, type ReactNode, useImperativeHandle} from "react";
 import type * as Y from "yjs";
+import type {WorkspaceDto} from "@/be/jinear-core";
 import ActionBar, {type TipTapActionBarMode} from "./actionBar/ActionBar";
 import {CRDT_FIELD} from "./crdt/constants";
 import {buildEditorExtensions} from "./editorExtensions";
@@ -11,6 +13,7 @@ import styles from "./Tiptap.module.css";
 export interface ICollaborativeRichTextRef {
     getHTML: () => string | undefined;
     focus: () => void;
+    setContent: (html: string) => void;
 }
 
 interface CollaborativeRichTextProps {
@@ -23,6 +26,9 @@ interface CollaborativeRichTextProps {
     editorWrapperClassName?: string;
     actionBarMode?: TipTapActionBarMode;
     workspaceIdForImages?: string;
+    workspaceForTaskLinks?: WorkspaceDto;
+    extensions?: Extension[];
+    actionBarEndContent?: ReactNode;
     /** Called on every change with the rendered HTML ("" when empty), to feed the CRDT projection. */
     onHtml?: (html: string) => void;
     /** Called on blur so the transport can force a settle flush (HTML included). */
@@ -41,6 +47,9 @@ const CollaborativeRichText = (
         editorWrapperClassName,
         actionBarMode = "full",
         workspaceIdForImages,
+        workspaceForTaskLinks,
+        extensions = [],
+        actionBarEndContent,
         onHtml,
         onSettle,
         actionBarClassName,
@@ -65,7 +74,8 @@ const CollaborativeRichText = (
                 Collaboration.configure({
                     document: doc,
                     field: CRDT_FIELD
-                })
+                }),
+                ...extensions
             ],
             editable,
             onUpdate({editor}) {
@@ -80,7 +90,8 @@ const CollaborativeRichText = (
 
     useImperativeHandle(ref, () => ({
         getHTML: () => editor?.getHTML(),
-        focus: () => editor?.commands.focus()
+        focus: () => editor?.commands.focus(),
+        setContent: (html: string) => editor?.commands.setContent(html, {emitUpdate: true})
     }));
 
     return (
@@ -90,6 +101,8 @@ const CollaborativeRichText = (
                     editor={editor}
                     mode={actionBarMode}
                     workspaceIdForImages={workspaceIdForImages}
+                    workspaceForTaskLinks={workspaceForTaskLinks}
+                    endContent={actionBarEndContent}
                     className={actionBarClassName}
                 />
             )}

@@ -29,7 +29,7 @@ public class TaskTeamVisibilityMaskService {
 
     private Set<TaskRelationDto> maskRelatedIn(String accountId, TeamMemberDto teamMemberDto, Set<TaskRelationDto> relations) {
         if (Objects.nonNull(relations)) {
-            Set<TaskRelationDto> filteredRelations = new HashSet<>();
+            Set<TaskRelationDto> filteredRelations = new LinkedHashSet<>();
             relations.forEach(taskRelationDto -> {
                 RelatedTaskDto relatedTaskDto = taskRelationDto.getTask();
                 String relatedTaskOwnerId = Optional.ofNullable(relatedTaskDto).map(RelatedTaskDto::getOwnerId).orElse(null);
@@ -50,7 +50,7 @@ public class TaskTeamVisibilityMaskService {
 
     private Set<TaskRelationDto> maskRelations(String accountId, TeamMemberDto teamMemberDto, Set<TaskRelationDto> relations) {
         if (Objects.nonNull(relations)) {
-            Set<TaskRelationDto> filteredRelations = new HashSet<>();
+            Set<TaskRelationDto> filteredRelations = new LinkedHashSet<>();
             relations.forEach(taskRelationDto -> {
                 RelatedTaskDto relatedTaskDto = taskRelationDto.getRelatedTask();
                 String relatedTaskOwnerId = Optional.ofNullable(relatedTaskDto).map(RelatedTaskDto::getOwnerId).orElse(null);

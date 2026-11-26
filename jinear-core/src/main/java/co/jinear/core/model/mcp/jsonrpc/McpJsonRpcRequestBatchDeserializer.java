@@ -1,31 +1,24 @@
 package co.jinear.core.model.mcp.jsonrpc;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ValueDeserializer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Reads either one JSON-RPC message or an array of them into {@link McpJsonRpcRequestBatch},
- * so the controller can take a typed body for both shapes.
- */
-public class McpJsonRpcRequestBatchDeserializer extends JsonDeserializer<McpJsonRpcRequestBatch> {
+public class McpJsonRpcRequestBatchDeserializer extends ValueDeserializer<McpJsonRpcRequestBatch> {
 
     @Override
-    public McpJsonRpcRequestBatch deserialize(JsonParser parser, DeserializationContext context) throws IOException {
-        ObjectMapper objectMapper = (ObjectMapper) parser.getCodec();
-        JsonNode body = objectMapper.readTree(parser);
+    public McpJsonRpcRequestBatch deserialize(JsonParser parser, DeserializationContext context) {
+        JsonNode body = context.readTree(parser);
         if (!body.isArray()) {
-            return new McpJsonRpcRequestBatch(List.of(objectMapper.treeToValue(body, McpJsonRpcRequest.class)), false);
+            return new McpJsonRpcRequestBatch(List.of(context.readTreeAsValue(body, McpJsonRpcRequest.class)), false);
         }
         List<McpJsonRpcRequest> messages = new ArrayList<>();
         for (JsonNode message : body) {
-            messages.add(objectMapper.treeToValue(message, McpJsonRpcRequest.class));
+            messages.add(context.readTreeAsValue(message, McpJsonRpcRequest.class));
         }
         return new McpJsonRpcRequestBatch(messages, true);
     }

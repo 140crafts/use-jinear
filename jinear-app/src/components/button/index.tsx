@@ -90,7 +90,9 @@ interface ButtonProps {
     style?: any;
     download?: string;
     draggable?: boolean;
+    onDragEnter?: (event: React.DragEvent<HTMLButtonElement>) => void;
     onDragOver?: (event: React.DragEvent<HTMLButtonElement>) => void;
+    onDragLeave?: (event: React.DragEvent<HTMLButtonElement>) => void;
     onDrop?: (event: React.DragEvent<any>) => void;
     shortcut?: ShortcutId;
     dismiss?: boolean;

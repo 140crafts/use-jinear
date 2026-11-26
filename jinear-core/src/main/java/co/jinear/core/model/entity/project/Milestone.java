@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 
@@ -54,7 +54,7 @@ public class Milestone extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "description_rich_text_id", referencedColumnName = "related_object_id", insertable = false, updatable = false)
     private RichText description;
 }

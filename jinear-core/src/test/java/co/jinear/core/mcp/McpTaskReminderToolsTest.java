@@ -28,7 +28,6 @@ import co.jinear.core.service.reminder.job.ReminderJobRetrieveService;
 import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.task.reminder.TaskReminderRetrieveService;
 import co.jinear.core.validator.task.TaskAccessValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
@@ -36,6 +35,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class McpTaskReminderToolsTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
     private static final ZonedDateTime START_DATE = ZonedDateTime.parse("2099-01-05T09:00:00Z");
     private static final ZonedDateTime WEEKLY_NEXT = ZonedDateTime.parse("2099-01-12T09:00:00+03:00");

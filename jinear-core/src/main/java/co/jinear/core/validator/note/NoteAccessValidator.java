@@ -7,10 +7,12 @@ import co.jinear.core.service.note.notebook.NotebookRetrieveService;
 import co.jinear.core.validator.notebook.NotebookAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class NoteAccessValidator {
@@ -38,6 +40,7 @@ public class NoteAccessValidator {
 
     private void validateNonOwnerAccess(String accountId, String workspaceId, NoteDto note) {
         if (Objects.isNull(note.getNotebookId())) {
+            log.info("Someone other than draft note owner trying to access/modify. accountId: {}, workspaceId: {}, noteId: {}", accountId, workspaceId, note.getNoteId());
             throw new NoAccessException();
         }
         validateNotebookInWorkspace(accountId, workspaceId, note.getNotebookId());

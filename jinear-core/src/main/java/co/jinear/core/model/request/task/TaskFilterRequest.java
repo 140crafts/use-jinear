@@ -7,6 +7,9 @@ import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +24,8 @@ import static co.jinear.core.model.enumtype.FilterSort.IDATE_DESC;
 @Setter
 @ToString
 public class TaskFilterRequest extends BaseRequest {
+
+    private static final String TASK_TAG_PATTERN = "^[A-Za-z0-9_.-]+-\\d{1,9}$";
 
     @Nullable
     private Integer page = 0;
@@ -62,4 +67,7 @@ public class TaskFilterRequest extends BaseRequest {
     private List<String> milestoneIds;
     @Nullable
     private List<String> taskboardIds;
+    @Size(max = 250)
+    @Nullable
+    private List<@NotNull @Pattern(regexp = TASK_TAG_PATTERN) String> taskTags;
 }

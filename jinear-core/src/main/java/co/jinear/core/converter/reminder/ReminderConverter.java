@@ -3,6 +3,7 @@ package co.jinear.core.converter.reminder;
 import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.entity.reminder.Reminder;
 import co.jinear.core.model.request.reminder.TaskReminderInitializeRequest;
+import co.jinear.core.model.request.task.TaskInitializeReminderRequest;
 import co.jinear.core.model.vo.reminder.ReminderInitializeVo;
 import co.jinear.core.model.vo.task.InitializeTaskRemindersVo;
 import org.mapstruct.Mapper;
@@ -15,4 +16,6 @@ public interface ReminderConverter {
     ReminderDto map(Reminder reminder);
 
     InitializeTaskRemindersVo map(TaskReminderInitializeRequest reminderInitializeRequest, String taskId, String ownerId);
+
+    InitializeTaskRemindersVo map(TaskInitializeReminderRequest taskInitializeReminderRequest, String taskId, String ownerId);
 }

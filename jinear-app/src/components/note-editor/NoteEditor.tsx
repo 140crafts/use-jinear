@@ -1,22 +1,26 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from './NoteEditor.module.css';
 import NoteHeader from "@/components/note-editor/note-header/NoteHeader.tsx";
 import NoteActionBar from "@/components/note-editor/note-action-bar/NoteActionBar.tsx";
 import NoteEditorBody from "@/components/note-editor/note-editor-body/NoteEditorBody.tsx";
 import {NoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
-import type {WorkspaceDto} from "@/be/jinear-core.ts";
-import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
+import type {RichTextVersionDetailDto, WorkspaceDto} from "@/be/jinear-core.ts";
+import {DRAFTS_NOTEBOOK_ID, TITLE_FIELD} from "@/components/tiptap/crdt/constants.ts";
+import {writeYText} from "@/components/tiptap/crdt/useYText.ts";
 import {useLiveText} from "@/components/tiptap/crdt/useLiveText.ts";
 import {useDraftNoteAck} from "@/components/note-editor/useDraftNoteAck.ts";
 import {useNoteTitleMirror} from "@/components/note-editor/useNoteTitleMirror.ts";
+import {useRefreshNoteListsAfterFirstEdit} from "@/components/note-editor/useRefreshNoteListsAfterFirstEdit.ts";
 import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
 import {useNotebookById} from "@/hooks/useNotebookById.ts";
-import {useTypedSelector} from "@/store";
+import {useAppDispatch, useTypedSelector} from "@/store";
+import {setLastOpenNote} from "@/slice/noteNavigationSlice.ts";
 import {selectDocKey} from "@/slice/noteDraftsSlice.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import NotePropertyBar from "@/components/note-editor/note-property-bar/NotePropertyBar.tsx";
+import NoteRelatedTasks from "@/components/note-editor/note-related-tasks/NoteRelatedTasks.tsx";
 
 interface NoteEditorProps {
     workspace: WorkspaceDto;
@@ -27,6 +31,7 @@ interface NoteEditorProps {
 const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) => {
     const {t} = useTranslation();
     const editorRef = useRef<ICollaborativeRichTextRef | null>(null);
+    const [taskTags, setTaskTags] = useState<string[]>([]);
 
     // The doc's local identity never changes: for draft-born notes it stays the original draft id
     // (aliased from the real noteId after creation), so IndexedDB content survives URL canonicalization.
@@ -56,7 +61,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         enabled: shouldEdit,
         richTextId: note?.richText?.richTextId,
         initialRichText: note?.richText,
-        getHtml: () => editorRef.current?.getHTML() ?? null
+        getHtml: () => editorRef.current?.getHTML() ?? null,
+        getTitle: (liveDoc) => liveDoc.getText(TITLE_FIELD).toString()
     });
 
     useNoteTitleMirror({
@@ -67,9 +73,27 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         pendingDraftId: isPendingCreate ? noteId : undefined
     });
 
+    useRefreshNoteListsAfterFirstEdit(status);
+
+    const dispatch = useAppDispatch();
+    const isOpenable = isPendingCreate || !!note;
+    useEffect(() => {
+        if (isOpenable) {
+            dispatch(setLastOpenNote({workspaceId: workspace.workspaceId, notebookId, noteId}));
+        }
+    }, [dispatch, isOpenable, workspace.workspaceId, notebookId, noteId]);
+
     const registerEditor = useCallback((editor: ICollaborativeRichTextRef | null) => {
         editorRef.current = editor;
     }, []);
+
+    const restoreVersion = useCallback((version: RichTextVersionDetailDto) => {
+        editorRef.current?.setContent(version.html);
+        if (doc && version.title) {
+            writeYText(doc, TITLE_FIELD, version.title);
+        }
+        flushNow();
+    }, [doc, flushNow]);
 
     const notFound = !isPendingCreate && !ackedNoteId && !isLoading && !note;
 
@@ -85,7 +109,10 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             doc,
             status,
             flushNow,
-            registerEditor
+            registerEditor,
+            restoreVersion,
+            taskTags,
+            setTaskTags
         }}>
             <div className={styles.container} key={noteId}>
                 <NoteActionBar/>
@@ -94,6 +121,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
                     : <>
                         <NoteHeader/>
                         <NotePropertyBar/>
+                        <NoteRelatedTasks/>
                         {doc ? <NoteEditorBody/> : <CircularLoading/>}
                     </>}
             </div>

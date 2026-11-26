@@ -13,3 +13,7 @@
   width: 20px;
   height: 20px;
 }
+
+.readOnly {
+  border: 1px solid transparent;
+}

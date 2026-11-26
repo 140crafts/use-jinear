@@ -50,13 +50,14 @@ import co.jinear.core.model.response.notification.NotificationEventListingRespon
 import co.jinear.core.model.response.task.RetrieveChecklistResponse;
 import co.jinear.core.model.response.task.TaskRelationResponse;
 import co.jinear.core.model.response.task.TaskResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Date;
 import java.util.Set;
@@ -66,7 +67,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 class McpTaskWorkToolsTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
     private final McpViewConverter viewConverter = new McpViewConverter();

@@ -1,7 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { Editor, useEditorState } from "@tiptap/react";
-import React, {type ChangeEvent, useEffect, useRef } from "react";
+import React, {type ChangeEvent, type ReactNode, useEffect, useRef } from "react";
 import {
   LuBold,
    LuCodeXml,
@@ -30,6 +30,8 @@ import { useUploadRichTextImageMutation } from "@/api/richTextImageApi";
 import { useAppDispatch } from "@/store";
 import { changeLoadingModalVisibility } from "@/slice/modalSlice";
 import cn from "classnames";
+import type { WorkspaceDto } from "@/be/jinear-core";
+import TaskLinkButton from "./taskLinkButton/TaskLinkButton";
 
 export type TipTapActionBarMode = "simple" | "full" | "none";
 
@@ -37,10 +39,12 @@ interface ActionBarProps {
   editor: Editor;
   mode?: TipTapActionBarMode;
   workspaceIdForImages?: string;
+  workspaceForTaskLinks?: WorkspaceDto;
+  endContent?: ReactNode;
   className?: string;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, className }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, workspaceForTaskLinks, endContent, className }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const imagePickerButtonRef = useRef<HTMLInputElement>(null);
@@ -134,6 +138,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           <MdLayersClear />
         </Button>
       )}
+      {mode != "simple" && <span className={styles.divider} />}
       {mode != "simple" && (
         <Button
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -182,6 +187,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           <LuHeading6 />
         </Button>
       )}
+      {mode != "simple" && <span className={styles.divider} />}
       {mode != "simple" && (
         <Button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -210,6 +216,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           <LuListChecks />
         </Button>
       )}
+      {mode != "simple" && <span className={styles.divider} />}
       {mode != "simple" && (
         <Button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
@@ -237,6 +244,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           <MdHorizontalRule />
         </Button>
       )}
+      {mode != "simple" && <span className={styles.divider} />}
       {mode != "simple" && (
         <Button
           onClick={() => editor.chain().focus().undo().run()}
@@ -255,6 +263,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           <LuRedo2 />
         </Button>
       )}
+      {mode != "simple" && <span className={styles.divider} />}
       {mode != "simple" && workspaceIdForImages && (
         <>
           <Button
@@ -274,6 +283,13 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
         </>
       )}
       {mode != "simple" && <TableControls editor={editor} />}
+      {mode != "simple" && workspaceForTaskLinks && <TaskLinkButton editor={editor} workspace={workspaceForTaskLinks} />}
+      {mode != "simple" && endContent && (
+        <>
+          <span className={styles.divider} />
+          {endContent}
+        </>
+      )}
     </div>
   ) : null;
 };

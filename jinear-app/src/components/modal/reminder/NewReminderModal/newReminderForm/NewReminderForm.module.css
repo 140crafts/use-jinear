@@ -1,0 +1,29 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--c-primary);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-left: auto;
+}

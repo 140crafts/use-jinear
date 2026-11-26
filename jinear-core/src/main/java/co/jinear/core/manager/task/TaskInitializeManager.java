@@ -1,5 +1,6 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.converter.reminder.ReminderConverter;
 import co.jinear.core.converter.task.TaskInitializeVoConverter;
 import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.exception.BusinessException;
@@ -9,13 +10,16 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.team.TeamStateType;
+import co.jinear.core.model.request.task.TaskInitializeReminderRequest;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.response.task.TaskResponse;
+import co.jinear.core.model.vo.task.InitializeTaskRemindersVo;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskInitializeService;
 import co.jinear.core.service.task.TaskRetrieveService;
+import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
@@ -53,6 +57,8 @@ public class TaskInitializeManager {
     private final TopicRetrieveService topicRetrieveService;
     private final ProjectAccessValidator projectAccessValidator;
     private final MilestoneValidator milestoneValidator;
+    private final TaskReminderOperationService taskReminderOperationService;
+    private final ReminderConverter reminderConverter;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -68,6 +74,7 @@ public class TaskInitializeManager {
         validateProjectAndMilestoneId(taskInitializeRequest, currentAccount);
         validateAssigneeHasTeamAndWorkflowAccess(taskInitializeRequest);
         validateAllCollaboratorsHasTeamAndWorkspaceAccess(taskInitializeRequest);
+        validateReminderHasItsTaskDates(taskInitializeRequest);
 
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
         TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
@@ -78,7 +85,21 @@ public class TaskInitializeManager {
         fillTaskUrl(initializedTask);
         taskActivityService.initializeNewTaskActivity(currentAccount, currentAccountSessionId, initializedTask);
         initializeTaskBoardActivity(taskInitializeRequest, currentAccount, currentAccountSessionId, initializedTask);
+        initializeReminders(taskInitializeRequest, currentAccount, initializedTask);
         return mapResponse(initializedTask);
+    }
+
+    private void validateReminderHasItsTaskDates(TaskInitializeRequest taskInitializeRequest) {
+        TaskInitializeReminderRequest reminder = taskInitializeRequest.getReminder();
+        if (Objects.isNull(reminder)) {
+            return;
+        }
+        if (Boolean.TRUE.equals(reminder.getBeforeAssignedDate()) && Objects.isNull(taskInitializeRequest.getAssignedDate())) {
+            throw new BusinessException("task.init.reminder-needs-assigned-date");
+        }
+        if (Boolean.TRUE.equals(reminder.getBeforeDueDate()) && Objects.isNull(taskInitializeRequest.getDueDate())) {
+            throw new BusinessException("task.init.reminder-needs-due-date");
+        }
     }
 
     private void validateAllCollaboratorsHasTeamAndWorkspaceAccess(TaskInitializeRequest taskInitializeRequest) {
@@ -179,6 +200,22 @@ public class TaskInitializeManager {
         if (Objects.nonNull(boardId)) {
             taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccount, currentAccountSessionId, initializedTask, taskInitializeRequest.getBoardId());
         }
+    }
+
+    private void initializeReminders(TaskInitializeRequest taskInitializeRequest, String currentAccount, TaskDto initializedTask) {
+        TaskInitializeReminderRequest reminder = taskInitializeRequest.getReminder();
+        if (Objects.isNull(reminder) || !requestsAnyReminder(reminder)) {
+            return;
+        }
+        log.info("Initialize reminders of the new task has started. taskId: {}", initializedTask.getTaskId());
+        InitializeTaskRemindersVo initializeTaskRemindersVo = reminderConverter.map(reminder, initializedTask.getTaskId(), currentAccount);
+        taskReminderOperationService.initializeTaskReminders(initializeTaskRemindersVo);
+    }
+
+    private boolean requestsAnyReminder(TaskInitializeReminderRequest reminder) {
+        return Boolean.TRUE.equals(reminder.getBeforeAssignedDate())
+                || Boolean.TRUE.equals(reminder.getBeforeDueDate())
+                || Objects.nonNull(reminder.getSpecificRemindDate());
     }
 
     private TaskResponse mapResponse(TaskDto taskDto) {

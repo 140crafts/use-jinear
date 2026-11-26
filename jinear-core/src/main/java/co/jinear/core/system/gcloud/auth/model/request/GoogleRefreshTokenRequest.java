@@ -1,10 +1,10 @@
 package co.jinear.core.system.gcloud.auth.model.request;
 
 import co.jinear.core.system.gcloud.auth.model.enumtype.GrantType;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
 
 @Getter
 @Setter

@@ -1,0 +1,17 @@
+.modalContainer {
+    height: 85vh !important;
+    max-height: unset !important;
+    overflow: hidden !important;
+}
+
+.mobileContainer {
+    height: 100% !important;
+}
+
+.modalBody {
+    flex: 1 1 0 !important;
+    min-height: 0;
+    max-height: unset !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}

@@ -18,4 +18,7 @@ public class AppendRichTextUpdateRequest extends BaseRequest {
     @Nullable
     @ToString.Exclude
     private String html;
+
+    @Nullable
+    private String title;
 }

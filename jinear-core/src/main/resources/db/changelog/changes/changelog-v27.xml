@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-593-create-rich_text_version-table">
+        <createTable tableName="rich_text_version">
+            <column name="rich_text_version_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="html" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="rich_text_version_ix_rich_text_id_idate" tableName="rich_text_version">
+            <column name="rich_text_id"/>
+            <column name="idate"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-593-add-title-to-rich_text_version">
+        <addColumn tableName="rich_text_version">
+            <column name="title" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-593-add-session_info_id-to-rich_text_version">
+        <addColumn tableName="rich_text_version">
+            <column name="session_info_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-593-turn-on-mcp_server-instance_flag">
+        <update tableName="instance_flag">
+            <column name="flag_value" value="true"/>
+            <column name="udate" valueComputed="CURRENT_TIMESTAMP"/>
+            <where>flag_type = 7</where>
+        </update>
+        <rollback>
+            <update tableName="instance_flag">
+                <column name="flag_value" value="false"/>
+                <column name="udate" valueComputed="CURRENT_TIMESTAMP"/>
+                <where>flag_type = 7</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

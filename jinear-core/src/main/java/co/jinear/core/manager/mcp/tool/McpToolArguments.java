@@ -2,14 +2,14 @@ package co.jinear.core.manager.mcp.tool;
 
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.schema.McpField;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -47,7 +47,7 @@ public class McpToolArguments {
             return objectMapper.readerFor(inputType)
                     .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                     .readValue(Objects.isNull(node) ? objectMapper.createObjectNode() : node);
-        } catch (IOException | IllegalArgumentException exception) {
+        } catch (JacksonException | IllegalArgumentException exception) {
             throw unwrapToolException(exception);
         }
     }
@@ -102,11 +102,11 @@ public class McpToolArguments {
         if (Objects.isNull(value) || value.isNull()) {
             return fallback;
         }
-        if (!value.isTextual()) {
+        if (!value.isString()) {
             String receivedType = value.getNodeType().name().toLowerCase();
             throw new McpToolException("invalid_argument", "mcp.error.argument.string-type", field, receivedType);
         }
-        return value.asText();
+        return value.asString();
     }
 
     public Integer optionalInteger(String field, Integer fallback) {
@@ -182,10 +182,10 @@ public class McpToolArguments {
             throw new McpToolException("invalid_argument", "mcp.error.argument.string-list-type", field);
         }
         value.forEach(item -> {
-            if (!item.isTextual()) {
+            if (!item.isString()) {
                 throw new McpToolException("invalid_argument", "mcp.error.argument.string-list-item", field);
             }
-            values.add(item.asText());
+            values.add(item.asString());
         });
         return values;
     }

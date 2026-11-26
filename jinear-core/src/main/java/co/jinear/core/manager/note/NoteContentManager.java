@@ -41,19 +41,21 @@ public class NoteContentManager {
 
     public NoteEditResultDto create(NoteCreateVo vo) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         noteAccessValidator.validateCanCreate(currentAccountId, vo.getWorkspaceId(), vo.getNotebookId());
         log.info("Create note content has started. currentAccountId: {}", currentAccountId);
         NoteInitializeVo initializeVo = noteCreateVoConverter.convert(vo, currentAccountId, EMPTY_DOC_STATE);
         NoteDto note = noteOperationService.initialize(initializeVo);
         NoteEditVo editVo = mapInitialContent(vo, note);
-        return noteContentEditService.edit(note, editVo);
+        return noteContentEditService.edit(currentAccountId, currentAccountSessionId, note, editVo);
     }
 
     public NoteEditResultDto edit(NoteEditVo vo) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         NoteDto note = noteRetrieveService.retrieve(vo.getNoteId());
         noteAccessValidator.validateCanEdit(currentAccountId, vo.getWorkspaceId(), note);
-        return noteContentEditService.edit(note, vo);
+        return noteContentEditService.edit(currentAccountId, currentAccountSessionId, note, vo);
     }
 
     private NoteEditVo mapInitialContent(NoteCreateVo vo, NoteDto note) {

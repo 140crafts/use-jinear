@@ -2,10 +2,10 @@ package co.jinear.core.model.mcp.jsonrpc;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
 import lombok.Getter;
 import lombok.Setter;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
 
 import java.util.Objects;
 

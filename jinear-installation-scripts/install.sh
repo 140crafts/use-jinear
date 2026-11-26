@@ -605,9 +605,6 @@ generate_secrets() {
     MINIO_ROOT_PASSWORD=$(generate_password 32)
     print_success "MinIO credentials generated"
 
-    ENCRYPTOR_PASSWORD=$(generate_password 32)
-    print_success "Encryptor password generated"
-
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
 
@@ -696,7 +693,6 @@ MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
 
 # Security
 JWT_SECRET=${JWT_SECRET}
-ENCRYPTOR_PASSWORD=${ENCRYPTOR_PASSWORD}
 INTERNAL_AUTH_TOKEN=${INTERNAL_AUTH_TOKEN}
 
 # Email
@@ -890,7 +886,6 @@ Password: ${MINIO_ROOT_PASSWORD}
 SECURITY SECRETS
 ----------------
 JWT Secret: ${JWT_SECRET}
-Encryptor Password: ${ENCRYPTOR_PASSWORD}
 Internal Auth Token: ${INTERNAL_AUTH_TOKEN}
 
 URLS
@@ -984,8 +979,8 @@ print_summary() {
         echo -e "  ${BOLD}AI Assistant Connections${NC}"
         echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
         echo -e "  🤖 Server address: ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}/mcp${NC}"
-        echo -e "     Turn on ${BOLD}AI Assistants${NC} in the admin panel, then members paste"
-        echo -e "     that address into Claude or ChatGPT as a custom connector."
+        echo -e "     Members paste that address into Claude or ChatGPT as a custom"
+        echo -e "     connector. ${BOLD}AI Assistants${NC} in the admin panel can turn it off."
         echo -e "     Each member finds it again on their profile page."
         echo ""
     fi

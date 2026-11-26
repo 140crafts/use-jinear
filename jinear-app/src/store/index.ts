@@ -9,6 +9,7 @@ import displayPreference, {resetDisplayPreferences} from "@/slice/displayPrefere
 import firebase, {resetFirebaseSlice} from "@/slice/firebaseSlice";
 import modal, {resetModals} from "@/slice/modalSlice";
 import noteDrafts, {resetNoteDrafts} from "@/slice/noteDraftsSlice";
+import noteNavigation, {resetNoteNavigation} from "@/slice/noteNavigationSlice";
 import sseSlice, {resetSseSlice} from "@/slice/sseSlice";
 import taskAdditionalData, {resetTaskAdditionalData} from "@/slice/taskAdditionalDataSlice";
 import {type TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
@@ -76,12 +77,13 @@ const rootReducer = combineReducers({
     firebase,
     sseSlice,
     noteDrafts,
+    noteNavigation,
 })
 
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['account', 'displayPreference', 'taskAdditionalData', 'noteDrafts', api.reducerPath],
+    whitelist: ['account', 'displayPreference', 'taskAdditionalData', 'noteDrafts', 'noteNavigation', api.reducerPath],
     throttle: 2000,
     serialize: false,
     deserialize: false,
@@ -137,6 +139,7 @@ export const resetAllStates = (dispatch: typeof store.dispatch) => {
     dispatch(resetDisplayPreferences());
     dispatch(resetTaskAdditionalData());
     dispatch(resetNoteDrafts());
+    dispatch(resetNoteNavigation());
     dispatch(resetFirebaseSlice());
     dispatch(resetSseSlice());
     dispatch(api.util.resetApiState());

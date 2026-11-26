@@ -10,9 +10,11 @@ import type {
     ProjectStateType,
     TaskBoardDto,
     TaskDto,
+    TaskInitializeReminderRequest,
     TeamDto,
     TeamMemberDto,
     TeamWorkflowStatusDto,
+    RichTextVersionDetailDto,
     TopicDto,
     WorkspaceDto,
     WorkspaceMemberDto
@@ -95,8 +97,18 @@ export interface ReminderListModalState extends ModalState {
     task?: TaskDto;
 }
 
+export interface NewReminderDraft {
+    assignedDate?: Date | null;
+    hasPreciseAssignedDate?: boolean;
+    dueDate?: Date | null;
+    hasPreciseDueDate?: boolean;
+    reminder?: TaskInitializeReminderRequest | null;
+}
+
 export interface NewReminderModalState extends ModalState {
     task?: TaskDto;
+    draft?: NewReminderDraft;
+    onDraftSave?: (reminder: TaskInitializeReminderRequest | null) => void;
 }
 
 export interface DatePickerModalState extends ModalState {
@@ -334,6 +346,13 @@ export interface NoteTagPickerModalState extends ModalState {
     notebookId?: string,
     initialSelection?: NoteTagDto[],
     onPick?: (pickedList: NoteTagDto[]) => void
+}
+
+export interface NoteHistoryModalState extends ModalState {
+    workspace?: WorkspaceDto,
+    richTextId?: string,
+    noteTitle?: string,
+    onRestore?: (version: RichTextVersionDetailDto) => void
 }
 
 export interface MaterialFolderPickerModalState extends ModalState {

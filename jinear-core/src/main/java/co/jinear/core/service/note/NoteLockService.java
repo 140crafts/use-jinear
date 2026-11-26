@@ -6,8 +6,7 @@ import co.jinear.core.model.vo.note.NoteInitializeVo;
 import co.jinear.core.service.lock.LockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,7 +19,7 @@ public class NoteLockService {
 
     private final LockService lockService;
 
-    @Retryable(value = {LockedException.class}, maxAttempts = 8, backoff = @Backoff(delay = 200, multiplier = 2, maxDelay = 3000))
+    @Retryable(includes = LockedException.class, maxRetries = 7, delay = 200, multiplier = 2, maxDelay = 3000)
     public void retryableLockForNoteInit(NoteInitializeVo noteInitializeVo) {
         String noteInitLockKey = generateNoteInitLockKey(noteInitializeVo);
         lockService.lock(noteInitLockKey, LockSourceType.NOTE_INIT);

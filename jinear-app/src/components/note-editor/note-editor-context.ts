@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
 import type * as Y from "yjs";
-import type {NotebookDto, NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
+import type {NotebookDto, NoteDto, RichTextVersionDetailDto, WorkspaceDto} from "@/be/jinear-core.ts";
 import type {LiveTextStatus} from "@/components/tiptap/crdt/useLiveText.ts";
 import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 
@@ -22,6 +22,9 @@ export interface INoteEditorContext {
     status?: LiveTextStatus;
     flushNow?: () => void;
     registerEditor?: (editor: ICollaborativeRichTextRef | null) => void;
+    restoreVersion?: (version: RichTextVersionDetailDto) => void;
+    taskTags?: string[];
+    setTaskTags?: (taskTags: string[]) => void;
 }
 
 export const NoteEditorContext = createContext<INoteEditorContext>({});

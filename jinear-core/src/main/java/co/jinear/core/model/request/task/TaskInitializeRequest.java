@@ -1,6 +1,7 @@
 package co.jinear.core.model.request.task;
 
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -68,4 +69,8 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @Nullable
     private List<String> collaboratorIds;
+
+    @Valid
+    @Nullable
+    private TaskInitializeReminderRequest reminder;
 }

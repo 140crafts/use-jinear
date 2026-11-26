@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.vo.note.NoteEditVo;
 import co.jinear.core.model.vo.note.NoteUpdateVo;
+import co.jinear.core.model.vo.richtext.AppendRichTextUpdateVo;
 import co.jinear.core.service.note.NoteOperationService;
 import co.jinear.core.service.richtext.crdt.NoteCrdtEngine;
 import co.jinear.core.service.richtext.sync.RichTextSyncOperationService;
@@ -16,8 +17,7 @@ import co.jinear.core.validator.note.NoteEditValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -34,8 +34,8 @@ public class NoteContentEditService {
     private final NoteEditValidator noteEditValidator;
     private final NoteEditResultConverter noteEditResultConverter;
 
-    @Retryable(value = {RichTextHeadMovedException.class}, maxAttempts = 3, backoff = @Backoff(delay = 100))
-    public NoteEditResultDto edit(NoteDto note, NoteEditVo vo) {
+    @Retryable(includes = RichTextHeadMovedException.class, maxRetries = 2, delay = 100)
+    public NoteEditResultDto edit(String accountId, String sessionInfoId, NoteDto note, NoteEditVo vo) {
         log.info("Edit note content has started. vo: {}", vo);
         RichTextDocumentDto document = richTextSyncOperationService.retrieveDocument(note.getRichTextId());
         noteEditValidator.validateEditable(document);
@@ -44,9 +44,21 @@ public class NoteContentEditService {
         if (!result.isChanged()) {
             return noteEditResultConverter.convert(note, false);
         }
-        richTextSyncOperationService.appendUpdateAtHead(note.getRichTextId(), result.getUpdate(), result.getHtml(), document.getHeadSeq());
+        AppendRichTextUpdateVo appendVo = mapAppendVo(accountId, sessionInfoId, note, result);
+        richTextSyncOperationService.appendUpdateAtHead(appendVo, document.getHeadSeq());
         mirrorTitle(note, result.getTitle());
         return noteEditResultConverter.convert(note, true);
+    }
+
+    private AppendRichTextUpdateVo mapAppendVo(String accountId, String sessionInfoId, NoteDto note, NoteCrdtResultDto result) {
+        AppendRichTextUpdateVo appendVo = new AppendRichTextUpdateVo();
+        appendVo.setRichTextId(note.getRichTextId());
+        appendVo.setAccountId(accountId);
+        appendVo.setSessionInfoId(sessionInfoId);
+        appendVo.setUpdate(result.getUpdate());
+        appendVo.setHtml(result.getHtml());
+        appendVo.setTitle(result.getTitle());
+        return appendVo;
     }
 
     private String resolveTargetHtml(RichTextDocumentDto document, NoteEditVo vo) {
