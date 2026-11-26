@@ -605,9 +605,6 @@ generate_secrets() {
     MINIO_ROOT_PASSWORD=$(generate_password 32)
     print_success "MinIO credentials generated"
 
-    ENCRYPTOR_PASSWORD=$(generate_password 32)
-    print_success "Encryptor password generated"
-
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
 
@@ -696,7 +693,6 @@ MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
 
 # Security
 JWT_SECRET=${JWT_SECRET}
-ENCRYPTOR_PASSWORD=${ENCRYPTOR_PASSWORD}
 INTERNAL_AUTH_TOKEN=${INTERNAL_AUTH_TOKEN}
 
 # Email
@@ -890,7 +886,6 @@ Password: ${MINIO_ROOT_PASSWORD}
 SECURITY SECRETS
 ----------------
 JWT Secret: ${JWT_SECRET}
-Encryptor Password: ${ENCRYPTOR_PASSWORD}
 Internal Auth Token: ${INTERNAL_AUTH_TOKEN}
 
 URLS

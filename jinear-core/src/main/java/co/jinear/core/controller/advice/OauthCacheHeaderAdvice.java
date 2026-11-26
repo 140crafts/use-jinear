@@ -39,7 +39,7 @@ public class OauthCacheHeaderAdvice implements ResponseBodyAdvice<Object> {
                                   ServerHttpRequest request,
                                   ServerHttpResponse response) {
         HttpHeaders headers = response.getHeaders();
-        if (headers.containsKey(HttpHeaders.CACHE_CONTROL)) {
+        if (headers.containsHeader(HttpHeaders.CACHE_CONTROL)) {
             return body;
         }
         if (OauthDiscoveryController.class.equals(returnType.getContainingClass())) {

@@ -6,8 +6,7 @@ import co.jinear.core.service.lock.LockService;
 import co.jinear.core.service.topic.TopicSequenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +16,7 @@ public class TaskLockService {
 
     private final LockService lockService;
 
-    @Retryable(value = {LockedException.class}, maxAttempts = 8, backoff = @Backoff(delay = 200, multiplier = 2, maxDelay = 3000))
+    @Retryable(includes = LockedException.class, maxRetries = 7, delay = 200, multiplier = 2, maxDelay = 3000)
     public void lockTopicForTaskInitialization(String topicId) {
         log.info("Lock topic for task initialization has started for topicId: {}", topicId);
         lockService.lock(topicId, LockSourceType.TOPIC_TASK_INIT);

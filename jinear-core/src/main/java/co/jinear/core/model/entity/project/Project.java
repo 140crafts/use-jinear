@@ -14,7 +14,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -64,29 +64,29 @@ public class Project extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "lead_workspace_member_id", referencedColumnName = "workspace_member_id", insertable = false, updatable = false)
     private WorkspaceMember leadWorkspaceMember;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "description_rich_text_id", referencedColumnName = "rich_text_id", insertable = false, updatable = false)
     private RichText description;
 
     @OneToMany(mappedBy = "project")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<ProjectTeam> projectTeams;
 
     @OneToMany(mappedBy = "project")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("targetDate ASC, createdDate ASC, milestoneOrder ASC")
     private Set<Milestone> milestones;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "workspace_id", referencedColumnName = "workspace_id", insertable = false, updatable = false)
     private Workspace workspace;
 
@@ -95,7 +95,7 @@ public class Project extends BaseEntity {
     private ProjectFeedSettings projectFeedSettings;
 
     @OneToMany(mappedBy = "project")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<ProjectDomain> domains;
 }

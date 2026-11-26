@@ -51,7 +51,6 @@ import co.jinear.core.system.util.ZonedDateHelper;
 import co.jinear.core.validator.mcp.McpEnabledValidator;
 import co.jinear.core.validator.mcp.McpToolScopeValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.AfterEach;
@@ -67,6 +66,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.ZoneId;
 import java.util.LinkedHashSet;
@@ -82,7 +83,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class McpGetContextToolTest {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = JsonMapper.builderWithJackson2Defaults().build();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
     private static final String ACCOUNT_ID = "account-1";
 

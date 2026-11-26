@@ -8,7 +8,7 @@ import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @Setter
@@ -31,7 +31,7 @@ public class NoteTagAssignment extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "note_tag_id", insertable = false, updatable = false)
     private NoteTag noteTag;
 

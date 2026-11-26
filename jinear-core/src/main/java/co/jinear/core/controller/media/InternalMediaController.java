@@ -6,11 +6,11 @@ import co.jinear.core.model.request.media.InternalMediaInitializeFromUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.media.InternalBatchMediaRetrieveResponse;
 import co.jinear.core.model.response.media.InternalMediaInitializeResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.core.JacksonException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class InternalMediaController {
     @ResponseStatus(HttpStatus.OK)
     public InternalMediaInitializeResponse uploadMedia(
             @RequestPart("file") MultipartFile file,
-            @RequestPart("metadata") String metadata) throws JsonProcessingException {
+            @RequestPart("metadata") String metadata) {
         return internalMediaManager.initializeMedia(file, metadata);
     }
 

@@ -1,9 +1,9 @@
 package co.jinear.core.model.mcp.jsonrpc;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 import lombok.Setter;
+import tools.jackson.databind.JsonNode;
 
 /**
  * The parameters of an MCP {@code tools/call}. {@code arguments} stays a raw tree because its

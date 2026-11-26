@@ -8,7 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -52,7 +52,7 @@ public class GoogleToken extends BaseEntity {
     private ZonedDateTime lastMailCheck;
 
     @OneToMany(mappedBy = "googleToken")
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     private Set<GoogleTokenScope> scopes;
 
     @OneToOne

@@ -3,11 +3,11 @@ package co.jinear.core.model.mcp.input;
 import co.jinear.core.model.enumtype.reminder.RepeatType;
 import co.jinear.core.model.mcp.schema.McpField;
 import co.jinear.core.model.mcp.schema.McpZonedDateTimeDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.ZonedDateTime;
 

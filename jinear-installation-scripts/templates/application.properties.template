@@ -1,5 +1,3 @@
-jasypt.encryptor.bean=encryptorBean
-
 jinear.instance.id=${JINEAR_INSTANCE_ID:jc0}
 spring.application.name=jinear-core
 server.port=8008
@@ -13,9 +11,9 @@ logging.file.path=./logs/
 logging.file.name=./logs/app.log
 logging.pattern.level=%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
 
-server.servlet.encoding.charset=UTF-8
-server.servlet.encoding.enabled=true
-server.servlet.encoding.force=true
+spring.servlet.encoding.charset=UTF-8
+spring.servlet.encoding.enabled=true
+spring.servlet.encoding.force=true
 
 jwt.secret=${JWT_SECRET}
 jwt.include-domain=true

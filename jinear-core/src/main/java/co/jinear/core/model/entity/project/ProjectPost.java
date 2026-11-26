@@ -10,7 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.Set;
 
@@ -51,13 +51,13 @@ public class ProjectPost extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @JoinColumn(name = "post_body_rich_text_id", referencedColumnName = "rich_text_id", insertable = false, updatable = false)
     private RichText postBody;
 
     @OneToMany
     @JoinColumn(name = "related_object_id", referencedColumnName = "project_post_id", insertable = false, updatable = false)
-    @Where(clause = "passive_id is null")
+    @SQLRestriction("passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Media> files;
 }

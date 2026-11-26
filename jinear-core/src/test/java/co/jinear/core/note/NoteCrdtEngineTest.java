@@ -5,7 +5,6 @@ import co.jinear.core.model.dto.note.NoteContentDto;
 import co.jinear.core.model.dto.note.NoteCrdtResultDto;
 import co.jinear.core.service.richtext.crdt.NoteCrdtContextPool;
 import co.jinear.core.service.richtext.crdt.NoteCrdtEngine;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Source;
 import org.junit.jupiter.api.AfterAll;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.util.ReflectionTestUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ class NoteCrdtEngineTest {
     @BeforeAll
     static void startEngine() {
         pool = new NoteCrdtContextPool();
-        engine = new NoteCrdtEngine(pool, new ObjectMapper());
+        engine = new NoteCrdtEngine(pool, JsonMapper.builderWithJackson2Defaults().build());
     }
 
     @AfterAll

@@ -23,7 +23,7 @@ import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -150,7 +150,7 @@ public class TaskListingManager {
         Optional.of(taskFilterRequest)
                 .map(TaskFilterRequest::getTeamIdList)
                 .map(Collection::stream)
-                .filter(teamIdStream -> teamIdStream.anyMatch(Strings::isBlank))
+                .filter(teamIdStream -> teamIdStream.anyMatch(StringUtils::isBlank))
                 .ifPresent(teamIdStream -> {
                     throw new NotValidException();
                 });

@@ -2,16 +2,15 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
-import co.jinear.core.model.enumtype.oauth.OauthScope;
-import co.jinear.core.service.mcp.McpDiscoveryService;
 import co.jinear.core.controller.mcp.McpController;
-import co.jinear.core.model.enumtype.account.RoleType;
-import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 import co.jinear.core.manager.mcp.McpProtocolManager;
-import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolRegistry;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import co.jinear.core.model.enumtype.account.RoleType;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
+import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
+import co.jinear.core.service.mcp.McpDiscoveryService;
+import co.jinear.core.service.mcp.McpToolCallLogService;
 import jakarta.validation.Validation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -69,7 +69,7 @@ class McpControllerTest {
         McpToolRegistry registry = new McpToolRegistry(tools);
 
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
-        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, new ObjectMapper(),
+        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, JsonMapper.builderWithJackson2Defaults().build(),
                 Validation.buildDefaultValidatorFactory().getValidator(), McpTestTools.messageSourceLocalizer());
         OauthProperties oauthProperties = new OauthProperties();
         oauthProperties.setIssuerUrl("https://api.jinear.test");
