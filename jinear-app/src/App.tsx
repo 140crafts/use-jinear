@@ -71,7 +71,6 @@ export default function App() {
             <FirebaseProvider/>
             <AuthCheck/>
             <ForcePasswordChangeChecker/>
-            <WorkspaceAndTeamChangeListener/>
             <OnboardListener/>
             <WebViewEventListener/>
             <ToasterProvider/>
@@ -114,6 +113,7 @@ export default function App() {
                 <Route path="/:workspaceName"
                        element={
                            <>
+                               <WorkspaceAndTeamChangeListener/>
                                <WorkspaceModalProvider/>
                                <WorkspaceLayout/>
                            </>}

@@ -4,7 +4,7 @@ import {useTypedSelector} from "@/store";
 import {ROUTE_IF_LOGGED_IN} from "@/util/constants";
 import Logger from "@/util/logger";
 import React, {useEffect} from "react";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 interface WorkspaceAndTeamChangeListenerProps {
 }
@@ -14,7 +14,6 @@ const logger = Logger("WorkspaceAndTeamChangeListener");
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
     const {workspaceName} = useParams();
     const navigate = useNavigate();
-    const {pathname} = useLocation();
 
     const preferedWorkspace = useTypedSelector((state) => state.account.current?.workspaceDisplayPreference?.workspace);
 
@@ -24,22 +23,22 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
     const [updatePreferredWorkspaceWithUsername, {error}] = useUpdatePreferredWorkspaceWithUsernameMutation();
 
     useEffect(() => {
-        if (currentWorkspaceDifferentFromUrl && pathname.indexOf("shared") == -1) {
+        if (currentWorkspaceDifferentFromUrl) {
             updatePreferredWorkspaceWithUsername({
                 workspaceUsername: workspaceName,
                 dontReroute: true
             });
         }
-    }, [currentWorkspaceDifferentFromUrl, pathname]);
+    }, [currentWorkspaceDifferentFromUrl, workspaceName, updatePreferredWorkspaceWithUsername]);
 
     useEffect(() => {
-        //@ts-ignore
-        const data = error?.data as BaseResponse;
+        const data = error && "data" in error ? error.data as BaseResponse : undefined;
         logger.log({data});
-        if (["14001", "001"].indexOf(data?.errorCode) != -1) {
+        const errorCode = data?.errorCode;
+        if (errorCode && ["14001", "001"].includes(errorCode)) {
             navigate(ROUTE_IF_LOGGED_IN);
         }
-    }, [error]);
+    }, [error, navigate]);
 
     return null;
 };
