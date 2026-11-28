@@ -1,6 +1,7 @@
 package co.jinear.core.service.material;
 
 import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.repository.material.MaterialRepository;
@@ -46,6 +47,12 @@ public class MaterialAccessValidationService {
         boolean hasAccess = materialDto.getOwnerId().equals(accountId) || workspaceAdminOrOwner;
         if (!hasAccess) {
             throw new NoAccessException();
+        }
+    }
+
+    public void validateAccountIsNotMaterialOwner(String accountId, MaterialDto materialDto) {
+        if (materialDto.getOwnerId().equals(accountId)) {
+            throw new NotValidException();
         }
     }
 

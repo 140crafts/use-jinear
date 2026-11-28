@@ -3,8 +3,8 @@
 House rules for writing code in this monorepo. Each rule names a real file you can open, so
 the standard stays checkable instead of aspirational.
 
-This is the first version. It covers release compatibility and comments for the whole repo,
-and the Java backend. Frontend sections come later.
+It covers release compatibility and comments for the whole repo, the Java backend, and the
+first rules for `jinear-app`. More frontend sections come later.
 
 ## Release compatibility
 
@@ -263,3 +263,26 @@ A public endpoint whose body is copied whole into another project is a published
 - It is pretty printed, so the copied file stays readable in a diff. Add the type to
   `config/jackson/PublishedDocumentJsonConfiguration.java`; never turn on indentation on the
   shared `ObjectMapper`.
+
+## Frontend - jinear-app
+
+Applies to the CSS and SCSS modules in `jinear-app/src`.
+
+### Font size
+
+Do not set `font-size` in a component style. The text then uses the size of its parent, and
+the global type scale in `jinear-app/src/styles/app.scss` sets that size: `body` is
+`0.75rem`, and `h1` to `h4`, `.title`, `.subtitle` and `.subtitle2` give the larger sizes.
+A size chosen by eye in one component does not match the text next to it.
+
+- When text must be larger or smaller, use the element or the class from the type scale
+  (`<h3>`, `.subtitle2`) instead of a new value.
+- Set `font-size` only when the design gives a size for that element, and you know why the
+  type scale cannot give it. Without that information, leave `font-size` out.
+
+- Legitimate: the username `<span>` in
+  `jinear-app/src/components/modal/materialAccessModal/materialAccessList/MaterialAccessList.tsx`
+  has no `font-size`, so it matches the rest of the modal.
+- Not legitimate: the first version of `.ownerLabel` in the same component's
+  `MaterialAccessList.module.css` had `font-size: 0.875rem`. It was larger than the username
+  next to it and looked out of place.

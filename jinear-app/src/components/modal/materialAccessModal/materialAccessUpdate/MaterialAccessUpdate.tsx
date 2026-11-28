@@ -89,7 +89,7 @@ const MaterialAccessUpdate: React.FC<MaterialAccessUpdateProps> = ({material}) =
             }
 
             {!isUpdateMaterialAccessTypeLoading && material.materialAccessType == "GRAINED" && materialAccessType == "GRAINED" &&
-                <MaterialAccessList materialId={materialId} workspaceId={material.workspaceId}/>}
+                <MaterialAccessList materialId={materialId} workspaceId={material.workspaceId} ownerId={material.ownerId}/>}
 
         </div>
     );

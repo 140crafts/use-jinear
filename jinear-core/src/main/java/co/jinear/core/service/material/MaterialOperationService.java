@@ -50,7 +50,8 @@ public class MaterialOperationService {
         log.info("Initialize folder has started. materialFolderInitializeVo: {}", materialFolderInitializeVo);
         validateParentMaterialIsFolderAndWithinSameWorkspace(materialFolderInitializeVo);
         Material material = materialEntityConverter.convert(materialFolderInitializeVo);
-        materialRepository.save(material);
+        Material saved = materialRepository.save(material);
+        giveOwnerAccessIfGrained(saved);
         materialFtsRefreshService.markDirty();
     }
 
@@ -62,6 +63,7 @@ public class MaterialOperationService {
         InitializeWaitingMediaVo initializeWaitingMediaVo = mapInitializeWaitingMediaVo(saved, materialFileInitializeVo);
         WaitingMediaResultDto waitingMediaResultDto = mediaOperationService.initializeWaitingMediaAndGetPresignedUploadUrl(initializeWaitingMediaVo);
         updateMediaId(saved, waitingMediaResultDto, material);
+        giveOwnerAccessIfGrained(saved);
         materialFtsRefreshService.markDirty();
         return new WaitingForUploadMaterialResultDto(saved.getMaterialId(), waitingMediaResultDto);
     }
@@ -118,6 +120,10 @@ public class MaterialOperationService {
         compareCurrentAndNextAccessTypeAndRevokeMediaAccess(nextMaterialAccessType, existingMaterialAccessType, material);
         material.setMaterialAccessType(nextMaterialAccessType);
         materialRepository.save(material);
+    }
+
+    private void giveOwnerAccessIfGrained(Material material) {
+        materialAccessService.giveOwnerAccessIfGrained(material.getMaterialId(), material.getOwnerId(), material.getMaterialAccessType());
     }
 
     private void collectChildIds(Material parent, Deque<String> queue) {

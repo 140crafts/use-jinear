@@ -14,6 +14,7 @@ import co.jinear.core.model.response.material.MaterialInitializeFileUploadRespon
 import co.jinear.core.model.vo.material.MaterialFileInitializeVo;
 import co.jinear.core.model.vo.material.MaterialFolderInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.material.MaterialAccessService;
 import co.jinear.core.service.material.MaterialAccessValidationService;
 import co.jinear.core.service.material.MaterialOperationService;
 import co.jinear.core.service.material.MaterialRetrieveService;
@@ -33,6 +34,7 @@ public class MaterialOperationManager {
     private final WorkspaceValidator workspaceValidator;
     private final MaterialOperationService materialOperationService;
     private final MaterialAccessValidationService materialAccessValidationService;
+    private final MaterialAccessService materialAccessService;
     private final MaterialInitializeFolderRequestToVoConverter materialInitializeFolderRequestToVoConverter;
     private final MaterialInitializeFileUploadRequestToVoConverter materialInitializeFileUploadRequestToVoConverter;
     private final MaterialRetrieveService materialRetrieveService;
@@ -108,6 +110,7 @@ public class MaterialOperationManager {
         materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
         log.info("Update access type has started. currentAccountId: {}", currentAccountId);
         materialOperationService.updateAccessType(materialId, materialAccessType, currentAccountId);
+        materialAccessService.giveOwnerAccessIfGrained(materialId, materialDto.getOwnerId(), materialAccessType);
         return new BaseResponse();
     }
 

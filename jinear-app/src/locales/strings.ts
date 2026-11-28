@@ -5652,6 +5652,10 @@ const translations = {
         en: "Revoke",
         tr: "Sil"
     },
+    materialAccessListOwner: {
+        en: "Owner",
+        tr: "Oluşturan"
+    },
     materialAccessUpdated: {
         en: "File access updated successfully.",
         tr: "Dosya erişimi başarıyla güncellendi."

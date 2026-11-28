@@ -3,6 +3,7 @@ package co.jinear.core.service.material;
 import co.jinear.core.converter.material.MaterialAccessDtoConverter;
 import co.jinear.core.model.dto.material.MaterialAccessDto;
 import co.jinear.core.model.entity.material.MaterialAccess;
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.repository.material.MaterialAccessRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,13 @@ public class MaterialAccessService {
             }
         } finally {
             materialLockService.unlockMaterialForAccessUpdate(materialId);
+        }
+    }
+
+    public void giveOwnerAccessIfGrained(String materialId, String ownerId, MaterialAccessType materialAccessType) {
+        if (MaterialAccessType.GRAINED.equals(materialAccessType)) {
+            log.info("Material access type is grained. Give owner access has started. materialId: {}, ownerId: {}", materialId, ownerId);
+            giveAccess(materialId, ownerId);
         }
     }
 

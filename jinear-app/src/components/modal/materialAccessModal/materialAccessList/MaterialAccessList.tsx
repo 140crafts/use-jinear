@@ -11,9 +11,10 @@ import {useTypedSelector} from "@/store";
 interface MaterialAccessListProps {
     materialId: string;
     workspaceId: string;
+    ownerId: string;
 }
 
-const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, workspaceId}) => {
+const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, workspaceId, ownerId}) => {
     const {t} = useTranslation();
     const {
         data: listMaterialAccessResponse
@@ -24,6 +25,9 @@ const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, work
     const resetList = useTypedSelector(selectMaterialAccessModalResetList);
 
     const workspaceMembers = workplaceMembersResponse?.data?.content ?? [];
+    const owner = workspaceMembers.filter(wm => wm.accountId == ownerId);
+    const otherMembers = workspaceMembers.filter(wm => wm.accountId != ownerId);
+    const ownerFirstMembers = [...owner, ...otherMembers];
     const [giveAccess, {isLoading: isGiveAccessLoading}] = useGiveAccessMutation();
     const [revokeAccess, {isLoading: isRevokeAccessLoading}] = useRevokeAccessMutation();
     const loading = isGiveAccessLoading || isRevokeAccessLoading;
@@ -32,7 +36,8 @@ const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, work
         <div className={styles.container}>
             <h3>{t("materialAccessListMembersTitle")}</h3>
             <div className={styles.contentContainer}>
-                {workspaceMembers.map(wm => {
+                {ownerFirstMembers.map(wm => {
+                        const isOwner = wm.accountId == ownerId;
                         const hasAccess = listMaterialAccessResponse?.data?.content?.find(materialAccess => materialAccess.accountId == wm.accountId) != null;
                         return (
                             <div key={wm.workspaceMemberId} className={styles.accessListItemContainer}>
@@ -42,17 +47,21 @@ const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, work
                                     wrapperClassName={styles.profilePic}
                                 />
                                 <span className={"flex-1"}>{wm.account?.username}</span>
-                                <Button
-                                    disabled={loading}
-                                    variant={hasAccess ? ButtonVariants.contrast : ButtonVariants.hoverFilled2}
-                                    onClick={() => {
-                                        hasAccess ?
-                                            revokeAccess({materialId, accountId: wm.accountId}) :
-                                            giveAccess({materialId, accountId: wm.accountId});
-                                        resetList?.();
-                                    }}>
-                                    {t(hasAccess ? "materialAccessListRevoke" : "materialAccessListAdd")}
-                                </Button>
+                                {isOwner ? (
+                                    <span className={styles.ownerLabel}>{t("materialAccessListOwner")}</span>
+                                ) : (
+                                    <Button
+                                        disabled={loading}
+                                        variant={hasAccess ? ButtonVariants.contrast : ButtonVariants.hoverFilled2}
+                                        onClick={() => {
+                                            hasAccess ?
+                                                revokeAccess({materialId, accountId: wm.accountId}) :
+                                                giveAccess({materialId, accountId: wm.accountId});
+                                            resetList?.();
+                                        }}>
+                                        {t(hasAccess ? "materialAccessListRevoke" : "materialAccessListAdd")}
+                                    </Button>
+                                )}
                             </div>
                         );
                     }

@@ -53,6 +53,7 @@ public class MaterialAccessManager {
         MaterialDto materialDto = materialRetrieveService.retrieve(materialId);
         workspaceValidator.validateHasAccess(currentAccountId, materialDto.getWorkspaceId());
         materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
+        materialAccessValidationService.validateAccountIsNotMaterialOwner(accountId, materialDto);
         log.info("Revoke access has started. currentAccountId: {}", currentAccountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
         materialAccessService.revokeAccess(materialId, accountId, passiveId);
