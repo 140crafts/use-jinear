@@ -607,6 +607,14 @@ export interface NoteDto extends BaseDto {
     notebook?: NotebookDto | null;
 }
 
+export interface TaskLinkingNoteDto {
+    noteId: string;
+    workspaceId: string;
+    notebookId?: string | null;
+    notebookTitle?: string | null;
+    title?: string | null;
+}
+
 export interface NoteEditResultDto {
     noteId: string;
     url: string;
@@ -2455,6 +2463,10 @@ export interface NoteInitializeResponse extends BaseResponse {
 
 export interface NotePaginatedResponse extends BaseResponse {
     data: PageDto<NoteDto>;
+}
+
+export interface TaskLinkingNoteListResponse extends BaseResponse {
+    data: TaskLinkingNoteDto[];
 }
 
 export interface NotebookInitializeResponse extends BaseResponse {

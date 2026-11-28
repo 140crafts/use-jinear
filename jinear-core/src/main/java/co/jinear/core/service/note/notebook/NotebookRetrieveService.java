@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,11 @@ public class NotebookRetrieveService {
         return notebookRepository.findByNotebookIdAndPassiveIdIsNull(notebookId)
                 .map(notebookDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<NotebookDto> retrieveOptional(String notebookId) {
+        return notebookRepository.findByNotebookIdAndPassiveIdIsNull(notebookId)
+                .map(notebookDtoConverter::convert);
     }
 
     public Notebook retrieveEntity(String notebookId) {

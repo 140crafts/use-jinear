@@ -13,6 +13,7 @@ import TaskComments from "./taskComments/TaskComments";
 import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
 import TaskMediaList from "./taskMediaList/TaskMediaList";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
+import TaskLinkingNoteList from "./taskLinkingNoteList/TaskLinkingNoteList";
 import DropZone from "@/components/dropZone/DropZone";
 import {pushDataToUploadStatusModalQueue} from "@/slice/modalSlice";
 import {useAppDispatch} from "@/store";
@@ -96,6 +97,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({
                         <TaskMediaList handleAttachmentUpload={handleAttachmentUpload}/>
                     )}
                     <TaskSubtaskList/>
+                    <TaskLinkingNoteList/>
                     <TaskComments/>
                     <LastTaskActivitiesList
                         workspaceId={task.workspaceId}

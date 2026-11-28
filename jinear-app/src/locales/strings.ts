@@ -6137,7 +6137,7 @@ const translations = {
     },
     notebookDraftsTitle: {
         en: 'Drafts',
-        tr: 'Tasklaklar'
+        tr: 'Taslaklar'
     },
     notebookEmptyStateTitle: {
         en: 'No notes yet',
@@ -6166,6 +6166,10 @@ const translations = {
     untitledNote: {
         en: 'Untitled',
         tr: 'Başlıksız'
+    },
+    taskLinkingNoteListTitle: {
+        en: "Notes mentioning this task",
+        tr: "Bu işten bahseden notlar"
     },
     draftCouldNotBeSaved: {
         en: "Couldn't be saved, open to recover",

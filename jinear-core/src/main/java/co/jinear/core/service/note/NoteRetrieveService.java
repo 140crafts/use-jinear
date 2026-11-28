@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class NoteRetrieveService {
+
+    private static final int TASK_LINK_CANDIDATE_LIMIT = 100;
 
     private final NoteRepository noteRepository;
     private final NoteDtoConverter noteDtoConverter;
@@ -44,6 +47,13 @@ public class NoteRetrieveService {
                 .toList();
     }
 
+    public List<NoteDto> retrieveAllLinkingTask(String taskId, String workspaceId) {
+        log.info("Retrieve all notes linking task has started. taskId: {}, workspaceId: {}", taskId, workspaceId);
+        List<String> noteIds = noteRepository.findNoteIdsLinkingTask(taskId, workspaceId, TASK_LINK_CANDIDATE_LIMIT);
+        List<NoteDto> notes = retrieveAll(noteIds);
+        return sortByIdOrder(notes, noteIds);
+    }
+
     public boolean existsByNoteIdAndNotebookId(String noteId, String notebookId) {
         return noteRepository.existsByNoteIdAndNotebookIdAndPassiveIdIsNull(noteId, notebookId);
     }
@@ -66,5 +76,11 @@ public class NoteRetrieveService {
                         .map(NotePathItemDto::getTitle)
                         .collect(Collectors.joining(" / ")))
                 .build();
+    }
+
+    private List<NoteDto> sortByIdOrder(List<NoteDto> notes, List<String> noteIds) {
+        return notes.stream()
+                .sorted(Comparator.comparingInt(note -> noteIds.indexOf(note.getNoteId())))
+                .toList();
     }
 }

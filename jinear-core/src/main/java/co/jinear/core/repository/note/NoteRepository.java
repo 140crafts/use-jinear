@@ -77,6 +77,19 @@ public interface NoteRepository extends JpaRepository<Note, String> {
                                        @Param("workspaceAdmin") boolean workspaceAdmin,
                                        Pageable pageable);
 
+    @Query(value = """
+            select cast(link.note_id as varchar) as note_id
+            from mv_note_task_link link
+                     inner join note n on n.note_id = link.note_id and n.passive_id is null
+            where link.task_id = :taskId
+              and n.workspace_id = :workspaceId
+            order by coalesce(n.udate, n.idate) desc, n.note_id desc
+            limit :limit
+            """, nativeQuery = true)
+    List<String> findNoteIdsLinkingTask(@Param("taskId") String taskId,
+                                        @Param("workspaceId") String workspaceId,
+                                        @Param("limit") int limit);
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             update Note note

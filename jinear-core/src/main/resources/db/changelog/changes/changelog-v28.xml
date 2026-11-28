@@ -10,4 +10,29 @@
         <rollback/>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jin-597-create-mv-note-task-link">
+        <!-- @formatter:off -->
+        <sql>
+            create materialized view mv_note_task_link
+as
+            select distinct n.note_id,
+                            t.task_id
+            from note n
+                     inner join rich_text rt on rt.rich_text_id = n.rich_text_id and rt.passive_id is null
+                     inner join username un on un.related_object_id = n.workspace_id and un.passive_id is null
+                     cross join lateral regexp_matches(rt.value, 'href="(?:https?://[^/"]+)?/([^/"]+)/task/([A-Za-z0-9]+)-([0-9]+)"', 'g') as link
+                     inner join team tm on tm.workspace_id = n.workspace_id and lower(tm.tag) = lower(link[2]) and tm.passive_id is null
+                     inner join task t on t.team_id = tm.team_id and t.team_tag_no = cast(link[3] as integer) and t.passive_id is null
+            where n.passive_id is null
+              and lower(un.username) = lower(link[1]);
+
+            create unique index idx_mv_note_task_link_note_id_task_id on mv_note_task_link (note_id, task_id);
+            create index idx_mv_note_task_link_task_id on mv_note_task_link (task_id);
+        </sql>
+        <!-- @formatter:on-->
+        <rollback>
+            <sql>drop materialized view mv_note_task_link;</sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

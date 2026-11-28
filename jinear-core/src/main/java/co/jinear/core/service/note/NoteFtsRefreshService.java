@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 public class NoteFtsRefreshService {
 
     private static final String REFRESH_FTS_MV_SQL = "refresh materialized view concurrently mv_note_fts";
+    private static final String REFRESH_TASK_LINK_MV_SQL = "refresh materialized view concurrently mv_note_task_link";
     private static final String REFRESH_LOCK_KEY = "mv-note-fts";
 
     private final NoteFtsDirtyStateRepository noteFtsDirtyStateRepository;
@@ -59,6 +60,7 @@ public class NoteFtsRefreshService {
         long start = System.currentTimeMillis();
         log.info("Refresh note fts mv has started.");
         jdbcTemplate.execute(REFRESH_FTS_MV_SQL);
+        jdbcTemplate.execute(REFRESH_TASK_LINK_MV_SQL);
         long duration = (System.currentTimeMillis() - start);
         log.info("Refresh note fts mv has completed. duration: {}", duration);
     }

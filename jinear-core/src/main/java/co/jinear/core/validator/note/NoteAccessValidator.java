@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -36,6 +39,39 @@ public class NoteAccessValidator {
         if (!accountId.equalsIgnoreCase(note.getOwnerId())) {
             validateNonOwnerAccess(accountId, workspaceId, note);
         }
+    }
+
+    public List<NoteDto> filterReadable(String accountId, String workspaceId, List<NoteDto> notes) {
+        Set<String> readableNotebookIds = retrieveReadableNotebookIds(accountId, workspaceId, notes);
+        return notes.stream()
+                .filter(note -> isReadable(accountId, workspaceId, note, readableNotebookIds))
+                .toList();
+    }
+
+    private Set<String> retrieveReadableNotebookIds(String accountId, String workspaceId, List<NoteDto> notes) {
+        return notes.stream()
+                .map(NoteDto::getNotebookId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .filter(notebookId -> canReadNotebook(accountId, workspaceId, notebookId))
+                .collect(Collectors.toSet());
+    }
+
+    private boolean canReadNotebook(String accountId, String workspaceId, String notebookId) {
+        return notebookRetrieveService.retrieveOptional(notebookId)
+                .filter(notebook -> workspaceId.equalsIgnoreCase(notebook.getWorkspaceId()))
+                .map(notebook -> notebookAccessValidator.hasAccess(accountId, notebook))
+                .orElse(Boolean.FALSE);
+    }
+
+    private boolean isReadable(String accountId, String workspaceId, NoteDto note, Set<String> readableNotebookIds) {
+        if (!workspaceId.equalsIgnoreCase(note.getWorkspaceId())) {
+            return false;
+        }
+        if (accountId.equalsIgnoreCase(note.getOwnerId())) {
+            return true;
+        }
+        return Objects.nonNull(note.getNotebookId()) && readableNotebookIds.contains(note.getNotebookId());
     }
 
     private void validateNonOwnerAccess(String accountId, String workspaceId, NoteDto note) {

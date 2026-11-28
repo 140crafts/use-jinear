@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-22 19:14:04.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-28 15:33:38.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -190,9 +190,9 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     gid: string;
-    ginternalDate: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -631,6 +631,14 @@ export interface NotePathItemDto {
 export interface NotePathItemDtoBuilder {
 }
 
+export interface TaskLinkingNoteDto {
+    noteId: string;
+    workspaceId: string;
+    notebookId: string;
+    notebookTitle: string;
+    title: string;
+}
+
 export interface NotebookDto extends BaseDto {
     notebookId: string;
     workspaceId: string;
@@ -965,6 +973,18 @@ export interface RichTextStateDto {
 export interface RichTextUpdatesDto {
     headSeq: number;
     updates: string[];
+}
+
+export interface RichTextVersionDetailDto extends RichTextVersionDto {
+    html: string;
+    title: string;
+}
+
+export interface RichTextVersionDto extends BaseDto {
+    richTextVersionId: string;
+    richTextId: string;
+    accountId: string;
+    account?: PlainAccountProfileDto | null;
 }
 
 export interface RobotDto extends BaseDto {
@@ -1775,11 +1795,11 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
+    code_challenge: string;
+    redirect_uri: string;
+    client_id: string;
     response_type: string;
     code_challenge_method: string;
-    client_id: string;
-    redirect_uri: string;
-    code_challenge: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1816,11 +1836,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    client_id: string;
-    redirect_uri: string;
     grant_type: string;
     code_verifier: string;
     refresh_token: string;
+    redirect_uri: string;
+    client_id: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -1934,6 +1954,7 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
 export interface AppendRichTextUpdateRequest extends BaseRequest {
     update: string;
     html?: string | null;
+    title?: string | null;
 }
 
 export interface SeedRichTextRequest extends BaseRequest {
@@ -2055,6 +2076,14 @@ export interface TaskFilterRequest extends BaseRequest {
     taskTags?: string[] | null;
 }
 
+export interface TaskInitializeReminderRequest {
+    beforeAssignedDate?: boolean | null;
+    beforeDueDate?: boolean | null;
+    specificRemindDate?: Date | null;
+    specificRemindRepeatEnd?: Date | null;
+    specificRemindDateRepeatType?: RepeatType | null;
+}
+
 export interface TaskInitializeRequest extends BaseRequest {
     workspaceId: string;
     teamId: string;
@@ -2073,6 +2102,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     projectId?: string | null;
     milestoneId?: string | null;
     collaboratorIds?: string[] | null;
+    reminder?: TaskInitializeReminderRequest | null;
 }
 
 export interface TaskProjectAndMilestoneUpdateRequest {
@@ -2435,6 +2465,10 @@ export interface NotePaginatedResponse extends BaseResponse {
     data: PageDto<NoteDto>;
 }
 
+export interface TaskLinkingNoteListResponse extends BaseResponse {
+    data: TaskLinkingNoteDto[];
+}
+
 export interface NotebookInitializeResponse extends BaseResponse {
     data: string;
 }
@@ -2587,6 +2621,14 @@ export interface RichTextTempImageResponse extends BaseResponse {
 
 export interface RichTextUpdatesResponse extends BaseResponse {
     data: RichTextUpdatesDto;
+}
+
+export interface RichTextVersionPaginatedResponse extends BaseResponse {
+    data: PageDto<RichTextVersionDto>;
+}
+
+export interface RichTextVersionResponse extends BaseResponse {
+    data: RichTextVersionDetailDto;
 }
 
 export interface RobotSecretResponse extends BaseResponse {
@@ -2834,12 +2876,12 @@ export interface CaptchaResolveVo {
 
 export interface MultipartFile extends InputStreamSource {
     contentType: string;
+    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
-    originalFilename: string;
 }
 
 export interface McpToolDescriptor {
@@ -2961,13 +3003,15 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
+    filePath: Path;
+    filename: string;
+    description: string;
+    uri: URI;
+    contentAsByteArray: any;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
-    uri: URI;
-    filename: string;
 }
 
 export interface InputStreamSource {
@@ -3084,10 +3128,13 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URL extends Serializable {
+export interface Path extends Comparable<Path>, Iterable<Path>, Watchable {
 }
 
 export interface URI extends Comparable<URI>, Serializable {
+}
+
+export interface URL extends Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -3172,6 +3219,9 @@ export interface AccountProfileMedia {
     media: Media;
 }
 
+export interface Watchable {
+}
+
 export interface Serializable {
 }
 
@@ -3238,6 +3288,9 @@ export interface Media extends BaseEntity {
 }
 
 export interface Comparable<T> {
+}
+
+export interface Iterable<T> {
 }
 
 export interface IntegrationScope extends BaseEntity {

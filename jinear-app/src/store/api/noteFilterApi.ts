@@ -1,4 +1,4 @@
-import type {NoteFilterRequest, NotePaginatedResponse} from "@/model/be/jinear-core";
+import type {NoteFilterRequest, NotePaginatedResponse, TaskLinkingNoteListResponse} from "@/model/be/jinear-core";
 import {api} from "./api";
 
 export const noteFilterApi = api.injectEndpoints({
@@ -18,12 +18,17 @@ export const noteFilterApi = api.injectEndpoints({
                     id: `${req.page}-${req.workspaceId}-${req.notebookId}-${req.parentNoteId}-${req.noteId}`
                 }
             ]
+        }),
+        //
+        retrieveNotesLinkingTask: build.query<TaskLinkingNoteListResponse, string>({
+            query: (taskId) => `v1/note/linking-task/${taskId}`,
+            providesTags: (_result, _err, taskId) => [{type: "v1/note/linking-task/{taskId}", id: taskId}]
         })
     })
 });
 
-export const {useFilterNotesQuery} = noteFilterApi;
+export const {useFilterNotesQuery, useRetrieveNotesLinkingTaskQuery} = noteFilterApi;
 
 export const {
-    endpoints: {filterNotes}
+    endpoints: {filterNotes, retrieveNotesLinkingTask}
 } = noteFilterApi;

@@ -122,6 +122,7 @@ export const tagTypes = [
     "v1/notebook/workspace/{workspaceId}",
     "v1/notebook/member/{notebookId}",
     "v1/note/filter",
+    "v1/note/linking-task/{taskId}",
     "v1/note/tag/notebook/{notebookId}",
     "v1/instance-flag/list",
     "v1/admin/account/list",

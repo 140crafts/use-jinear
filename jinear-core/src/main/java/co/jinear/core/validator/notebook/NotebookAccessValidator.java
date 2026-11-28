@@ -31,7 +31,7 @@ public class NotebookAccessValidator {
         }
     }
 
-    private boolean hasAccess(String accountId, NotebookDto notebookDto) {
+    public boolean hasAccess(String accountId, NotebookDto notebookDto) {
         boolean isOwner = notebookDto.getOwnerId().equals(accountId);
         if (isOwner) {
             return true;
