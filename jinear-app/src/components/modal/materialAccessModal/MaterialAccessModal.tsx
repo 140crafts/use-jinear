@@ -32,7 +32,7 @@ const MaterialAccessModal: React.FC<MaterialAccessModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      width={isMobile ? "fullscreen" : "xlarge"}
+      width={isMobile ? "fullscreen" : "large"}
       title={t("materialAccessChangeModalTitle")}
       hasTitleCloseButton={true}
       requestClose={close}

@@ -5593,7 +5593,7 @@ const translations = {
     },
     materialListRowAccessOnlyYouTooltip: {
         en: "Only You",
-        tr: "Yanlızca Siz"
+        tr: "Yalnızca Siz"
     },
     materialListRowGrainedAccessAccountCount: {
         en: "{number} User(s)",
@@ -5636,13 +5636,17 @@ const translations = {
         en: "Only {user} can access this file.",
         tr: "Bu dosyaya yalnızca {user} erişebilir."
     },
-    materialAccessSaving: {
-        en: "Saving",
-        tr: "Kayıt ediliyor"
-    },
     materialAccessListMembersTitle: {
-        en: "Workspace members that can access file",
-        tr: "Dosyaya erişebilecek alışma alanı üyeleri"
+        en: "Choose who can access",
+        tr: "Erişebilecek üyeleri seçin"
+    },
+    materialAccessTypeSectionTitle: {
+        en: "Who can access",
+        tr: "Kimler erişebilir"
+    },
+    materialAccessTypeOwnerOnlyLabel: {
+        en: "Only Owner",
+        tr: "Yalnızca Oluşturan"
     },
     materialAccessListAdd: {
         en: "Add",
@@ -5650,7 +5654,7 @@ const translations = {
     },
     materialAccessListRevoke: {
         en: "Revoke",
-        tr: "Sil"
+        tr: "Kaldır"
     },
     materialAccessListOwner: {
         en: "Owner",

@@ -7,6 +7,7 @@ import ProfilePhoto from "@/components/profilePhoto";
 import useTranslation from "@/locals/useTranslation";
 import {selectMaterialAccessModalResetList} from "@/slice/modalSlice";
 import {useTypedSelector} from "@/store";
+import type {WorkspaceMemberDto} from "@/be/jinear-core";
 
 interface MaterialAccessListProps {
     materialId: string;
@@ -28,45 +29,53 @@ const MaterialAccessList: React.FC<MaterialAccessListProps> = ({materialId, work
     const owner = workspaceMembers.filter(wm => wm.accountId == ownerId);
     const otherMembers = workspaceMembers.filter(wm => wm.accountId != ownerId);
     const ownerFirstMembers = [...owner, ...otherMembers];
-    const [giveAccess, {isLoading: isGiveAccessLoading}] = useGiveAccessMutation();
-    const [revokeAccess, {isLoading: isRevokeAccessLoading}] = useRevokeAccessMutation();
+    const [giveAccess, {isLoading: isGiveAccessLoading, originalArgs: giveAccessArgs}] = useGiveAccessMutation();
+    const [revokeAccess, {isLoading: isRevokeAccessLoading, originalArgs: revokeAccessArgs}] = useRevokeAccessMutation();
     const loading = isGiveAccessLoading || isRevokeAccessLoading;
+    const savingAccountId = isGiveAccessLoading ? giveAccessArgs?.accountId : revokeAccessArgs?.accountId;
+
+    const hasAccess = (accountId: string) =>
+        listMaterialAccessResponse?.data?.content?.some(materialAccess => materialAccess.accountId == accountId) ?? false;
+
+    const toggleAccess = (accountId: string) => {
+        if (hasAccess(accountId)) {
+            revokeAccess({materialId, accountId});
+        } else {
+            giveAccess({materialId, accountId});
+        }
+        resetList?.();
+    };
+
+    const renderAccessAction = (wm: WorkspaceMemberDto) => {
+        if (wm.accountId == ownerId) {
+            return <span className={styles.ownerLabel}>{t("materialAccessListOwner")}</span>;
+        }
+        const memberHasAccess = hasAccess(wm.accountId);
+        return (
+            <Button
+                disabled={loading}
+                loading={loading && savingAccountId == wm.accountId}
+                variant={memberHasAccess ? ButtonVariants.contrast : ButtonVariants.hoverFilled2}
+                onClick={() => toggleAccess(wm.accountId)}
+            >
+                {t(memberHasAccess ? "materialAccessListRevoke" : "materialAccessListAdd")}
+            </Button>
+        );
+    };
 
     return (
         <div className={styles.container}>
-            <h3>{t("materialAccessListMembersTitle")}</h3>
-            <div className={styles.contentContainer}>
-                {ownerFirstMembers.map(wm => {
-                        const isOwner = wm.accountId == ownerId;
-                        const hasAccess = listMaterialAccessResponse?.data?.content?.find(materialAccess => materialAccess.accountId == wm.accountId) != null;
-                        return (
-                            <div key={wm.workspaceMemberId} className={styles.accessListItemContainer}>
-                                <ProfilePhoto
-                                    boringAvatarKey={wm.accountId}
-                                    url={wm?.account.profilePicture?.url}
-                                    wrapperClassName={styles.profilePic}
-                                />
-                                <span className={"flex-1"}>{wm.account?.username}</span>
-                                {isOwner ? (
-                                    <span className={styles.ownerLabel}>{t("materialAccessListOwner")}</span>
-                                ) : (
-                                    <Button
-                                        disabled={loading}
-                                        variant={hasAccess ? ButtonVariants.contrast : ButtonVariants.hoverFilled2}
-                                        onClick={() => {
-                                            hasAccess ?
-                                                revokeAccess({materialId, accountId: wm.accountId}) :
-                                                giveAccess({materialId, accountId: wm.accountId});
-                                            resetList?.();
-                                        }}>
-                                        {t(hasAccess ? "materialAccessListRevoke" : "materialAccessListAdd")}
-                                    </Button>
-                                )}
-                            </div>
-                        );
-                    }
-                )}
-            </div>
+            {ownerFirstMembers.map(wm => (
+                <div key={wm.workspaceMemberId} className={styles.memberRow}>
+                    <ProfilePhoto
+                        boringAvatarKey={wm.accountId}
+                        url={wm?.account.profilePicture?.url}
+                        wrapperClassName={styles.profilePic}
+                    />
+                    <span className={"flex-1 single-line"}>{wm.account?.username}</span>
+                    {renderAccessAction(wm)}
+                </div>
+            ))}
         </div>
     );
 };

@@ -1,51 +1,87 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
-.titleContainer {
+.fileCard {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
     align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
 }
 
-.infoContainer {
+.fileIconTile {
     display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.loadingContainer {
-    /*min-height: 19px;*/
-    display: flex;
-    flex-direction: row;
-    gap: .5rem;
-    justify-content: flex-end;
-}
-
-.accessTypeSelectContainer {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-}
-
-.accessTypeButtons {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    border-style: solid;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
     border-radius: var(--border-radius);
-    border-color: var(--c-primary-shade-1-op05);
+    background-color: var(--c-primary-shade-0);
 }
 
-.accessTypeButton {
+.fileInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 0.125rem;
+}
+
+.fileMeta {
+    opacity: 0.6;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sectionTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.option {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem !important;
+    text-align: left;
+}
+
+.optionIcon {
+    min-width: 16px;
+    margin-top: 1px;
+}
+
+.optionText {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    gap: 0.125rem;
+}
+
+.optionDetail {
+    opacity: 0.6;
+}
+
+.optionState {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    justify-content: flex-start !important;
+    justify-content: center;
+    min-width: 16px;
+    margin-top: 1px;
 }
