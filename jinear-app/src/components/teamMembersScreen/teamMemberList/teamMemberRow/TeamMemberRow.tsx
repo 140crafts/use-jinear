@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
-import { useCurrentAccountsTeamRoleIsAdmin } from "@/hooks/useCurrentAccountsTeamRole";
+import { useWorkspaceOwnerOrAdminOrTeamAdmin } from "@/hooks/useWorkspaceOwnerOrAdminOrTeamAdmin";
 import type { TeamMemberDto } from "@/model/be/jinear-core";
 import { useKickMemberFromTeamMutation } from "@/store/api/teamMemberApi";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
@@ -22,7 +22,7 @@ const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const isTeamAdmin = useCurrentAccountsTeamRoleIsAdmin({ workspaceId: teamMember.workspaceId, teamId: teamMember.teamId });
+  const canKickMember = useWorkspaceOwnerOrAdminOrTeamAdmin({ workspaceId: teamMember.workspaceId, teamId: teamMember.teamId });
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const viewingHimself = teamMember.accountId == currentAccountId;
 
@@ -54,7 +54,7 @@ const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
           <div className={styles.title}>{teamMember.account.email}</div>
         </div>
 
-        {isTeamAdmin && !viewingHimself && (
+        {canKickMember && !viewingHimself && (
           <div className={styles.rightInfoContainer}>
             <Button
               variant={ButtonVariants.filled}
