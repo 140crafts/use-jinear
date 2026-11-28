@@ -15,7 +15,6 @@ import type {
     CalendarShareEventsModalState,
     ChangeTaskAssigneeModalState,
     ChangeTaskDateModalState,
-    ChangeTaskTopicModalState,
     ChangeTaskWorkflowStatusModalState,
     ChannelListModalState,
     ChannelSettingsModalState,
@@ -92,9 +91,6 @@ const initialState = {
         visible: false
     },
     changeTaskWorkflowStatusModal: {
-        visible: false
-    },
-    changeTaskTopicModal: {
         visible: false
     },
     changeTaskDateModal: {
@@ -323,7 +319,6 @@ const initialState = {
     newTaskModal: null | NewTaskModalState;
     newTopicModal: null | NewTopicModalState;
     changeTaskWorkflowStatusModal: null | ChangeTaskWorkflowStatusModalState;
-    changeTaskTopicModal: null | ChangeTaskTopicModalState;
     changeTaskDateModal: null | ChangeTaskDateModalState;
     changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
     newWorkspaceModal: null | ModalState;
@@ -444,12 +439,6 @@ const slice = createSlice({
             state.changeTaskWorkflowStatusModal = {visible: false};
         },
 
-        popChangeTaskTopicModal: (state, action: PayloadAction<ChangeTaskTopicModalState>) => {
-            state.changeTaskTopicModal = {visible: true, task: action.payload.task};
-        },
-        closeChangeTaskTopicModal: (state, action: PayloadAction<void>) => {
-            state.changeTaskTopicModal = {visible: false};
-        },
 
         popChangeTaskDateModal: (state, action: PayloadAction<ChangeTaskDateModalState>) => {
             state.changeTaskDateModal = {...action.payload, visible: true};
@@ -1008,8 +997,6 @@ export const {
     closeNewTopicModal,
     popChangeTaskWorkflowStatusModal,
     closeChangeTaskWorkflowStatusModal,
-    popChangeTaskTopicModal,
-    closeChangeTaskTopicModal,
     popChangeTaskDateModal,
     closeChangeTaskDateModal,
     popChangeTaskAssigneeModal,
@@ -1205,15 +1192,12 @@ export const selectNewTaskModalInitialBoard = (state: RootState) =>
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;
 export const selectNewTopicModalTeam = (state: RootState) => state.modal.newTopicModal?.team;
+export const selectNewTopicModalInitialName = (state: RootState) => state.modal.newTopicModal?.initialName;
 
 export const selectChangeTaskWorkflowStatusModalVisible = (state: RootState) =>
     state.modal.changeTaskWorkflowStatusModal?.visible;
 export const selectChangeTaskWorkflowStatusModalTask = (state: RootState) => state.modal.changeTaskWorkflowStatusModal?.task;
 
-export const selectChangeTaskTopicModalVisible = (state: RootState) => state.modal.changeTaskTopicModal?.visible;
-export const selectChangeTaskTopicModalTaskId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.taskId;
-export const selectChangeTaskTopicModalTeamId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.teamId;
-export const selectChangeTaskTopicModalTaskCurrentTopicId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.topicId;
 
 export const selectChangeTaskDateModalVisible = (state: RootState) => state.modal.changeTaskDateModal?.visible;
 export const selectChangeTaskDateModalTaskId = (state: RootState) => state.modal.changeTaskDateModal?.task?.taskId;
@@ -1329,6 +1313,9 @@ export const selectTopicPickerModalMultiple = (state: RootState) => state.modal.
 export const selectTopicPickerModalInitialSelectionOnMultiple = (state: RootState) =>
     state.modal.topicPickerModal?.initialSelectionOnMultiple;
 export const selectTopicPickerModalOnPick = (state: RootState) => state.modal.topicPickerModal?.onPick;
+export const selectTopicPickerModalCurrentTopicId = (state: RootState) => state.modal.topicPickerModal?.currentTopicId;
+export const selectTopicPickerModalOnRemove = (state: RootState) => state.modal.topicPickerModal?.onRemove;
+export const selectTopicPickerModalTitle = (state: RootState) => state.modal.topicPickerModal?.title;
 
 export const selectTeamMemberPickerModalVisible = (state: RootState) => state.modal.teamMemberPickerModal?.visible;
 export const selectTeamMemberPickerModalTeamId = (state: RootState) => state.modal.teamMemberPickerModal?.teamId;

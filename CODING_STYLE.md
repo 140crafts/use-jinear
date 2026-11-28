@@ -286,3 +286,36 @@ A size chosen by eye in one component does not match the text next to it.
 - Not legitimate: the first version of `.ownerLabel` in the same component's
   `MaterialAccessList.module.css` had `font-size: 0.875rem`. It was larger than the username
   next to it and looked out of place.
+
+### Colors and themes
+
+The app has many themes: the Jinear themes and themes from VS Code, JetBrains and other popular
+editors, in light and dark. A theme sets the color variables through
+`jinear-app/src/theme/themeVariables.ts`. A color that does not come from these variables stays
+the same on every theme, so it can be unreadable or out of place on some of them.
+
+- Use the theme variables:
+  - backgrounds, surfaces and lines: `--c-primary`, `--c-primary-shade-0`, `--c-primary-shade-1`;
+  - text: `--c-text-color`, `--c-secondary-shade-0`, `--c-secondary-shade-1`;
+  - highlight: `--c-accent`;
+  - error and success states: `--c-ERROR_RED`, `--c-SUCCESS_GREEN`.
+- Do not write a hex or rgb value, or a fixed brand color such as `--c-JINEAR_ORANGE` or
+  `--c-BABY_POWDER`, in a component style.
+- Text on a colored background uses the pair of that background: `--c-on-accent` on
+  `--c-accent`. A color that a user chose, such as a topic color, gets its text color from
+  `getTextColor` in `jinear-app/src/util/colorHelper.ts`. `--c-ERROR_RED` has no pair, so do not
+  put text on a red background.
+- Use color for a state, not for decoration. An action, also a remove action, uses the normal
+  text color, and an icon can show what it does. Keep `--c-ERROR_RED` for an error message or a
+  failed state.
+- Before you finish, look at a new color with one light and one dark theme from the theme picker.
+
+- Legitimate: the `.brandColor` button variant in
+  `jinear-app/src/components/button/index.module.css` uses `--c-accent` with `--c-on-accent`.
+  `jinear-app/src/components/taskDetail/taskActionBar/changeTopicButton/ChangeTopicButton.tsx`
+  uses `getTextColor` for the text on the topic color.
+- Not legitimate: the delete button in
+  `jinear-app/src/components/form/topicForm/TopicForm.module.css` puts the fixed white
+  `--c-BABY_POWDER` on `--c-ERROR_RED`. The first version of the "Görevin Konusunu Kaldır" button
+  in the topic picker used `--c-ERROR_RED` as the text color of a normal action, and it looked
+  wrong.

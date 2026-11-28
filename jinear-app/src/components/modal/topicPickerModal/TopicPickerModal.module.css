@@ -4,16 +4,28 @@
   padding: 0;
 }
 
-.content {
+.searchBar {
   display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  padding-bottom: 0;
-  position: relative;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 
 .searchInput {
   flex: 1;
+  min-width: 0;
+}
+
+.newTopicButton {
+  gap: 0.35rem;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  white-space: nowrap;
+}
+
+.line {
+  padding: 0.5rem 0.5rem 0 0.5rem;
 }
 
 .list {
@@ -23,77 +35,72 @@
   height: min(100%, 16rem);
   min-height: 6rem;
   padding: 0.5rem;
-
   overflow-y: scroll;
-  gap: 0.25rem;
+  gap: 0.125rem;
+}
+
+.row {
+  justify-content: flex-start !important;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.rowIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  width: 16px;
+}
+
+.colorDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
 }
 
 .messageContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 4rem;
+  min-height: 4rem;
 }
 
-.listItemButton {
-  text-align: left !important;
-  justify-content: left !important;
-  gap: 0.5rem !important;
-}
-
-.listItemIcon {
+.footer {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22.5px;
-}
-
-.titleContainer {
-  flex: 1;
-  padding-left: 0.5rem;
+  flex-direction: column;
+  padding: 0 0.5rem;
 }
 
 .actionBar {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1rem;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: var(--c-primary-shade-1);
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0.75rem 0;
+}
+
+.selectedCount {
+  flex: 1;
+  padding-left: 0.5rem;
+  color: var(--c-secondary-shade-1);
 }
 
 .contButton {
   width: 6rem;
-}
-
-.selectedTopicListContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  padding: 1rem;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: var(--c-primary-shade-1);
-}
-
-.selectedTopicContainer {
-  /* padding: 0.25rem 0.75rem; */
-  background-color: var(--c-primary-shade-0);
-  border-radius: var(--border-radius);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.selectedTopicName {
-  padding: 0.25rem 1rem;
-}
-
-.selectedTopicUnselectButton {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
 }

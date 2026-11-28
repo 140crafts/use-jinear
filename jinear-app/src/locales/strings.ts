@@ -778,6 +778,14 @@ const translations = {
         en: "Delete",
         tr: "Sil"
     },
+    topicFormDeleteAreYouSureTitle: {
+        en: "Delete Topic",
+        tr: "Konuyu Sil"
+    },
+    topicFormDeleteAreYouSureText: {
+        en: "Are you sure you want to delete this topic?",
+        tr: "Bu konuyu silmek istediğinizden emin misiniz?"
+    },
     topicListScreenTitle: {
         en: "Topics",
         tr: "Konular"
@@ -889,22 +897,6 @@ const translations = {
     taskDetailChangeTopicTooltip: {
         en: "Change task topic",
         tr: "İşin konusunu değiştir"
-    },
-    changeTaskTopicModalTitle: {
-        en: "Change Task Topic",
-        tr: "İşin Konusunu Değiştir"
-    },
-    changeTaskTopicModalFilterLabel: {
-        en: "Filter by topic name and assign new topic",
-        tr: "Konu adına göre filtrele ve yeni bir konu ata"
-    },
-    changeTaskTopicModalFilteredListEmpty: {
-        en: "No topic found",
-        tr: "Hiçbir konu bulunamadı"
-    },
-    changeTaskTopicModalRemoveTopic: {
-        en: "Remove Task Topic",
-        tr: "Görevin Konusunu Kaldır"
     },
     changeTaskDateTitle: {
         en: "Change Task Dates",
@@ -2430,6 +2422,18 @@ const translations = {
     topicPickerModalCancelButton: {
         en: "Cancel",
         tr: "Vazgeç"
+    },
+    topicPickerModalNoTopic: {
+        en: "No topic",
+        tr: "Konu yok"
+    },
+    topicPickerModalSelectedCount: {
+        en: "${count} selected",
+        tr: "${count} seçili"
+    },
+    topicPickerModalTaskTopicTitle: {
+        en: "Change Task Topic",
+        tr: "İşin Konusunu Değiştir"
     },
     newTaskFormPickTopicButtonLabel: {
         en: "Assign a topic",

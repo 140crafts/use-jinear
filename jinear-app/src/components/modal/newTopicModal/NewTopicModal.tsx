@@ -1,6 +1,7 @@
 import TopicForm from "@/components/form/topicForm/TopicForm";
 import {
     closeNewTopicModal,
+    selectNewTopicModalInitialName,
     selectNewTopicModalTeam,
     selectNewTopicModalVisible,
     selectNewTopicModalWorkspace,
@@ -20,6 +21,7 @@ const NewTopicModal: React.FC<NewTopicModalProps> = ({}) => {
     const visible = useTypedSelector(selectNewTopicModalVisible);
     const workspace = useTypedSelector(selectNewTopicModalWorkspace);
     const team = useTypedSelector(selectNewTopicModalTeam);
+    const initialName = useTypedSelector(selectNewTopicModalInitialName);
 
     const close = () => {
         dispatch(closeNewTopicModal());
@@ -33,7 +35,7 @@ const NewTopicModal: React.FC<NewTopicModalProps> = ({}) => {
             hasTitleCloseButton={true}
             requestClose={close}
         >
-            {workspace && team && <TopicForm workspace={workspace} team={team} onSuccess={close}/>}
+            {workspace && team && <TopicForm workspace={workspace} team={team} taskName={initialName} onSuccess={close}/>}
         </Modal>
     );
 };

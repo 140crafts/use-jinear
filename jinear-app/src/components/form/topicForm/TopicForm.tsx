@@ -2,6 +2,9 @@ import Button, {ButtonVariants} from "@/components/button";
 import type {TeamDto, TopicInitializeRequest, TopicUpdateRequest, WorkspaceDto} from "@/model/be/jinear-core";
 import {useDeleteTopicMutation, useInitializeTopicMutation, useUpdateTopicMutation} from "@/store/api/topicApi";
 import Logger from "@/util/logger";
+import {closeDialogModal, popDialogModal} from "@/store/slice/modalSlice";
+import {useAppDispatch} from "@/store";
+import {LuTrash2} from "react-icons/lu";
 import {normalizeStrictly} from "@/util/normalizeHelper";
 import useTranslation from "@/locales/useTranslation";
 
@@ -36,6 +39,7 @@ const logger = Logger("TopicForm");
 
 const TopicForm: React.FC<TopicFormProps> = ({workspace, team, topicId, color, taskName, taskTag, onSuccess}) => {
     const {t} = useTranslation();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const {register, handleSubmit, control, setFocus, setValue, watch} = useForm<ITopicForm>();
@@ -96,6 +100,19 @@ const TopicForm: React.FC<TopicFormProps> = ({workspace, team, topicId, color, t
         if (topicId) {
             deleteTopicCall(topicId);
         }
+        dispatch(closeDialogModal());
+    };
+
+    const popDeleteTopicDialog = () => {
+        dispatch(
+            popDialogModal({
+                visible: true,
+                title: t("topicFormDeleteAreYouSureTitle"),
+                content: t("topicFormDeleteAreYouSureText"),
+                confirmButtonLabel: t("topicFormDelete"),
+                onConfirm: deleteTopic,
+            })
+        );
     };
 
     const routeToList = () => {
@@ -121,9 +138,9 @@ const TopicForm: React.FC<TopicFormProps> = ({workspace, team, topicId, color, t
                         disabled={isDeleteLoading}
                         loading={isDeleteLoading}
                         className={styles.footerButtonDelete}
-                        variant={ButtonVariants.contrast}
-                        onClick={deleteTopic}
+                        onClick={popDeleteTopicDialog}
                     >
+                        <LuTrash2/>
                         {t("topicFormDelete")}
                     </Button>
                 )}

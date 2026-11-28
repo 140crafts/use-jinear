@@ -1,6 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { popChangeTaskTopicModal } from "@/store/slice/modalSlice";
-import { useAppDispatch } from "@/store";
+import { useTaskTopicPicker } from "@/hooks/useTaskTopicPicker";
 import { getTextColor } from "@/util/colorHelper";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
@@ -11,18 +10,15 @@ interface ChangeTopicButtonProps {}
 const ChangeTopicButton: React.FC<ChangeTopicButtonProps> = ({}) => {
   const task = useTask();
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-
-  const popChangeTopicModal = () => {
-    dispatch(popChangeTaskTopicModal({ visible: true, task }));
-  };
+  const { popTopicPicker, isReady } = useTaskTopicPicker(task);
 
   return (
     <Button
       variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       data-tooltip-right={t("taskDetailChangeTopicTooltip")}
-      onClick={popChangeTopicModal}
+      disabled={!isReady}
+      onClick={popTopicPicker}
       style={{
         backgroundColor: task.topic ? `#${task.topic?.color}` : undefined,
       }}

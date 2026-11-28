@@ -24,7 +24,6 @@ import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspace
 import TaskAssigneeChangeModal
     from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal.tsx";
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal.tsx";
-import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal.tsx";
 import TaskTaskBoardModal from "@/components/modal/taskTaskBoardModal/TaskTaskBoardModal.tsx";
 import WorkflowChangeStatusModal
     from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal.tsx";
@@ -80,7 +79,6 @@ const workspaceModals: any = (
         <NewWorkspaceModal/>
         <TaskAssigneeChangeModal/>
         <TaskDateChangeModal/>
-        <TaskTopicChangeModal/>
         <TaskTaskBoardModal/>
         <WorkflowChangeStatusModal/>
         <NewTaskModal/>

@@ -5,20 +5,24 @@ import {useSearchTeamTopicsQuery} from "@/store/api/topicListingApi";
 import {
     closeTopicPickerModal,
     popNewTopicModal,
+    selectTopicPickerModalCurrentTopicId,
     selectTopicPickerModalInitialSelectionOnMultiple,
     selectTopicPickerModalMultiple,
     selectTopicPickerModalOnPick,
+    selectTopicPickerModalOnRemove,
     selectTopicPickerModalTeam,
+    selectTopicPickerModalTitle,
     selectTopicPickerModalVisible,
     selectTopicPickerModalWorkspace,
 } from "@/store/slice/modalSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React, {type ChangeEvent, useEffect, useRef, useState} from "react";
-import {IoClose} from "react-icons/io5";
+import {LuCheck, LuCircleSlash, LuPlus} from "react-icons/lu";
 import Modal from "../modal/Modal";
 import styles from "./TopicPickerModal.module.css";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
+import GradientLine from "@/components/gradientLine/GradientLine";
 
 interface TopicPickerModalProps {
 }
@@ -36,11 +40,15 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
     const multiple = useTypedSelector(selectTopicPickerModalMultiple);
     const initialSelectionOnMultiple = useTypedSelector(selectTopicPickerModalInitialSelectionOnMultiple);
     const onPick = useTypedSelector(selectTopicPickerModalOnPick);
+    const currentTopicId = useTypedSelector(selectTopicPickerModalCurrentTopicId);
+    const onRemove = useTypedSelector(selectTopicPickerModalOnRemove);
+    const title = useTypedSelector(selectTopicPickerModalTitle);
 
     const {currentData: searchResponse, isFetching} = useSearchTeamTopicsQuery(
         {teamId: team?.teamId || "", nameOrTag: searchValue},
         {skip: team == null}
     );
+    const topics = searchResponse?.data ?? [];
 
     useEffect(() => {
         setTimeout(() => {
@@ -59,7 +67,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
     useDebouncedEffect(() => setSearchValue(input), [input], 500);
 
     const popCreateNewTopicModal = () => {
-        dispatch(popNewTopicModal({visible: true, team, workspace}));
+        dispatch(popNewTopicModal({visible: true, team, workspace, initialName: input.trim()}));
     };
 
     const close = () => {
@@ -73,37 +81,47 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
         setInput(e.target.value);
     };
 
-    const addTaskToSelected = (topicDto: TopicDto) => {
-        if (selectedTopics.filter((t) => t.topicId == topicDto.topicId).length == 0) {
+    const isSelected = (topicDto: TopicDto) =>
+        multiple ?
+            selectedTopics.some((topic) => topic.topicId == topicDto.topicId) :
+            topicDto.topicId == currentTopicId;
+
+    const toggleSelected = (topicDto: TopicDto) => {
+        if (isSelected(topicDto)) {
+            setSelectedTopics(selectedTopics.filter((topic) => topic.topicId != topicDto.topicId));
+        } else {
             setSelectedTopics([...selectedTopics, topicDto]);
         }
     };
 
-    const removeFromSelected = (selectedTopic: TopicDto) => {
-        const filtered = selectedTopics.filter((topic) => topic.topicId != selectedTopic.topicId);
-        setSelectedTopics(filtered);
-    };
-
     const pickAndClose = (topicDto: TopicDto) => {
         onPick?.([topicDto]);
-        close?.();
+        close();
+    };
+
+    const removeAndClose = () => {
+        if (currentTopicId) {
+            onRemove?.();
+        }
+        close();
     };
 
     const submitPickedAndClose = () => {
         onPick?.(selectedTopics);
-        close?.();
+        close();
     };
 
     return (
         <Modal
             visible={visible}
-            title={t("topicPickerModalTitle")}
+            title={title ?? t("topicPickerModalTitle")}
             bodyClass={styles.container}
             hasTitleCloseButton={true}
             requestClose={close}
+            width={'large'}
             height={"height-medium-or-full"}
         >
-            <div className={styles.content}>
+            <div className={styles.searchBar}>
                 <input
                     ref={inputRef}
                     type={"text"}
@@ -112,64 +130,69 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
                     value={input}
                     onChange={onTextChange}
                 />
+                <Button className={styles.newTopicButton} onClick={popCreateNewTopicModal} shortcut="pickerNew">
+                    <LuPlus/>
+                    {t("newTaskModalNewTopicButton")}
+                </Button>
+            </div>
+            <div className={styles.line}>
+                <GradientLine/>
             </div>
 
             <div className={styles.list}>
-                <Button variant={ButtonVariants.outline} heightVariant={ButtonHeight.short}
-                        onClick={popCreateNewTopicModal} shortcut="pickerNew">
-                    {t("newTaskModalNewTopicButton")}
-                </Button>
+                {!multiple && onRemove && (
+                    <Button className={styles.row} onClick={removeAndClose}>
+                        <LuCircleSlash className={styles.rowIcon}/>
+                        <span className={styles.name}>{t("topicPickerModalNoTopic")}</span>
+                        <div className={styles.state}>{!currentTopicId && <LuCheck/>}</div>
+                    </Button>
+                )}
 
-                {searchResponse?.data.map((topicDto) => (
+                {topics.map((topicDto) => (
                     <Button
                         key={`topic-search-result-list-${topicDto.topicId}`}
-                        variant={ButtonVariants.default}
-                        className={styles.listItemButton}
-                        onClick={() => {
-                            multiple ? addTaskToSelected(topicDto) : pickAndClose(topicDto);
-                        }}
+                        className={styles.row}
+                        onClick={() => multiple ? toggleSelected(topicDto) : pickAndClose(topicDto)}
                     >
-                        {topicDto.name}
+                        <div className={styles.rowIcon}>
+                            <span className={styles.colorDot} style={{backgroundColor: `#${topicDto.color}`}}/>
+                        </div>
+                        <span className={styles.name}>{topicDto.name}</span>
+                        <div className={styles.state}>{isSelected(topicDto) && <LuCheck/>}</div>
                     </Button>
                 ))}
-                <div className={styles.messageContainer}>
-                    {searchValue?.length != 0 && searchResponse?.data?.length == 0 && (
-                        <div>{t("topicPickerModalEmptyState")}</div>
-                    )}
-                    {isFetching && searchResponse == null && <CircularLoading size={17}/>}
-                </div>
+
+                {isFetching && searchResponse == null && (
+                    <div className={styles.messageContainer}>
+                        <CircularLoading size={17}/>
+                    </div>
+                )}
+
+                {searchResponse && topics.length == 0 && (
+                    <div className={styles.messageContainer}>{t("topicPickerModalEmptyState")}</div>
+                )}
             </div>
-            {multiple && selectedTopics.length != 0 && (
-                <div className={styles.selectedTopicListContainer}>
-                    {selectedTopics.map((topicDto) => (
-                        <div key={`selected-topic-${topicDto.topicId}`} className={styles.selectedTopicContainer}>
-                            <div className={styles.selectedTopicName}>{topicDto.name}</div>
-                            <Button
-                                variant={ButtonVariants.filled2}
-                                className={styles.selectedTopicUnselectButton}
-                                onClick={() => removeFromSelected(topicDto)}
-                            >
-                                <IoClose/>
-                            </Button>
-                        </div>
-                    ))}
-                </div>
-            )}
+
             {multiple && (
-                <div className={styles.actionBar}>
-                    <Button heightVariant={ButtonHeight.short} onClick={close}>
-                        {t("topicPickerModalCancelButton")}
-                    </Button>
-                    <Button
-                        heightVariant={ButtonHeight.short}
-                        variant={ButtonVariants.contrast}
-                        className={styles.contButton}
-                        onClick={submitPickedAndClose}
-                        shortcut="pickerConfirm"
-                        disabled={selectedTopics?.length == 0 && !multiple}
-                    >
-                        {t("topicPickerModalSelectButton")}
-                    </Button>
+                <div className={styles.footer}>
+                    <GradientLine/>
+                    <div className={styles.actionBar}>
+                        <span className={styles.selectedCount}>
+                            {t("topicPickerModalSelectedCount").replace("${count}", `${selectedTopics.length}`)}
+                        </span>
+                        <Button heightVariant={ButtonHeight.short} onClick={close}>
+                            {t("topicPickerModalCancelButton")}
+                        </Button>
+                        <Button
+                            heightVariant={ButtonHeight.short}
+                            variant={ButtonVariants.contrast}
+                            className={styles.contButton}
+                            onClick={submitPickedAndClose}
+                            shortcut="pickerConfirm"
+                        >
+                            {t("topicPickerModalSelectButton")}
+                        </Button>
+                    </div>
                 </div>
             )}
         </Modal>

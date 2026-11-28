@@ -46,13 +46,10 @@ export interface NotFoundModalState extends ModalState {
 export interface NewTopicModalState extends ModalState {
     workspace?: WorkspaceDto;
     team?: TeamDto;
+    initialName?: string;
 }
 
 export interface ChangeTaskWorkflowStatusModalState extends ModalState {
-    task?: TaskDto;
-}
-
-export interface ChangeTaskTopicModalState extends ModalState {
     task?: TaskDto;
 }
 
@@ -199,7 +196,10 @@ export interface TopicPickerModalState extends ModalState {
     team?: TeamDto;
     multiple?: boolean;
     initialSelectionOnMultiple?: TopicDto[];
+    currentTopicId?: string | null;
+    title?: string;
     onPick?: (pickedList: TopicDto[]) => void;
+    onRemove?: () => void;
 }
 
 export interface TeamMemberPickerModalState extends ModalState {

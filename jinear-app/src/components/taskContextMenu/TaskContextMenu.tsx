@@ -18,7 +18,6 @@ import {
     closeTaskContextMenu,
     popChangeTaskAssigneeModal,
     popChangeTaskDateModal,
-    popChangeTaskTopicModal,
     popChangeTaskWorkflowStatusModal,
     popTaskOverviewModal,
     popTaskTaskBoardAssignModal,
@@ -27,6 +26,7 @@ import {
 import useTranslation, {type StringKeys} from "@/locales/useTranslation";
 import useWindowSize from "@/hooks/useWindowSize";
 import {useTaskCollaboratorPicker} from "@/hooks/useTaskCollaboratorPicker";
+import {useTaskTopicPicker} from "@/hooks/useTaskTopicPicker";
 import {copyTextToClipboard} from "@/util/clipboard";
 import {HOST} from "@/util/constants";
 import {retrieveTaskStatusIcon} from "@/util/taskIconFactory";
@@ -52,6 +52,7 @@ const TaskContextMenu: React.FC = () => {
     const menu = useTypedSelector(selectTaskContextMenu);
     const task = menu?.visible ? menu.task : undefined;
     const {popCollaboratorPicker, isReady: collaboratorsReady} = useTaskCollaboratorPicker(task);
+    const {popTopicPicker, isReady: topicPickerReady} = useTaskTopicPicker(task);
     const menuRef = useRef<HTMLDivElement>(null);
     const [position, setPosition] = useState({top: 0, left: 0});
 
@@ -139,7 +140,8 @@ const TaskContextMenu: React.FC = () => {
                 label: "taskContextMenuTopic",
                 icon: LuTag,
                 value: task.topic?.name ?? none,
-                onSelect: () => dispatch(popChangeTaskTopicModal({visible: true, task}))
+                disabled: !topicPickerReady,
+                onSelect: popTopicPicker
             },
             {
                 shortcut: "taskMenuDates",
