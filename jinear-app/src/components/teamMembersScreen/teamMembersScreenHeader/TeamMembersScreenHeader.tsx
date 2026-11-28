@@ -6,6 +6,7 @@ import {useAppDispatch} from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
 import styles from "./TeamMembersScreenHeader.module.css";
+import {useWorkspaceOwnerOrAdminOrTeamAdmin} from "@/hooks/useWorkspaceOwnerOrAdminOrTeamAdmin";
 
 interface TeamMembersScreenHeaderProps {
     workspace: WorkspaceDto;
@@ -15,6 +16,7 @@ interface TeamMembersScreenHeaderProps {
 const TeamMembersScreenHeader: React.FC<TeamMembersScreenHeaderProps> = ({workspace, team}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
+    const canAddMember = useWorkspaceOwnerOrAdminOrTeamAdmin({workspaceId: team.workspaceId, teamId: team.teamId});
 
     const popInviteModal = () => {
         dispatch(popAddMemberToTeamModal({visible: true, workspace, team}));
@@ -24,7 +26,7 @@ const TeamMembersScreenHeader: React.FC<TeamMembersScreenHeaderProps> = ({worksp
         <div className={styles.container}>
             <SectionTitle title={t("teamMemberScreenListTitle")} description={t("teamMemberScreenListText")}/>
             <div className={styles.actionBar}>
-                {team.teamState != "ARCHIVED" && (
+                {canAddMember && team.teamState != "ARCHIVED" && (
                     <Button variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short}
                             onClick={popInviteModal}>
                         {t("teamMemberScreenAddMember")}
