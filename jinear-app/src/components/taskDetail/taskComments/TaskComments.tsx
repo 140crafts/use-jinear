@@ -9,6 +9,7 @@ import {useTask} from "../context/TaskDetailContext";
 import styles from "./TaskComments.module.css";
 import CommentInput from "./commentInput/CommentInput";
 import CommentSimple from "./commentSimple/CommentSimple";
+import TaskSectionHeader from "@/components/taskDetail/taskSectionHeader/TaskSectionHeader";
 
 interface TaskCommentsProps {
 }
@@ -51,10 +52,9 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
                 renderItem={renderItem}
                 // emptyLabel={t("taskCommentListEmpty")}
                 emptyLabel={""}
-                listTitle={t("taskCommentsTitle")}
+                listTitleComponent={<TaskSectionHeader title={t("taskCommentsTitle")}/>}
                 hidePaginationOnSinglePages={true}
                 contentContainerClassName={styles.list}
-                listTitleClassName={styles.listTitle}
                 paginationPosition="bottom"
             />
             {newCommentInputVisible ? (

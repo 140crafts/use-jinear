@@ -8,6 +8,7 @@ interface LastTaskActivitiesListProps {
   taskId: string;
   listTitle?: string;
   listTitleClassName?: string;
+  listTitleComponent?: React.ReactElement;
 }
 
 const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
@@ -15,6 +16,7 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
   taskId,
   listTitle = "",
   listTitleClassName,
+  listTitleComponent,
 }) => {
   const [page, setPage] = useState<number>(0);
   const { data: response, isLoading, isFetching } = useFilterWorkspaceActivitiesQuery({ workspaceId, taskIds: [taskId], page });
@@ -25,6 +27,7 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
         id={"last-workspace-task-activities-list"}
         name={listTitle}
         listNameClassName={listTitleClassName}
+        listNameComponent={listTitleComponent}
         response={response}
         isFetching={isFetching}
         isLoading={isLoading}

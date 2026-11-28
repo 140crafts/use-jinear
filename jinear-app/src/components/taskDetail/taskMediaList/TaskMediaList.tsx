@@ -11,6 +11,7 @@ import React, {type ChangeEvent, useRef, useState} from "react";
 import {useTask} from "../context/TaskDetailContext";
 import styles from "./TaskMediaList.module.css";
 import TaskMediaItem from "./taskMediaItem/TaskMediaItem";
+import TaskSectionHeader from "@/components/taskDetail/taskSectionHeader/TaskSectionHeader";
 
 interface TaskMediaListProps {
     handleAttachmentUpload: ({files}: { files: File[] }) => void;
@@ -46,8 +47,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
 
     return (
         <div className={styles.container}>
-            <div className={styles.actionBar}>
-                <h3>{t("taskDetailMediaTitle")}</h3>
+            <TaskSectionHeader title={t("taskDetailMediaTitle")}>
                 <Button
                     disabled={isUploading}
                     variant={ButtonVariants.outline}
@@ -56,7 +56,8 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
                 >
                     {t("taskDetailMediaAddMedia")}
                 </Button>
-                <input
+            </TaskSectionHeader>
+            <input
                     ref={attachmentPickerRef}
                     id={"attachment-picker"}
                     type="file"
@@ -65,7 +66,6 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
                     onChange={onSelectFile}
                     multiple={true}
                 />
-            </div>
             <div className={styles.mediaListContainer}>
                 {retrieveTaskMediaListResponse?.data?.length == 0 &&
                     <div>{t("taskDetailMediaListEmpty")}</div>}

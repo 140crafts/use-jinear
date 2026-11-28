@@ -31,3 +31,19 @@
 .inputChecked {
   opacity: 0.8;
 }
+
+.deleteButton {
+  visibility: hidden;
+  transition-property: background-color, color !important;
+}
+
+.container:hover .deleteButton,
+.container:focus-within .deleteButton {
+  visibility: visible;
+}
+
+@media (hover: none) {
+  .deleteButton {
+    visibility: visible;
+  }
+}

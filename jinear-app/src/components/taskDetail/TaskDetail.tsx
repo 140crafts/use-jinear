@@ -14,6 +14,7 @@ import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
 import TaskMediaList from "./taskMediaList/TaskMediaList";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
 import TaskLinkingNoteList from "./taskLinkingNoteList/TaskLinkingNoteList";
+import TaskSectionHeader from "./taskSectionHeader/TaskSectionHeader";
 import DropZone from "@/components/dropZone/DropZone";
 import {pushDataToUploadStatusModalQueue} from "@/slice/modalSlice";
 import {useAppDispatch} from "@/store";
@@ -92,19 +93,21 @@ const TaskDetail: React.FC<TaskDetailProps> = ({
                     <TaskHasUpdatesInfo/>
                     <TaskBody className={styles.taskBody}/>
                     <TaskActionBar className={styles.taskInfo}/>
-                    <TaskChecklistContainer/>
-                    {filePermissionsExists && (
-                        <TaskMediaList handleAttachmentUpload={handleAttachmentUpload}/>
-                    )}
-                    <TaskSubtaskList/>
-                    <TaskLinkingNoteList/>
-                    <TaskComments/>
-                    <LastTaskActivitiesList
-                        workspaceId={task.workspaceId}
-                        taskId={task.taskId}
-                        listTitle={t("taskActivityListTitle")}
-                        listTitleClassName={styles.taskActivitiesTitle}
-                    />
+                    <div className={styles.sections}>
+                        <TaskSubtaskList/>
+                        <TaskChecklistContainer/>
+                        {filePermissionsExists && (
+                            <TaskMediaList handleAttachmentUpload={handleAttachmentUpload}/>
+                        )}
+                        <TaskLinkingNoteList/>
+                        <TaskComments/>
+                        <LastTaskActivitiesList
+                            workspaceId={task.workspaceId}
+                            taskId={task.taskId}
+                            listTitle={t("taskActivityListTitle")}
+                            listTitleComponent={<TaskSectionHeader title={t("taskActivityListTitle")}/>}
+                        />
+                    </div>
                 </div>
             </DropZone>
         </TaskDetailContext.Provider>

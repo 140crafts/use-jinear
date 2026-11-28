@@ -12,6 +12,7 @@ import React, {type ChangeEvent, type KeyboardEvent, useEffect, useState} from "
 import {IoClose} from "react-icons/io5";
 import ChecklistItem from "./checklistItem/ChecklistItem";
 import styles from "./TaskChecklist.module.scss";
+import GradientLine from "@/components/gradientLine/GradientLine";
 
 interface TaskChecklistProps {
     initialChecklist: ChecklistDto;
@@ -109,6 +110,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({initialChecklist}) => {
                     <IoClose/>
                 </Button>
             </div>
+            <GradientLine/>
             <div className={styles.itemsContainer}>
                 {checklist.checklistItems.map((checklistItem) => (
                     <ChecklistItem

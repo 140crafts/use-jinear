@@ -14,6 +14,7 @@ import React, { useEffect } from "react";
 import { useShowSubTaskListEvenIfNoSubtasks, useTask } from "../context/TaskDetailContext";
 import styles from "./TaskSubtaskList.module.scss";
 import TaskRelationRow from "./taskRelationRow/TaskRelationRow";
+import TaskSectionHeader from "../taskSectionHeader/TaskSectionHeader";
 
 interface TaskSubtaskListProps {
 }
@@ -75,10 +76,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
   return showSubTaskListEvenIfNoSubtasks || hasSubTasks ? (
     <>
       <div className={styles.container}>
-        <div className={styles.headerContainer}>
-          <h3>{t("taskSubtaskList")}</h3>
-
-          <div className={styles.newTaskInputButtonContainer}>
+        <TaskSectionHeader title={t("taskSubtaskList")}>
             <Button
               onClick={popNewTaskModalWithRelation}
               variant={ButtonVariants.outline}
@@ -95,8 +93,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
             >
               {t("taskSubtaskListAddExistingTaskButton")}
             </Button>
-          </div>
-        </div>
+        </TaskSectionHeader>
         <div className={styles.content}>
           {task.relatedIn?.map((relation) => (
             <TaskRelationRow key={relation.taskRelationId} {...relation} noAccessLabel={t("taskRelatedTaskNoAccess")} />

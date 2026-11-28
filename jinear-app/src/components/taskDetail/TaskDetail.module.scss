@@ -14,16 +14,19 @@
     width: var(--page)
 }
 
+.sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
 .taskBody {
     //flex: 1;
 }
 
 .taskInfo {
     background-color: unset;
-}
-
-.taskActivitiesTitle {
-    font-size: 0.8rem;
 }
 
 @container task (max-width: #{$tablet}) {

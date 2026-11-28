@@ -18,6 +18,7 @@ interface PaginatedActivityListProps {
     setPage: React.Dispatch<React.SetStateAction<number>>;
     ignoreGrouping?: boolean;
     listNameClassName?: string;
+    listNameComponent?: React.ReactElement;
     hidePaginationOnSinglePages?: boolean;
     contentContainerClassName?: string;
 }
@@ -32,6 +33,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
                                                                          setPage,
                                                                          ignoreGrouping,
                                                                          listNameClassName,
+                                                                         listNameComponent,
                                                                          hidePaginationOnSinglePages = false,
                                                                          contentContainerClassName,
                                                                      }) => {
@@ -42,7 +44,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
     return (
         <div id={id} className={cn(styles.container)}>
             <div className={styles.header}>
-                <h2 className={listNameClassName}>{name}</h2>
+                {listNameComponent ?? <h2 className={listNameClassName}>{name}</h2>}
                 {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && (
                     <Pagination
                         id={`${id}-paginator`}

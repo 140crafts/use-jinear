@@ -1,4 +1,4 @@
-import Button from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import type {ChecklistItemDto} from "@/model/be/jinear-core";
 import {
     useDeleteChecklistItemMutation,
@@ -9,8 +9,9 @@ import {
 import Logger from "@/util/logger";
 import cn from "classnames";
 import useTranslation from "@/locales/useTranslation";
-import React, {type ChangeEvent, type  KeyboardEvent, useEffect, useState} from "react";
+import React, {type ChangeEvent, type  KeyboardEvent, useRef, useState} from "react";
 import {IoCheckmarkCircleSharp, IoRadioButtonOff} from "react-icons/io5";
+import {LuTrash2} from "react-icons/lu";
 import {CHECKLIST_ICON_SIZE} from "../TaskChecklist";
 import styles from "./ChecklistItem.module.css";
 
@@ -30,16 +31,12 @@ const ChecklistItem: React.FC<ChecklistItemProps> = ({checklistId, checklistItem
     const [updateCheckedStatus] = useUpdateCheckedStatusMutation();
     const [updateLabel, {isLoading: isUpdateLabelLoading}] = useUpdateLabelMutation();
     const [deleteChecklistItem, {isLoading: isDeleteLoading}] = useDeleteChecklistItemMutation();
-    const [initializeChecklistItem, {isSuccess: isInitializeSuccess, isLoading: isInitializeLoading}] =
-        useInitializeChecklistItemMutation();
+    const [initializeChecklistItem, {isLoading: isInitializeLoading}] = useInitializeChecklistItemMutation();
+    const saveInProgressRef = useRef(false);
 
     const anyOngoingCallExists = isInitializeLoading || isUpdateLabelLoading || isDeleteLoading;
-
-    useEffect(() => {
-        if (isInitializeSuccess) {
-            setLabel("");
-        }
-    }, [isInitializeSuccess]);
+    const savedLabel = checklistItem?.label || "";
+    const changed = savedLabel != label;
 
     const toggleStatus = () => {
         const checked = !isChecked;
@@ -56,29 +53,49 @@ const ChecklistItem: React.FC<ChecklistItemProps> = ({checklistId, checklistItem
 
     const onLabelKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key == "Enter") {
-            onLabelBlur();
+            save();
+        } else if (event.key == "Escape") {
+            setLabel(savedLabel);
         }
     };
 
-    const onLabelBlur = () => {
-        const itemLabel = checklistItem?.label || "";
-        const changed = itemLabel != label;
-        const oldLabelExistsNewLabelEmpty = itemLabel != "" && label == "";
+    const deleteItem = () => {
+        if (checklistItem) {
+            deleteChecklistItem({checklistItemId: checklistItem.checklistItemId});
+        }
+    };
+
+    const clearLabel = () => {
+        setLabel("");
+    };
+
+    const releaseSave = () => {
+        saveInProgressRef.current = false;
+    };
+
+    const saveChange = () => {
         logger.log({checklistItemLabel: checklistItem?.label, label});
-        if (changed && checklistItem && oldLabelExistsNewLabelEmpty) {
-            deleteChecklistItem({checklistItemId: checklistItem?.checklistItemId});
-        } else if (changed && checklistItem) {
-            updateLabel({
+        if (checklistItem && savedLabel != "" && label == "") {
+            return deleteChecklistItem({checklistItemId: checklistItem.checklistItemId}).unwrap();
+        }
+        if (checklistItem) {
+            return updateLabel({
                 checklistId: checklistItem.checklistId,
                 checklistItemId: checklistItem.checklistItemId,
-                label: label || "",
-            });
-        } else if (changed) {
-            initializeChecklistItem({
-                checklistId: checklistId,
-                label: label || "",
-            });
+                label,
+            }).unwrap();
         }
+        return initializeChecklistItem({checklistId, label}).unwrap().then(clearLabel);
+    };
+
+    const save = () => {
+        if (!changed || saveInProgressRef.current) {
+            return;
+        }
+        saveInProgressRef.current = true;
+        saveChange()
+            .catch(logger.log)
+            .finally(releaseSave);
     };
 
     return (
@@ -94,10 +111,34 @@ const ChecklistItem: React.FC<ChecklistItemProps> = ({checklistId, checklistItem
                     value={label}
                     className={cn(styles.input, isChecked && styles.inputChecked)}
                     onChange={onLabelChange}
-                    onBlur={onLabelBlur}
+                    onBlur={save}
                     onKeyDown={onLabelKeyDown}
                     placeholder={asNewItem ? t("checklistNewItemPlaceholder") : undefined}
                 />
+                {changed && (
+                    <Button
+                        variant={ButtonVariants.contrast}
+                        heightVariant={ButtonHeight.short}
+                        disabled={anyOngoingCallExists}
+                        loading={isInitializeLoading || isUpdateLabelLoading}
+                        onClick={save}
+                    >
+                        {t("checklistItemSaveButton")}
+                    </Button>
+                )}
+                {!changed && checklistItem && (
+                    <Button
+                        variant={ButtonVariants.hoverFilled2}
+                        heightVariant={ButtonHeight.short}
+                        className={styles.deleteButton}
+                        disabled={anyOngoingCallExists}
+                        loading={isDeleteLoading}
+                        onClick={deleteItem}
+                        data-tooltip-right={t("checklistItemDeleteButtonTooltip")}
+                    >
+                        <LuTrash2/>
+                    </Button>
+                )}
             </div>
         </div>
     );

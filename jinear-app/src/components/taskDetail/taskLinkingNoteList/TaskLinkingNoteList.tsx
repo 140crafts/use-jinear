@@ -9,6 +9,7 @@ import {LuFileText} from "react-icons/lu";
 import {Link} from "react-router-dom";
 import {useTask} from "../context/TaskDetailContext";
 import styles from "./TaskLinkingNoteList.module.css";
+import TaskSectionHeader from "../taskSectionHeader/TaskSectionHeader";
 
 const TaskLinkingNoteList: React.FC = () => {
     const {t} = useTranslation();
@@ -31,7 +32,7 @@ const TaskLinkingNoteList: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <h3>{t("taskLinkingNoteListTitle")}</h3>
+            <TaskSectionHeader title={t("taskLinkingNoteListTitle")}/>
             <div className={styles.list}>
                 {notes.map((note) => (
                     <Link key={note.noteId} to={notePath(note)} className={styles.row} onClick={closeOverviewModal}>

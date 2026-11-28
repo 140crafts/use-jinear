@@ -2082,6 +2082,14 @@ const translations = {
         en: "Delete checklist",
         tr: "Kontrol Listesini Sil"
     },
+    checklistItemSaveButton: {
+        en: "Save",
+        tr: "Kaydet"
+    },
+    checklistItemDeleteButtonTooltip: {
+        en: "Delete item",
+        tr: "Maddeyi Sil"
+    },
     checklistDeleteAreYouSureTitle: {
         en: "Delete checklist",
         tr: "Kontrol Listesini Sil"
@@ -6169,7 +6177,7 @@ const translations = {
     },
     taskLinkingNoteListTitle: {
         en: "Notes mentioning this task",
-        tr: "Bu işten bahseden notlar"
+        tr: "Bu görevden bahseden notlar"
     },
     draftCouldNotBeSaved: {
         en: "Couldn't be saved, open to recover",
