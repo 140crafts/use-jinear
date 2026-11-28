@@ -1,15 +1,24 @@
-import type {BaseResponse} from "@/model/be/jinear-core";
+import type {BaseResponse, WorkspaceDisplayPreferenceResponse} from "@/model/be/jinear-core";
 import {useUpdatePreferredWorkspaceWithUsernameMutation} from "@/store/api/workspaceDisplayPreferenceApi";
 import {useTypedSelector} from "@/store";
 import {ROUTE_IF_LOGGED_IN} from "@/util/constants";
 import Logger from "@/util/logger";
+import {getTranslatedMessage} from "@/locales/useTranslation";
 import React, {useEffect} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface WorkspaceAndTeamChangeListenerProps {
 }
 
 const logger = Logger("WorkspaceAndTeamChangeListener");
+const WORKSPACE_SWITCHED_TOAST_ID = "workspace-switched";
+
+const showWorkspaceSwitchedToast = (response: WorkspaceDisplayPreferenceResponse) => {
+    const title = response.data.workspace?.title ?? "";
+    const message = getTranslatedMessage("workspaceSwitchedToast").replace("${title}", title);
+    toast(message, {id: WORKSPACE_SWITCHED_TOAST_ID});
+};
 
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
     const {workspaceName} = useParams();
@@ -27,7 +36,10 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
             updatePreferredWorkspaceWithUsername({
                 workspaceUsername: workspaceName,
                 dontReroute: true
-            });
+            })
+                .unwrap()
+                .then(showWorkspaceSwitchedToast)
+                .catch(logger.log);
         }
     }, [currentWorkspaceDifferentFromUrl, workspaceName, updatePreferredWorkspaceWithUsername]);
 

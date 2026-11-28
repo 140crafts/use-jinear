@@ -3347,6 +3347,10 @@ const translations = {
         en: "Switch Workspace",
         tr: "Çalışma Alanını Değiştir"
     },
+    workspaceSwitchedToast: {
+        en: "Switched to workspace ${title}",
+        tr: "${title} çalışma alanına geçildi"
+    },
     moreMenuActionModalTitle: {
         en: "More",
         tr: "Daha Fazla"
